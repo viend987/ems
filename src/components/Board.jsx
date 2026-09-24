@@ -2,54 +2,54 @@ import { CATEGORIES, GROUPS } from '../data/index.js'
 import SearchField from './SearchField.jsx'
 
 /**
- * Papan status stasiun. Di desktop ia kolom menempel; di bawah 1024px ia
- * berubah jadi deretan chip mendatar yang bisa digeser, menempel di bawah
- * header. Kategori aktif menyala merah dengan lampu indikator.
+ * Papan status stasiun. Di desktop ia kolom menempel di kiri; di layar kecil
+ * ia jadi menu kotak-kotak yang membungkus ke bawah, supaya semua kategori
+ * kelihatan sekaligus tanpa perlu digeser ke samping.
  */
+
+const BY_GROUP = GROUPS.map((group) => ({
+  ...group,
+  items: CATEGORIES.filter((c) => c.group === group.id),
+})).filter((g) => g.items.length > 0)
 
 function Light({ active }) {
   return (
-    <span
-      aria-hidden="true"
-      className={`size-1.5 shrink-0 rounded-full ${active ? 'bg-bone' : 'bg-line'}`}
-    />
+    <span aria-hidden="true" className={`size-1.5 shrink-0 rounded-full ${active ? 'bg-bone' : 'bg-line'}`} />
   )
 }
 
 export default function Board({ active, onGo, query, onQuery, searchRef }) {
-  const byGroup = GROUPS.map((group) => ({
-    ...group,
-    items: CATEGORIES.filter((c) => c.group === group.id),
-  })).filter((g) => g.items.length > 0)
-
   return (
     <>
-      {/* Ponsel & tablet: chip mendatar */}
-      <div className="sticky top-0 z-20 border-b border-line bg-ink/95 backdrop-blur lg:hidden">
-        <div className="px-4 py-3 sm:px-6">
-          <SearchField value={query} onChange={onQuery} inputRef={searchRef} />
-        </div>
-        <div className="no-bar flex gap-1.5 overflow-x-auto px-4 pb-3 sm:px-6">
-          {byGroup.map((group) => (
-            <div key={group.id} className="flex shrink-0 items-center gap-1.5">
-              <span className="slab px-1 text-[10px] tracking-[0.2em] text-muted">{group.name}</span>
-              {group.items.map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => onGo(cat.id)}
-                  aria-current={active === cat.id ? 'page' : undefined}
-                  className={`slab shrink-0 rounded-sm px-3 py-2 text-xs whitespace-nowrap ${
-                    active === cat.id ? 'bg-alarm text-white' : 'bg-panel text-dim'
-                  }`}
-                >
-                  {cat.name}
-                </button>
-              ))}
-              <span className="px-1 text-line">|</span>
+      {/* Layar kecil: menu kotak-kotak */}
+      <div className="border-b border-line px-4 py-4 sm:px-6 lg:hidden">
+        <SearchField value={query} onChange={onQuery} inputRef={searchRef} />
+
+        <nav aria-label="Kategori prosedur" className="mt-3 flex flex-col gap-3">
+          {BY_GROUP.map((group) => (
+            <div key={group.id}>
+              <div className="slab mb-1.5 text-[10px] tracking-[0.24em] text-muted">{group.name}</div>
+              <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
+                {group.items.map((cat) => {
+                  const isActive = active === cat.id
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => onGo(cat.id)}
+                      aria-current={isActive ? 'page' : undefined}
+                      className={`slab min-h-11 rounded-sm px-2.5 py-2 text-center text-xs leading-tight ${
+                        isActive ? 'bg-alarm text-white' : 'border border-line bg-panel text-bone'
+                      }`}
+                    >
+                      {cat.name}
+                    </button>
+                  )
+                })}
+              </div>
             </div>
           ))}
-        </div>
+        </nav>
       </div>
 
       {/* Desktop: papan menempel */}
@@ -61,7 +61,7 @@ export default function Board({ active, onGo, query, onQuery, searchRef }) {
           <SearchField value={query} onChange={onQuery} inputRef={searchRef} />
         </div>
 
-        {byGroup.map((group) => (
+        {BY_GROUP.map((group) => (
           <div key={group.id} className="border-b border-line py-2">
             <div className="slab px-3 py-1.5 text-[10px] tracking-[0.24em] text-muted">{group.name}</div>
             {group.items.map((cat) => {

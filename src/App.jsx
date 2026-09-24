@@ -5,6 +5,7 @@ import FlowBar from './components/FlowBar.jsx'
 import Header from './components/Header.jsx'
 import Section from './components/Section.jsx'
 import SearchResults from './components/SearchResults.jsx'
+import SectionNav from './components/SectionNav.jsx'
 import { CATEGORIES, PROCEDURES } from './data/index.js'
 import { useCopy, useRoute } from './hooks.js'
 import { isCopyable } from './lib/copy.js'
@@ -71,10 +72,16 @@ export default function App() {
             <SearchResults query={query} hits={hits} onGo={goAndClear} onClear={() => setQuery('')} />
           ) : (
             <>
-              <div className="mb-6">
+              <div className="mb-4">
                 <h2 className="slab text-2xl text-bone sm:text-3xl">{category.name}</h2>
                 <p className="mt-1 max-w-prose text-xs leading-relaxed text-dim">{category.blurb}</p>
               </div>
+
+              <SectionNav
+                categoryId={category.id}
+                sections={category.sections ?? category.tables ?? []}
+                onGo={goAndClear}
+              />
 
               <div className="flex flex-col gap-8">
                 {category.sections?.map((section) => (

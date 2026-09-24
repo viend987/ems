@@ -60,17 +60,17 @@ export default function StepRow({ step, rowKey, status, onCopy, onGo }) {
         type="button"
         onClick={() => onCopy(rowKey, text)}
         title="Klik untuk menyalin"
-        className="flex w-full items-start gap-3 px-3 py-2.5 text-left hover:bg-raise sm:gap-4 sm:px-4"
+        className="flex w-full items-start gap-2.5 px-3 py-2.5 text-left hover:bg-raise sm:gap-4 sm:px-4"
       >
         <span
-          className={`mt-px w-14 shrink-0 text-[10px] tabular-nums sm:w-16 sm:text-[11px] ${
+          className={`mt-px w-9 shrink-0 text-[11px] tabular-nums sm:w-16 ${
             copied ? (status.ok ? 'text-mech' : 'text-alarm') : 'text-bone'
           }`}
         >
           {copied ? marker : step.n ? `/${step.n}` : '—'}
         </span>
 
-        <span className="min-w-0 flex-1 text-[12.5px] leading-relaxed break-words sm:text-[13px]">
+        <span className="min-w-0 flex-1 text-[13.5px] leading-relaxed break-words sm:text-[13px]">
           {prefix && <span className={`${tone.prefix} mr-1.5`}>{prefix}</span>}
           <span className="text-bone">{step.text}</span>
           {step.label && <span className="ml-2 text-[11px] text-muted">({step.label})</span>}
@@ -78,13 +78,15 @@ export default function StepRow({ step, rowKey, status, onCopy, onGo }) {
           {step.note && <span className="ml-2 text-[11px] text-muted">— {step.note}</span>}
         </span>
 
-        <span aria-hidden="true" className="mt-px shrink-0 text-xs text-muted">
+        {/* Di HP ikon ini tidak memberi tahu apa-apa — tidak ada hover di sana dan
+            seluruh barisnya memang bisa diketuk — jadi lebarnya dikembalikan ke teks. */}
+        <span aria-hidden="true" className="mt-px hidden shrink-0 text-xs text-muted sm:block">
           ⧉
         </span>
       </button>
 
       {step.branches && (
-        <div className="px-3 pb-2.5 pl-20 sm:px-4 sm:pl-24">
+        <div className="px-3 pb-2.5 pl-[3.125rem] sm:px-4 sm:pl-24">
           <Branches branches={step.branches} onGo={onGo} />
         </div>
       )}
