@@ -1,0 +1,99 @@
+@import 'tailwindcss';
+
+@import '@fontsource/saira-condensed/latin-800.css';
+@import '@fontsource/ibm-plex-mono/latin-400.css';
+@import '@fontsource/ibm-plex-mono/latin-500.css';
+
+@theme {
+  --font-display: 'Saira Condensed', 'Arial Narrow', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-sans: 'IBM Plex Mono', ui-monospace, monospace;
+
+  --color-ink: #0a0a0b;
+  --color-panel: #121215;
+  --color-raise: #16161a;
+  --color-line: #1e1e22;
+  --color-muted: #5e5e68;
+  --color-dim: #9a9aa2;
+  --color-bone: #ededef;
+
+  --color-alarm: #ff3b30;
+  --color-signal: #ffb800;
+  --color-calm: #8fb8ff;
+  --color-mech: #5fd3a0;
+  --color-anim: #c79bff;
+}
+
+@layer base {
+  html {
+    background: var(--color-ink);
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-dvh bg-ink font-mono text-bone antialiased;
+  }
+
+  ::selection {
+    background: var(--color-signal);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Judul dan nama kategori. Saira Condensed rapat dan berat — memberi bobot
+     tanpa memakan lebar, yang penting karena papan kiri sempit. */
+  .slab {
+    font-family: var(--font-display);
+    font-weight: 800;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+    line-height: 0.95;
+  }
+}
+
+/* Pita alur. Satu-satunya gerakan di seluruh web, dan hanya ketika rantainya
+   tidak muat di lebar layar. Di layar lebar ia diam sebagai pengingat urutan. */
+@keyframes flow-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.flow-track {
+  animation: flow-scroll 34s linear infinite;
+}
+
+@media (min-width: 1280px) {
+  .flow-track {
+    animation: none;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-track {
+    animation: none;
+    transform: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* Papan kategori di ponsel menggulir mendatar; sembunyikan batangnya. */
+.no-bar {
+  scrollbar-width: none;
+}
+.no-bar::-webkit-scrollbar {
+  display: none;
+}
