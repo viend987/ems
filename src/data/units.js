@@ -168,6 +168,7 @@ export default {
         {
           callsign: 'SCOUT',
           vehicle: 'Swift',
+          images: ['scout'],
           desc: 'Patroli dan pencarian dari udara, tapi terbatas di area terbuka — tidak bisa masuk ke celah-celah sempit seperti Firehawk.',
         },
       ],
