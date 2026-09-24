@@ -118,7 +118,7 @@ export default function App() {
       </div>
 
       <footer className="border-t border-line px-4 py-6 text-center text-[11px] text-muted sm:px-6">
-        Disusun dari LSFD RP &amp; Field Academy Handbook · JGVRP
+        Fan-made tool by JGVRP Player. Based on LSFD Handbook Procedure + Some Adjustments· JGVRP
       </footer>
     </div>
   )
