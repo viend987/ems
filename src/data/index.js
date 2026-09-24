@@ -1,4 +1,5 @@
 import abc from './procedures/abc.js'
+import animals from './procedures/animals.js'
 import coroner from './procedures/coroner.js'
 import deat from './procedures/deat.js'
 import drugs from './procedures/drugs.js'
@@ -11,6 +12,7 @@ import ocd from './procedures/ocd.js'
 import radio from './procedures/radio.js'
 import vertical from './procedures/vertical.js'
 import wounds from './procedures/wounds.js'
+import LINKS from './links.js'
 import { REFERENCE } from './reference.js'
 
 /** Urutan kategori di papan. Kategori baru cukup diimpor dan ditaruh di sini. */
@@ -28,9 +30,12 @@ export const PROCEDURES = [
   coroner,
   mva,
   vertical,
+  animals,
 ]
 
-export const CATEGORIES = [...PROCEDURES, ...REFERENCE]
+export const CATEGORIES = [...PROCEDURES, ...REFERENCE, LINKS]
+
+export { LINKS }
 
 /** Kelompok di papan status, berurutan dari yang paling sering dipakai. */
 export const GROUPS = [
@@ -46,13 +51,13 @@ export const GROUPS = [
  * Field Handbook, dipetakan ke bagian yang menanganinya.
  */
 export const FLOW = [
-  { label: 'Danger', to: 'field#default' },
-  { label: 'Response', to: 'field#default' },
+  { label: 'Danger', to: 'field#danger' },
+  { label: 'Response', to: 'field#response' },
   { label: 'X — Pendarahan', to: 'deat#direct-pressure' },
   { label: 'Airway', to: 'abc#airway-headtilt' },
   { label: 'Breathing', to: 'abc#breathing-ecg' },
   { label: 'Circulation', to: 'abc#circulation-ecg' },
-  { label: 'Cek Ulang', to: 'abc#circulation-ecg' },
+  { label: 'Cek Ulang', to: 'abc#circulation-normal' },
   { label: 'Load', to: 'load#load' },
   { label: 'Transport', to: 'hospital#arrive' },
 ]

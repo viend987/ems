@@ -8,7 +8,17 @@ describe('prefixOf', () => {
     expect(prefixOf({ kind: 'radio' })).toBe('/r')
   })
 
-  it('tidak memberi awalan untuk dialog, command, dan anim', () => {
+  it('membedakan kanal radio dan OOC', () => {
+    expect(prefixOf({ kind: 'ooc' })).toBe('/ro')
+    expect(prefixOf({ kind: 'deptradio' })).toBe('/d')
+    expect(prefixOf({ kind: 'deptooc' })).toBe('/od')
+  })
+
+  it('memberi awalan teriak', () => {
+    expect(prefixOf({ kind: 'shout' })).toBe('/s')
+  })
+
+  it('tidak memberi awalan untuk bicara biasa, command, dan anim', () => {
     expect(prefixOf({ kind: 'say' })).toBe('')
     expect(prefixOf({ kind: 'command' })).toBe('')
     expect(prefixOf({ kind: 'anim' })).toBe('')
@@ -16,7 +26,6 @@ describe('prefixOf', () => {
 
   it('menghormati awalan yang ditulis eksplisit', () => {
     expect(prefixOf({ kind: 'radio', prefix: '/ro' })).toBe('/ro')
-    expect(prefixOf({ kind: 'radio', prefix: '/d' })).toBe('/d')
   })
 })
 

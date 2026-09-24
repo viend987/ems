@@ -1,16 +1,16 @@
-// Penanganan Korban — dari "FIELD PROCEDURE" di LSFD RP.md
+// Penanganan Korban — dari "FIELD PROCEDURE" di draft.md
 
 export default {
   id: 'field',
   group: 'tkp',
   name: 'Penanganan Korban',
-  blurb: 'Langkah pembuka di TKP, sampai menentukan korban kena fracture atau GSW.',
+  blurb: 'Danger dan Response di TKP, sampai menentukan korban kena fracture atau GSW.',
   sections: [
     {
-      id: 'default',
-      name: 'Prosedur Awal',
+      id: 'danger',
+      name: 'Danger (kondisional)',
       steps: [
-        { kind: 'note', text: 'Tiga langkah berikut kondisional — pakai kalau situasinya menuntut.' },
+        { kind: 'note', text: 'Pakai yang sesuai keadaan — tidak semuanya perlu tiap scene.' },
         {
           n: 51,
           kind: 'me',
@@ -22,6 +22,12 @@ export default {
           text: 'melepas atribut dan segala aksesoris dari kepala korban untuk mengantisipasi adanya cedera tambahan.',
         },
         { n: 53, kind: 'me', text: 'memindahkan tubuh korban untuk penanganan di lokasi yang lebih aman.' },
+      ],
+    },
+    {
+      id: 'response',
+      name: 'Response',
+      steps: [
         {
           n: 54,
           kind: 'me',
@@ -45,7 +51,7 @@ export default {
         { kind: 'command', text: '/inspect [id]' },
         {
           kind: 'note',
-          text: 'Dari sini, lanjut sesuai temuan pada tubuh korban.',
+          text: 'Lanjut sesuai temuan pada tubuh korban.',
           branches: [
             { label: 'Patah tulang', to: 'field#fracture' },
             { label: 'Luka tembak', to: 'field#gsw' },
@@ -73,12 +79,7 @@ export default {
         },
         {
           kind: 'note',
-          text: 'Close Fracture: langsung A-B-C, lalu penanganan patah tulang. Open Fracture: RP di bawah ini → DEAT → A-B-C → penanganan patah tulang.',
-        },
-        {
-          n: 62,
-          kind: 'me',
-          text: 'segera memulai prosedur penanganan D.E.A.T. untuk menghentikan pendarahan pada area patah tulang.',
+          text: 'Close Fracture: A-B-C, lalu penanganan patah tulang. Open Fracture: DEAT dulu, baru A-B-C, baru penanganan patah tulang.',
         },
       ],
     },
@@ -86,7 +87,7 @@ export default {
       id: 'gsw',
       name: 'Kalau GSW',
       steps: [
-        { n: 63, kind: 'me', text: 'menemukan adanya area bekas luka tertembak pada tubuh korban.' },
+        { n: 63, kind: 'me', text: 'menemukan adanya bekas luka tembakan pada tubuh korban.' },
         {
           kind: 'note',
           text: 'Kondisi ini disebut X (Exsanguinating Hemorrhage). Penanganannya DEAT, lalu lanjut A-B-C.',

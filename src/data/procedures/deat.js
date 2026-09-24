@@ -1,4 +1,4 @@
-// DEAT / Pendarahan — dari "BLEEDING PROCEDURE (DEAT)" di LSFD RP.md
+// DEAT / Pendarahan — dari "BLEEDING PROCEDURE (DEAT)" di draft.md.
 // Dipakai untuk GSW, Vital Wound, Flesh Wound, dan Open Fracture.
 
 export default {
@@ -19,7 +19,7 @@ export default {
         {
           n: 72,
           kind: 'me',
-          text: 'mengambil Trauma Dressing dari ILS Bag lalu meletakkannya diatas luka korban sambil memberi tekanan.',
+          text: 'mengambil Trauma Dressing dari ILS Bag lalu meletakkannya di atas luka korban sambil memberi tekanan.',
         },
         {
           id: 'bleed-check',
@@ -31,8 +31,8 @@ export default {
             { label: 'Masih → Elevation', to: 'deat#elevation' },
           ],
         },
-        { kind: 'note', text: 'Kalau belum berhenti, lapisi ulang dulu sebelum naik ke Elevation.' },
-        { n: 74, kind: 'me', text: 'mengambil trauma dressing yang baru dari dalam ILS Bag.' },
+        { kind: 'note', text: 'Jika belum berhenti, lapisi ulang dulu sebelum naik ke Elevation.' },
+        { n: 74, kind: 'me', text: 'mengambil trauma dressing yang baru dari ILS Bag.' },
         { n: 75, kind: 'me', text: 'melapisi kembali area pendarahan dengan trauma dressing yang baru.' },
         { ref: 'bleed-check' },
       ],
@@ -68,20 +68,31 @@ export default {
         { n: 78, kind: 'me', text: 'mengambil tourniquet dan memasangnya 5cm di atas luka.' },
         { n: 79, kind: 'me', text: 'mengencangkan windlass sampai perdarahan berhenti.' },
         { n: 80, kind: 'me', text: 'memastikan tourniquet tetap pada posisi dan tidak longgar.' },
-        { id: 'bleed-controlled', n: 73, kind: 'do', text: 'Terlihat pendarahan mulai dapat diatasi.' },
+        { ref: 'bleed-check' },
       ],
     },
     {
       id: 'croc',
-      name: 'CRoC — luka di tubuh',
+      name: 'CRoC — luka di tubuh / groin',
       steps: [
-        { n: 81, kind: 'me', text: 'mengeluarkan CRoC dari dalam ILS Bag.' },
-        { n: 82, kind: 'me', text: 'merakit CRoC.' },
-        { n: 83, kind: 'me', text: 'meletakkan CRoC di atas area pendarahan.' },
-        { n: 84, kind: 'me', text: 'memposisikan kepala cakram CRoC menyentuh area pendarahan.' },
-        { n: 85, kind: 'me', text: 'memutar T-Handle, memberikan tekanan hingga pendarahan berhenti.' },
-        { n: 86, kind: 'me', text: 'memasangkan tali pengaman.' },
-        { ref: 'bleed-controlled' },
+        { n: 81, kind: 'me', text: 'mengeluarkan CRoC dari dalam ILS Bag dan merakitnya.' },
+        { n: 82, kind: 'me', text: 'memposisikan pressure plate CRoC tepat di atas area pendarahan.' },
+        {
+          n: 83,
+          kind: 'me',
+          text: 'melilitkan strap CRoC pada area groin dan mengencangkannya untuk menstabilkan alat.',
+        },
+        {
+          n: 84,
+          kind: 'me',
+          text: 'memutar windlass secara perlahan untuk memberikan kompresi langsung hingga pendarahan berhenti.',
+        },
+        {
+          n: 85,
+          kind: 'me',
+          text: 'mengunci windlass pada pengait pengaman CRoC untuk menjaga tekanan tetap stabil.',
+        },
+        { ref: 'bleed-check' },
         {
           kind: 'note',
           text: 'Kalau korban kehilangan banyak darah, lanjutkan dengan ILS IV Lactated Ringer.',

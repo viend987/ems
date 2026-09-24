@@ -3,6 +3,7 @@ import Board from './components/Board.jsx'
 import CodeTable from './components/CodeTable.jsx'
 import FlowBar from './components/FlowBar.jsx'
 import Header from './components/Header.jsx'
+import LinkList from './components/LinkList.jsx'
 import Section from './components/Section.jsx'
 import SearchResults from './components/SearchResults.jsx'
 import SectionNav from './components/SectionNav.jsx'
@@ -79,7 +80,7 @@ export default function App() {
 
               <SectionNav
                 categoryId={category.id}
-                sections={category.sections ?? category.tables ?? []}
+                sections={category.sections ?? category.tables ?? category.groups ?? []}
                 onGo={goAndClear}
               />
 
@@ -102,6 +103,9 @@ export default function App() {
                     status={status}
                     onCopy={copy}
                   />
+                ))}
+                {category.groups?.map((group) => (
+                  <LinkList key={group.id} group={group} />
                 ))}
               </div>
             </>

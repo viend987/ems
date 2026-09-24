@@ -8,7 +8,7 @@ describe('render halaman', () => {
   it('merender tanpa error dan memuat isi kategori awal', () => {
     const html = renderToString(<App />)
     expect(html).toContain('Los Santos')
-    expect(html).toContain('Prosedur Awal')
+    expect(html).toContain('Danger (kondisional)')
     expect(html).toContain('mengambil ILS Bag')
   })
 

@@ -31,14 +31,24 @@ workflow. Pushing to `main` is the deploy step.
 
 ## Content sources
 
-`LSFD RP.md` is the **authoritative** source for RP text, shortcut numbers, and step order.
-`LSFD Field Handbook.md` is secondary — it supplies the meaning of codes (10-code, Status, CAT,
-Triage, LOC) and the theory behind each stage. Where the two disagree, `LSFD RP.md` wins.
+`draft.md` is the **current authoritative** source for RP text and step order; it supersedes
+`LSFD RP.md`, which is kept only as the previous revision. `LSFD Field Handbook.md` is secondary —
+it supplies the meaning of codes (10-code, Status, CAT, Triage, LOC) and the theory behind each
+stage.
 
-Note: the source document reuses shortcut `/73` for two different sentences ("Apakah pendarahan
-berhenti?" under direct pressure/elevation/arterial, and "Terlihat pendarahan mulai dapat diatasi."
-under tourniquet/CRoC). Both are preserved as written. Because `n` is only a display marker, this
-causes no conflict — reuse is keyed on `id`, not on `n`.
+The site carries **only lines a player types into game chat**. `draft.md` also contains doctrine —
+role descriptions, equipment lists, the fire-extinguisher class table, risk classifications, the
+skunk-deodorizer recipe, bat-guano cleanup — and none of it belongs here. When new content arrives,
+extract the chat lines and leave the prose in the source document.
+
+In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
+trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
+`/do` step.
+
+Two things in the source were deliberately corrected rather than transcribed, and should not be
+"fixed" back: the AED block was headed *BVM* though BVM belongs to CPR, and the Vertical Rescue
+radio cited ASGH/CGH/FS helipads, IFR, and `squawk 2222`. LSFD flies from DFS and PBH, always VFR,
+and squawks 1200 unless ATC assigns a code. See the header comment in `procedures/vertical.js`.
 
 ## Architecture
 
@@ -61,6 +71,11 @@ A step is `{ n?, id?, kind, text, label?, prefix?, note?, branches? }`:
   patient-loaded radio lines each appear in several branches this way. `resolveCategory()` in
   `src/lib/procedures.js` expands refs and tags the result `reused: true`. Refs resolve across
   category files, so definition order does not matter.
+- **`kind` picks the chat channel**, and the prefix follows from it: `me` → `/me`, `do` → `/do`,
+  `say` → no prefix, `shout` → `/s`, `radio` → `/r` (LSFD), `ooc` → `/ro`, `deptradio` → `/d`
+  (between departments, including ATC), `deptooc` → `/od`, and `command`/`anim` carry their own
+  text. Getting this wrong puts the line on the wrong channel in game, so pick the kind by *who
+  hears it*, not by how it looks.
 - **`kind: 'note'`** is guidance, not typed text: no number, no copy button.
 - **`branches`** are jump links to `'<categoryId>#<sectionId>'`.
 
@@ -108,6 +123,11 @@ bundle.
 
 From the spec: JS under 90 KB gzip, CSS under 15 KB gzip, and no network request when switching
 categories (all content is in the bundle). Check `npm run build` output before adding a dependency.
+
+**The JS budget is nearly spent** (89.8 KB at last count) and content keeps growing. The next time
+it is exceeded, do not solve it by lazy-loading a category — that would put a network request
+between a tap and the text, which is the one thing this site must never do. Split the data into its
+own chunk that the page still preloads, so the shell renders sooner without delaying any category.
 
 ## Deployment specifics
 

@@ -5,15 +5,24 @@
  * Nomor shortcut, label, dan catatan tampilan tidak pernah ikut.
  */
 
-/** Awalan chat per jenis langkah. Kosong berarti teksnya sudah lengkap sendiri. */
+/**
+ * Awalan chat per jenis langkah. Kosong berarti teksnya sudah lengkap sendiri.
+ *
+ * Awalan tidak pernah disimpan di data — ia diturunkan dari `kind`, sehingga
+ * satu tempat menentukan teks yang tersalin sekaligus warnanya di layar.
+ */
 const PREFIXES = {
-  me: '/me',
-  do: '/do',
-  radio: '/r',
-  say: '',
-  command: '',
-  anim: '',
-  note: '',
+  me: '/me', // aksi karakter
+  do: '/do', // keadaan atau pertanyaan untuk lawan RP
+  say: '', // bicara biasa, tanpa awalan
+  shout: '/s', // berteriak
+  radio: '/r', // radio internal LSFD
+  ooc: '/ro', // OOC lewat radio LSFD
+  deptradio: '/d', // radio antar departemen
+  deptooc: '/od', // OOC antar departemen
+  command: '', // command mekanik, teksnya sudah termasuk garis miring
+  anim: '', // nama animasi
+  note: '', // catatan pedoman, tidak bisa disalin
 }
 
 export const KINDS = Object.keys(PREFIXES)

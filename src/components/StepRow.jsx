@@ -12,8 +12,13 @@ import { copyText, isCopyable, prefixOf } from '../lib/copy.js'
 const TONE = {
   me: { edge: 'border-l-signal', prefix: 'text-signal' },
   do: { edge: 'border-l-calm', prefix: 'text-calm' },
-  radio: { edge: 'border-l-alarm', prefix: 'text-alarm' },
   say: { edge: 'border-l-bone', prefix: 'text-bone' },
+  shout: { edge: 'border-l-bone', prefix: 'text-bone' },
+  radio: { edge: 'border-l-alarm', prefix: 'text-alarm' },
+  deptradio: { edge: 'border-l-alarm', prefix: 'text-alarm' },
+  // OOC berada di luar cerita, jadi sengaja dibuat paling tenang.
+  ooc: { edge: 'border-l-muted', prefix: 'text-muted' },
+  deptooc: { edge: 'border-l-muted', prefix: 'text-muted' },
   command: { edge: 'border-l-mech', prefix: 'text-mech' },
   anim: { edge: 'border-l-anim', prefix: 'text-anim' },
   note: { edge: 'border-l-line', prefix: 'text-muted' },

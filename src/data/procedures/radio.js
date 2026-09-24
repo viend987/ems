@@ -14,8 +14,7 @@ export default {
         { kind: 'say', label: 'Positif', text: '*PAGER* Positive from Fire Alrik.' },
         { kind: 'say', label: 'Negatif', text: '*PAGER* Negative from Fire Alrik.' },
         {
-          kind: 'radio',
-          prefix: '/ro',
+          kind: 'ooc',
           label: 'Alasan negatif',
           text: 'Maaf saya sebentar lagi mau off game karena mau pergi jadi tidak bisa on duty.',
         },
@@ -121,9 +120,9 @@ export default {
       id: 'jarang',
       name: 'Jarang dipakai',
       steps: [
-        { kind: 'radio', label: 'Radio ke departemen lain (1)', text: 'Fire @ to LSPD/LSSD.' },
+        { kind: 'deptradio', label: 'Radio ke departemen lain (1)', text: 'Fire @ to LSPD/LSSD.' },
         {
-          kind: 'radio',
+          kind: 'deptradio',
           label: 'Radio ke departemen lain (2)',
           text: 'Please send your unit to Hospital, we have patient bring an ilegal items.',
         },

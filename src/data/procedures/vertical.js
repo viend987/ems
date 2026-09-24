@@ -1,14 +1,23 @@
-// Vertical Rescue — dari "VERTICAL RESCUE" di LSFD RP.md
+// Vertical Rescue — chat RP dari "VERTICAL RESCUE" dan panduan LifeFlight di draft.md.
+//
+// Frasa radionya dirapikan mengikuti kebiasaan penerbangan Amerika:
+// - Helipad LSFD hanya DFS dan PBH. ASGH/CGH/FS di naskah asal terbawa dari
+//   panduan server lain dan dihapus.
+// - Selalu VFR. IFR menuntut rencana penerbangan yang diajukan lebih dulu dan
+//   tidak dipakai unit penyelamat yang terbang dengan pandangan mata.
+// - Squawk 1200 adalah kode transponder VFR baku di Amerika saat tidak sedang
+//   dilayani ATC. Kalau ATC memberi kode khusus, pakai kode itu. 7700 hanya
+//   untuk pesawat yang sendirinya sedang darurat.
 
 export default {
   id: 'vertical',
   group: 'khusus',
   name: 'Vertical Rescue',
-  blurb: 'Radio saat bertugas sebagai pilot helikopter.',
+  blurb: 'Radio penerbangan, koordinasi IC dengan Rescuer, dan penurunan korban dari tebing.',
   sections: [
     {
-      id: 'vertical-radio',
-      name: 'Radio penerbangan',
+      id: 'radio-latihan',
+      name: 'Radio — latihan dari DFS',
       steps: [
         {
           kind: 'radio',
@@ -18,23 +27,141 @@ export default {
         {
           kind: 'radio',
           label: 'Lapor bertugas',
-          text: 'Fire Alrik now duty as Pilot of ~ and unavaliable for Vertical Rescue Training.',
+          text: 'Fire Alrik now duty as Pilot of ~ and unavailable for Vertical Rescue Training.',
         },
         {
           kind: 'radio',
           label: 'Lapor lepas landas',
-          text: 'Fire Alrik under ~ airborne from DFS helipad, alt 400, for Vertical Rescue Training VFR heading North on departure, over.',
+          text: 'Fire Alrik under ~ airborne from DFS helipad, alt 400, for Vertical Rescue Training, VFR, heading North on departure, over.',
         },
         {
-          kind: 'radio',
-          prefix: '/d',
+          kind: 'deptradio',
           label: 'Lapor ke ATC',
-          text: 'ATC, ~ airborne from DFS helipad, alt 400, for Vertical Rescue Training, VFR, heading North on departure, squawk 2222.',
+          text: 'ATC, ~ airborne from DFS helipad, alt 400, for Vertical Rescue Training, VFR, heading North on departure, squawk 1200.',
+        },
+        { kind: 'radio', label: 'Lapor mendarat', text: '~ has fully landed on DFS helipad, full-stop.' },
+      ],
+    },
+    {
+      id: 'radio-lifeflight',
+      name: 'Radio — panggilan LifeFlight',
+      steps: [
+        {
+          kind: 'note',
+          text: 'OCD menanyakan 10-21 Pilot Certified lebih dulu. Jawaban itu wajib dibalas.',
         },
         {
           kind: 'radio',
-          label: 'Lapor mendarat',
-          text: '~ has fully landed on DFS helipad, full-stop.',
+          label: 'Jawab 10-21',
+          text: 'Fire Alrik on duty as Pilot of LifeFlight.',
+        },
+        {
+          kind: 'radio',
+          label: 'Lepas landas',
+          text: 'LifeFlight-1 airborne from PBH helipad, alt 400, department call, VFR, heading North on departure, over.',
+        },
+        {
+          kind: 'deptradio',
+          label: 'Lapor ke ATC',
+          text: 'ATC, LifeFlight-1 airborne from PBH helipad, alt 400, VFR, heading North on departure, squawk 1200.',
+        },
+        {
+          kind: 'radio',
+          label: 'Mendarat darurat di lokasi',
+          text: 'LifeFlight-1 emergency landing on Angel Pine area.',
+        },
+        { kind: 'radio', label: 'Sampai lokasi', text: 'LifeFlight-1 Status-6 10-20 Angel Pine.' },
+        {
+          kind: 'radio',
+          label: 'Selesai menangani',
+          text: 'LifeFlight-1 10-99 from Angel Pine scene, victim has been taken by Rescue, airborne from scene, alt 400, VFR, departing North for RTB.',
+        },
+        {
+          kind: 'radio',
+          label: 'Sudah mendarat',
+          text: 'LifeFlight-1 has fully landed on PBH helipad, full-stop.',
+        },
+        {
+          kind: 'deptradio',
+          label: 'Lapor mendarat ke ATC',
+          text: 'ATC, LifeFlight-1 has fully landed on PBH helipad, full-stop.',
+        },
+      ],
+    },
+    {
+      id: 'ic-rescuer',
+      name: 'Koordinasi IC dengan Rescuer',
+      steps: [
+        { kind: 'note', text: 'Yang memegang IC adalah Pilot atau Co-Pilot. Biasanya Co-Pilot.' },
+        {
+          kind: 'radio',
+          label: 'IC',
+          text: 'LF take over IC. IC to Rescuer, bersiap untuk melakukan Vertical Rescue.',
+        },
+        {
+          kind: 'radio',
+          label: 'Rescuer',
+          text: 'Rescuer to IC, persiapan telah selesai, silahkan melanjutkan observasi.',
+        },
+        {
+          kind: 'radio',
+          label: 'IC',
+          text: 'IC to Rescuer, lokasi sudah ditentukan, silahkan memasangkan device ke Steel Rod.',
+        },
+        { kind: 'radio', label: 'Rescuer', text: 'Rescuer to IC, harness telah terpasang.' },
+        {
+          kind: 'me',
+          text: 'memasangkan Ferno basket stretcher ke carabiner lalu mengaitkannya ke steel rod.',
+        },
+        {
+          kind: 'me',
+          text: 'memasangkan safety harness ke steel rod sambil memangku Ferno basket stretcher.',
+        },
+        {
+          kind: 'me',
+          text: 'menekan tombol rod activation, membuka kunci pengaman, lalu menekan tombol turun untuk menurunkan steel rod.',
+        },
+        { kind: 'radio', label: 'Rescuer', text: 'Rescuer to IC, saya sudah berada di ground.' },
+        {
+          kind: 'radio',
+          label: 'IC',
+          text: 'IC to Rescuer, di copy. Silahkan menuju ke lokasi korban dan lakukan penanganan. Saya akan mendarat di tempat yang memungkinkan.',
+        },
+        {
+          kind: 'me',
+          text: 'menaikkan korban ke atas Ferno basket stretcher dan mengencangkan sabuk Velcro di setiap bagian.',
+        },
+      ],
+    },
+    {
+      id: 'ground',
+      name: 'Ground Vertical Rescue',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Dipakai saat korban terjebak di tebing atau tempat yang tidak bisa digapai dari darat.',
+        },
+        {
+          kind: 'me',
+          text: 'membuat simpul di pohon menggunakan descender lalu membuat dua anchor point.',
+        },
+        {
+          kind: 'me',
+          text: 'memasangkan static rope ke anchor, memasangkan descender ke harness dengan carabiner, lalu memasangkan descender ke static rope.',
+        },
+        {
+          kind: 'me',
+          text: 'memasangkan static rope kedua ke anchor dan memasangkan figure of eight ke ujung basket stretcher dengan carabiner lalu melilitkan FOE ke static rope.',
+        },
+        { kind: 'me', text: 'menurunkan basket stretcher terlebih dahulu dengan teknik katrol.' },
+        {
+          kind: 'me',
+          text: 'turun dengan berhati-hati sembari membuka perlahan katup descender agar pengait tidak terlalu menggigit tali.',
+        },
+        {
+          kind: 'radio',
+          label: 'Rescuer',
+          text: 'Rescuer to IC, korban sudah berada di bawah dengan aman. Requesting pickup at my location.',
         },
       ],
     },
