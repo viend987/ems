@@ -94,6 +94,12 @@ what is broadcast, `signal` yellow marks what the character does, and `calm`/`me
 `/do` questions, server commands, and animation names. `.slab` is the Saira Condensed heading
 treatment; reuse it instead of restyling headings inline.
 
+The theme is light. Token *names* are surface-neutral (`ink` is the page, `panel` is a card) so a
+theme change stays in `@theme` — components never name a literal color. The accent values are the
+darkened variants: the bright yellow/green/purple that read well on black fail contrast on white, so
+if you reintroduce a dark surface anywhere, those accents need their own values rather than reuse.
+`highlight` is the one bright yellow, and it is fill-only — never use it as text color.
+
 Fonts are self-hosted through `@fontsource` imports so the page makes no third-party request. Only
 the weights actually used are imported — adding a weight to the CSS without using it just grows the
 bundle.

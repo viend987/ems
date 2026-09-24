@@ -25,7 +25,7 @@ export default function Section({ categoryId, section, status, onCopy, onGo }) {
         )}
       </div>
 
-      <div className="flex flex-col gap-px overflow-hidden rounded-sm border border-line">
+      <div className="flex flex-col gap-px overflow-hidden rounded-sm border border-line bg-line">
         {section.steps.map((step, i) => (
           <StepRow
             key={`${anchor}-${i}`}

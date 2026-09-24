@@ -59,21 +59,35 @@ apparatus sebagai navigasi, dan langkah RP yang tersaji seperti log radio bermon
 
 ### Palet
 
+Temanya terang. Nama token tetap sama seperti saat rancangan awal masih gelap, sehingga
+pembalikan tema cukup mengganti nilainya di satu tempat tanpa menyentuh komponen.
+
 | Token | Nilai | Peran |
 |---|---|---|
-| `ink` | `#0A0A0B` | Latar halaman |
-| `panel` | `#121215` | Papan, kartu, permukaan naik |
-| `line` | `#1E1E22` | Garis pemisah, tepi |
-| `muted` | `#5E5E68` | Nomor, label sekunder |
-| `bone` | `#EDEDEF` | Teks utama |
-| `alarm` | `#FF3B30` | Merah LSFD: kategori aktif, baris radio, pita LED |
-| `signal` | `#FFB800` | Kuning LSFD: `/me`, penanda waktu, aksen |
-| `calm` | `#8FB8FF` | `/do` — pertanyaan ke lawan RP |
-| `mech` | `#5FD3A0` | Command mekanik server |
-| `anim` | `#C79BFF` | Nama animasi |
+| `ink` | `#FFFFFF` | Latar halaman |
+| `panel` | `#F5F5F8` | Papan, kartu, baris langkah |
+| `raise` | `#EAEAEF` | Permukaan saat disentuh kursor |
+| `line` | `#DCDCE3` | Garis pemisah, tepi |
+| `muted` | `#6B6B76` | Label sekunder |
+| `dim` | `#4E4E58` | Teks penjelas |
+| `bone` | `#16161B` | Teks utama dan nomor langkah |
+| `alarm` | `#D0121F` | Merah LSFD: kategori aktif, baris radio |
+| `signal` | `#9A5F00` | Kuning LSFD dipekatkan: `/me`, aksen, cincin fokus |
+| `calm` | `#1D5FBF` | `/do` — pertanyaan ke lawan RP |
+| `mech` | `#0E7A4F` | Command mekanik server |
+| `anim` | `#6B3FBF` | Nama animasi |
+| `highlight` | `#FFD24D` | Kuning cerah, hanya sebagai isian (sorotan teks) |
 
-Merah dan kuning mendapat porsi seimbang sesuai lambang LSFD: merah menandai apa yang sedang aktif
-dan apa yang disiarkan, kuning menandai apa yang diperbuat karakter.
+Merah dan kuning tetap mendapat porsi seimbang sesuai lambang LSFD: merah menandai apa yang sedang
+aktif dan apa yang disiarkan, kuning menandai apa yang diperbuat karakter.
+
+Warna penanda sengaja dipekatkan dari versi gelapnya. Kuning terang, hijau mint, dan ungu muda
+terbaca bagus di atas hitam tapi gagal kontras di atas putih, jadi menukar latar saja tidak cukup —
+tiap warna butuh nilai sendiri. Kuning cerah tetap ada, tapi hanya sebagai isian di belakang teks
+gelap, tidak pernah sebagai warna huruf.
+
+Celah satu piksel antarbaris memakai `line` sebagai latar wadahnya, sehingga pemisahnya terlihat
+sebagai garis rambut alih-alih menyatu dengan halaman.
 
 ### Tipografi
 

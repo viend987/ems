@@ -14,7 +14,7 @@ const BY_GROUP = GROUPS.map((group) => ({
 
 function Light({ active }) {
   return (
-    <span aria-hidden="true" className={`size-1.5 shrink-0 rounded-full ${active ? 'bg-bone' : 'bg-line'}`} />
+    <span aria-hidden="true" className={`size-1.5 shrink-0 rounded-full ${active ? 'bg-white' : 'bg-line'}`} />
   )
 }
 

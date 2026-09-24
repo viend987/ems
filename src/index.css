@@ -9,25 +9,31 @@
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
   --font-sans: 'IBM Plex Mono', ui-monospace, monospace;
 
-  --color-ink: #0a0a0b;
-  --color-panel: #121215;
-  --color-raise: #16161a;
-  --color-line: #1e1e22;
-  --color-muted: #5e5e68;
-  --color-dim: #9a9aa2;
-  --color-bone: #ededef;
+  /* Permukaan, dari yang paling terang ke yang paling gelap. */
+  --color-ink: #ffffff;
+  --color-panel: #f5f5f8;
+  --color-raise: #eaeaef;
+  --color-line: #dcdce3;
+  --color-muted: #6b6b76;
+  --color-dim: #4e4e58;
+  --color-bone: #16161b;
 
-  --color-alarm: #ff3b30;
-  --color-signal: #ffb800;
-  --color-calm: #8fb8ff;
-  --color-mech: #5fd3a0;
-  --color-anim: #c79bff;
+  /* Warna penanda. Semuanya dipekatkan agar terbaca di atas putih — kuning
+     dan hijau versi terang tidak lolos kontras di latar terang. */
+  --color-alarm: #d0121f;
+  --color-signal: #9a5f00;
+  --color-calm: #1d5fbf;
+  --color-mech: #0e7a4f;
+  --color-anim: #6b3fbf;
+
+  /* Kuning cerah hanya dipakai sebagai isian, tidak pernah sebagai teks. */
+  --color-highlight: #ffd24d;
 }
 
 @layer base {
   html {
     background: var(--color-ink);
-    color-scheme: dark;
+    color-scheme: light;
     scroll-behavior: smooth;
   }
 
@@ -36,8 +42,8 @@
   }
 
   ::selection {
-    background: var(--color-signal);
-    color: var(--color-ink);
+    background: var(--color-highlight);
+    color: var(--color-bone);
   }
 
   :focus-visible {

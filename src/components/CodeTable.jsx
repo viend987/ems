@@ -13,7 +13,7 @@ export default function CodeTable({ categoryId, table, status, onCopy }) {
         {table.name}
       </h2>
 
-      <div className="flex flex-col gap-px overflow-hidden rounded-sm border border-line">
+      <div className="flex flex-col gap-px overflow-hidden rounded-sm border border-line bg-line">
         {table.rows.map((row, i) => {
           const rowKey = `${anchor}-${i}`
           const copied = status?.key === rowKey

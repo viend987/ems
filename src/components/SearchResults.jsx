@@ -16,7 +16,7 @@ export default function SearchResults({ query, hits, onGo, onClear }) {
           kategorinya langsung dari papan.
         </p>
       ) : (
-        <div className="flex flex-col gap-px overflow-hidden rounded-sm border border-line">
+        <div className="flex flex-col gap-px overflow-hidden rounded-sm border border-line bg-line">
           {hits.map((hit, i) => (
             <button
               key={`${hit.to}-${i}`}
