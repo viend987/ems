@@ -478,21 +478,26 @@ export default {
       id: 'circulation-normal',
       name: 'Cek Ulang (nadi 60–100, atau kembali normal)',
       steps: [
+        { kind: 'note', text: 'A, B, dan C sudah beres.' },
         {
           kind: 'note',
-          text: 'A, B, dan C sudah beres. Sebelum lompat ke penanganan luka, periksa sekali lagi seluruh tubuh korban — luka kedua sering luput waktu perhatian masih tertuju ke luka pertama.',
+          text: 'Kalau kasus ini patah tulang — close maupun open fracture, sudah ketahuan sejak awal di Penanganan Korban — bidainya wajib dipasang sekarang. Bukan pilihan, dan bukan sesuatu yang "ditemukan" di cek ulang ini.',
+          branches: [{ label: 'Penanganan patah tulang', to: 'fracture#triangular' }],
+        },
+        {
+          kind: 'note',
+          text: 'Sisanya baru cek ulang sungguhan: luka kedua yang belum ketahuan, sering luput waktu perhatian masih tertuju ke luka pertama.',
         },
         {
           n: 148,
           kind: 'me',
-          text: 'melakukan palpasi menyeluruh dari kepala hingga kaki korban, memeriksa apakah ada cedera lain yang belum tertangani.',
+          text: 'melakukan palpasi menyeluruh dari kepala hingga kaki korban, memeriksa apakah ada luka tambahan yang belum tertangani.',
         },
         {
           n: 149,
           kind: 'do',
-          text: 'Apakah ditemukan cedera lain pada tubuh korban? (patah tulang / luka lecet / memar / tidak ada)',
+          text: 'Apakah ditemukan luka tambahan pada tubuh korban? (luka lecet / memar / tidak ada)',
           branches: [
-            { label: 'Patah tulang', to: 'fracture#triangular' },
             { label: 'Luka lecet', to: 'wounds#graze' },
             { label: 'Memar', to: 'wounds#bruise' },
             { label: 'Tidak ada → muat korban', to: 'load#load' },
