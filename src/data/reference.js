@@ -34,6 +34,7 @@ export const ANIMS = {
           desc: 'Kedua tangan dilipat ke belakang seperti posisi istirahat — karakter tetap bisa berjalan, bukan anim mematung.',
         },
         { code: '.namaste', desc: 'Gestur mengatupkan kedua telapak tangan — untuk berterima kasih atau memberi hormat.' },
+        { code: '.salute', desc: 'Memberi hormat dengan tangan kanan.' },
       ],
     },
     {
@@ -59,10 +60,13 @@ export const COMMANDS = {
       name: 'Korban & gurney',
       rows: [
         { code: '/inspect [id]', desc: 'Memeriksa kondisi dan luka korban.' },
-        { code: '/removebarrier', desc: 'Menghapus barrier agar gurney bisa lewat.' },
-        { code: '/gurney get 2', desc: 'Mengeluarkan gurney dari unit.' },
+        {
+          code: '/bls',
+          desc: 'Memperpanjang durasi injured korban supaya tidak jatuh ke kondisi critical. Pakai sedini mungkin — kalau korban sampai critical, petugas bisa disalahkan secara IC karena dianggap kelamaan menangani.',
+        },
+        { code: '/gurney get [1-4]', desc: 'Mengeluarkan gurney dari unit. Biasanya dipakai 3.' },
         { code: '/gurney load [id]', desc: 'Memuat korban yang sudah di gurney ke dalam unit.' },
-        { code: '/gurney return', desc: 'Mengembalikan gurney ke unit.' },
+        { code: '/gurney put', desc: 'Mengembalikan gurney ke unit.' },
         { code: '/dropbody', desc: 'Menurunkan tubuh korban dari gendongan.' },
         { code: '/bed [id]', desc: 'Menaruh korban ke ranjang rumah sakit.' },
       ],
@@ -71,7 +75,11 @@ export const COMMANDS = {
       id: 'cmd-medis',
       name: 'Tindakan medis',
       rows: [
-        { code: '/fo', desc: 'Membuka menu first aid — pilih Lifepack.' },
+        {
+          code: '/fo',
+          desc: 'Memilih objek yang muncul sebagai visual di lapangan — tangga, cone, BLS bag, dan lainnya.',
+        },
+        { code: '/removebarrier', desc: 'Menghapus objek yang tadi dimunculkan lewat /fo.' },
         { code: '/stabilize [id]', desc: 'Menstabilkan pasien setelah operasi berhasil.' },
         { code: '/heal [id]', desc: 'Menyembuhkan pasien setelah notifikasi stabilize muncul.' },
         { code: '/medicreport [id]', desc: 'Mengirim laporan medis ke pasien.' },
@@ -82,6 +90,10 @@ export const COMMANDS = {
       id: 'cmd-chat',
       name: 'Chat & radio',
       rows: [
+        {
+          code: '/createunit [nama_unit]',
+          desc: 'Membuat unit sebelum bertugas. Setelah dibuat, tanda ~ di radio otomatis jadi nama unitmu — kalau belum, radio hanya menampilkan ~ mentah.',
+        },
         { code: '/me', desc: 'Aksi karakter. Output diawali nama karakter.' },
         { code: '/do', desc: 'Keadaan atau pertanyaan untuk lawan RP. Output tanpa nama.' },
         { code: '(tanpa awalan)', desc: 'Bicara biasa — cukup ketik teksnya langsung.' },
@@ -204,6 +216,11 @@ export const CODES = {
         { code: 'OCD', desc: 'Operational Control Dispatch.' },
         { code: 'RID', desc: 'Nomor titik lokasi yang dipakai dispatch.' },
         { code: 'ER', desc: 'Emergency Room.' },
+        {
+          code: 'RPLY',
+          desc: 'Roleplay Lie — adegan yang hanya diceritakan lewat /do tanpa ada kegiatan yang benar-benar terlihat. Dipakai saat sesuatu tidak mungkin dijalankan mekaniknya, misalnya firefighter menarasikan operasi karena tidak ada dokter yang bertugas.',
+        },
+        { code: '~', desc: 'Nama unit di radio. Muncul otomatis setelah /createunit dijalankan.' },
       ],
     },
   ],

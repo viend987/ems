@@ -8,6 +8,17 @@ export default {
   blurb: 'Pager, on/off duty, panggilan OCD, dan lalu lintas radio di TKP.',
   sections: [
     {
+      id: 'unit',
+      name: 'Buat unit dulu',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Tanda ~ di baris radio bukan sesuatu yang perlu kamu ganti sendiri — dia berubah otomatis jadi nama unitmu. Tapi itu cuma terjadi kalau unitnya sudah dibuat. Belum dibuat, radio akan menyiarkan ~ mentah.',
+        },
+        { kind: 'command', text: '/createunit [nama_unit]' },
+      ],
+    },
+    {
       id: 'pager',
       name: 'Pager',
       steps: [

@@ -36,6 +36,14 @@ workflow. Pushing to `main` is the deploy step.
 it supplies the meaning of codes (10-code, Status, CAT, Triage, LOC), the theory behind each stage,
 and the Intermediate Life Support chapter that defines drug doses and routes.
 
+Server vocabulary worth knowing before editing content: **RPLY means "Roleplay Lie"** — a scene
+narrated entirely through `/do` with nothing actually happening on screen, used when the mechanics
+or the rank do not allow the real thing (a firefighter narrating surgery when no doctor is on duty).
+It is not "reply". **`~` in a radio line is the unit name**, filled in automatically once
+`/createunit` has run; without it the radio broadcasts a literal `~`. **`/bls` extends the victim's
+injured timer** and should go in early — letting a victim slip into critical gets the responder
+blamed in character.
+
 Some procedures here are **not** in any source document: they were written from real prehospital
 practice because the official material stops at the drug and leaves unlicensed members with nowhere
 to go. Chest seal, abdominal evisceration, flail chest, BVM-assisted ventilation, hyperventilation
@@ -81,7 +89,9 @@ A step is `{ n?, id?, kind, text, label?, prefix?, note?, branches? }`:
   `say` → no prefix, `shout` → `/s`, `radio` → `/r` (LSFD), `ooc` → `/ro`, `deptradio` → `/d`
   (between departments, including ATC), `deptooc` → `/od`, and `command`/`anim` carry their own
   text. Getting this wrong puts the line on the wrong channel in game, so pick the kind by *who
-  hears it*, not by how it looks.
+  hears it*, not by how it looks. Each channel also owns a color (`--color-chat-*` in
+  `index.css`): `/me` pink, `/do` purple, `/r` blue, `/d` orange, `/s` yellow, commands green,
+  anims teal. Those pairings come from the user and are not ours to re-theme.
 - **`kind: 'note'`** is guidance, not typed text: no number, no copy button.
 - **`branches`** are jump links to `'<categoryId>#<sectionId>'`.
 

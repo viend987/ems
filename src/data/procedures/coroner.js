@@ -4,12 +4,16 @@ export default {
   id: 'coroner',
   group: 'khusus',
   name: 'Coroner',
-  blurb: 'Korban sudah tidak bernyawa. Dua versi: reply cepat, atau adegan penuh untuk possible CK.',
+  blurb: 'Korban sudah tidak bernyawa. Dua versi: RPLY yang dinarasikan, atau adegan penuh untuk possible CK.',
   sections: [
     {
       id: 'rply',
-      name: 'RPLy — versi ringkas',
+      name: 'RPLY — versi ringkas',
       steps: [
+        {
+          kind: 'note',
+          text: 'RPLY singkatan dari Roleplay Lie: seluruh kedatangan dan kerja tim Coroner hanya dinarasikan lewat /do, tidak ada unit yang benar-benar datang.',
+        },
         {
           n: 238,
           kind: 'radio',

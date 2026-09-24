@@ -18,10 +18,23 @@
   --color-dim: #4e4e58;
   --color-bone: #16161b;
 
-  /* Warna penanda. Semuanya dipekatkan agar terbaca di atas putih — kuning
-     dan hijau versi terang tidak lolos kontras di latar terang. */
+  /* Warna antarmuka: merah menandai apa yang sedang aktif, kuning untuk
+     aksen dan cincin fokus. Keduanya dipekatkan agar terbaca di atas putih. */
   --color-alarm: #d0121f;
   --color-signal: #9a5f00;
+
+  /* Warna kanal chat. Tiap awalan punya warnanya sendiri supaya jenis baris
+     kebaca sebelum teksnya dibaca. Nilainya dipekatkan dari warna yang
+     dimaksud — merah muda, ungu, biru, oranye, dan kuning versi terang tidak
+     lolos kontras di atas putih. */
+  --color-chat-me: #c2185b; /* /me — merah muda */
+  --color-chat-do: #6b3fbf; /* /do — ungu */
+  --color-chat-radio: #1d5fbf; /* /r — biru */
+  --color-chat-dept: #a8500b; /* /d — oranye */
+  --color-chat-shout: #8a6100; /* /s — kuning */
+  --color-chat-cmd: #0e7a4f; /* command mekanik — hijau */
+  --color-chat-anim: #0f6f7a; /* nama anim — toska */
+
   --color-calm: #1d5fbf;
   --color-mech: #0e7a4f;
   --color-anim: #6b3fbf;

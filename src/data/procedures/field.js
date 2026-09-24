@@ -38,7 +38,7 @@ export default {
           kind: 'me',
           text: 'meletakkan ILS Bag di samping korban, membukanya lalu mengeluarkan perangkat ECG dari dalam ILS Bag.',
         },
-        { kind: 'command', text: '/fo', note: 'pilih Lifepack' },
+        { kind: 'command', text: '/fo', note: 'pilih BLS bag sebagai visual di lapangan' },
         { kind: 'anim', text: '.medic2' },
         {
           n: 56,
@@ -49,6 +49,11 @@ export default {
         { n: 58, kind: 'me', text: 'mencubit kulit korban dengan tangan kanan untuk memicu respon nyeri.' },
         { n: 59, kind: 'do', text: 'Apakah terlihat ada reaksi otot atau rasa nyeri dari cubitan?' },
         { kind: 'command', text: '/inspect [id]' },
+        {
+          kind: 'note',
+          text: 'Pasang /bls sedini mungkin. Command ini memperpanjang durasi injured korban; kalau durasinya habis dan korban jatuh ke critical, petugas yang menangani bisa disalahkan secara IC karena dianggap kelamaan.',
+        },
+        { kind: 'command', text: '/bls' },
         {
           kind: 'note',
           text: 'Lanjut sesuai temuan pada tubuh korban.',

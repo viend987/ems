@@ -9,18 +9,20 @@ import { copyText, isCopyable, prefixOf } from '../lib/copy.js'
  * awalan /me, /do, /r selalu tertulis.
  */
 
+// Satu warna per kanal chat, sehingga jenis baris kebaca sebelum teksnya.
 const TONE = {
-  me: { edge: 'border-l-signal', prefix: 'text-signal' },
-  do: { edge: 'border-l-calm', prefix: 'text-calm' },
+  me: { edge: 'border-l-chat-me', prefix: 'text-chat-me' },
+  do: { edge: 'border-l-chat-do', prefix: 'text-chat-do' },
+  radio: { edge: 'border-l-chat-radio', prefix: 'text-chat-radio' },
+  deptradio: { edge: 'border-l-chat-dept', prefix: 'text-chat-dept' },
+  shout: { edge: 'border-l-chat-shout', prefix: 'text-chat-shout' },
+  command: { edge: 'border-l-chat-cmd', prefix: 'text-chat-cmd' },
+  anim: { edge: 'border-l-chat-anim', prefix: 'text-chat-anim' },
+  // Bicara biasa tidak punya awalan, jadi tidak perlu warna penanda.
   say: { edge: 'border-l-bone', prefix: 'text-bone' },
-  shout: { edge: 'border-l-bone', prefix: 'text-bone' },
-  radio: { edge: 'border-l-alarm', prefix: 'text-alarm' },
-  deptradio: { edge: 'border-l-alarm', prefix: 'text-alarm' },
   // OOC berada di luar cerita, jadi sengaja dibuat paling tenang.
   ooc: { edge: 'border-l-muted', prefix: 'text-muted' },
   deptooc: { edge: 'border-l-muted', prefix: 'text-muted' },
-  command: { edge: 'border-l-mech', prefix: 'text-mech' },
-  anim: { edge: 'border-l-anim', prefix: 'text-anim' },
   note: { edge: 'border-l-line', prefix: 'text-muted' },
 }
 

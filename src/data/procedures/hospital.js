@@ -30,9 +30,13 @@ export default {
       ],
     },
     {
-      id: 'npc-reply',
-      name: 'Reply NPC kalau tidak ada dokter',
+      id: 'rply-operasi',
+      name: 'RPLY operasi — tidak ada dokter bertugas',
       steps: [
+        {
+          kind: 'note',
+          text: 'RPLY singkatan dari Roleplay Lie: adegan yang hanya diceritakan lewat /do, tanpa ada kegiatan yang benar-benar terlihat. Dipakai di sini karena firefighter sebenarnya tidak berwenang mengoperasi — tapi kalau tidak ada dokter yang bertugas, operasinya dinarasikan supaya scene tetap bisa selesai.',
+        },
         { kind: 'command', text: '/dropbody' },
         { kind: 'command', text: '/bed [id]' },
         { kind: 'anim', text: '.mechanic' },

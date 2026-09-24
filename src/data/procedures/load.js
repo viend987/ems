@@ -15,15 +15,15 @@ export default {
           kind: 'me',
           text: 'merapikan peralatan yang digunakan lalu mengambil gurney dari dalam Unit Kendaraan dan membawanya ke samping korban.',
         },
-        { n: 38, kind: 'command', text: '/removebarrier' },
-        { n: 39, kind: 'command', text: '/gurney get 2' },
+        { n: 38, kind: 'command', text: '/removebarrier', note: 'menghapus objek /fo yang tadi dipasang' },
+        { n: 39, kind: 'command', text: '/gurney get 3', note: 'pilihan 1 sampai 4, biasanya 3' },
         {
           n: 40,
           kind: 'me',
           text: 'memindahkan korban ke atas gurney lalu mendorongnya sampai ke Unit Kendaraan dan memasukkan korban dengan hati-hati.',
         },
         { kind: 'command', text: '/gurney load [id]' },
-        { n: 41, kind: 'command', text: '/gurney return' },
+        { n: 41, kind: 'command', text: '/gurney put' },
       ],
     },
     {
