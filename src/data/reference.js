@@ -94,6 +94,7 @@ export const COMMANDS = {
           code: '/createunit [nama_unit]',
           desc: 'Membuat unit sebelum bertugas. Setelah dibuat, tanda ~ di radio otomatis jadi nama unitmu — kalau belum, radio hanya menampilkan ~ mentah.',
         },
+        { code: '/joinunit [nama_unit]', desc: 'Bergabung ke unit yang sudah dibuat rekan lain.' },
         { code: '/me', desc: 'Aksi karakter. Output diawali nama karakter.' },
         { code: '/do', desc: 'Keadaan atau pertanyaan untuk lawan RP. Output tanpa nama.' },
         { code: '(tanpa awalan)', desc: 'Bicara biasa — cukup ketik teksnya langsung.' },

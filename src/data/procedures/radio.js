@@ -9,13 +9,14 @@ export default {
   sections: [
     {
       id: 'unit',
-      name: 'Buat unit dulu',
+      name: 'Buat atau gabung unit dulu',
       steps: [
         {
           kind: 'note',
-          text: 'Tanda ~ di baris radio bukan sesuatu yang perlu kamu ganti sendiri — dia berubah otomatis jadi nama unitmu. Tapi itu cuma terjadi kalau unitnya sudah dibuat. Belum dibuat, radio akan menyiarkan ~ mentah.',
+          text: 'Tanda ~ di baris radio bukan sesuatu yang perlu kamu ganti sendiri — dia berubah otomatis jadi nama unitmu. Tapi itu cuma terjadi kalau kamu sudah punya unit. Belum punya, radio akan menyiarkan ~ mentah.',
         },
-        { kind: 'command', text: '/createunit [nama_unit]' },
+        { kind: 'command', text: '/createunit [nama_unit]', note: 'kalau kamu yang membuka unitnya' },
+        { kind: 'command', text: '/joinunit [nama_unit]', note: 'kalau ikut unit rekan yang sudah ada' },
       ],
     },
     {
