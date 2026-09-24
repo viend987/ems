@@ -407,7 +407,7 @@ export default {
           kind: 'do',
           text: 'Berapa denyut nadi per menit yang terbaca pada monitor ECG? (60 - 100 Normal)',
           branches: [
-            { label: '60–100 → lanjut penanganan luka', to: 'abc#circulation-normal' },
+            { label: '60–100 → Cek Ulang', to: 'abc#circulation-normal' },
             { label: 'Di bawah 60 → nadi melambat', to: 'abc#circulation-bradi' },
             { label: 'Di atas 100 → nadi memacu', to: 'abc#circulation-taki' },
             { label: 'Tidak ada denyut → CPR', to: 'abc#cpr' },
@@ -431,7 +431,7 @@ export default {
           kind: 'do',
           text: 'Berapa denyut nadi per menit korban? (60 - 100 normal)',
           branches: [
-            { label: '60–100 → lanjut penanganan luka', to: 'abc#circulation-normal' },
+            { label: '60–100 → Cek Ulang', to: 'abc#circulation-normal' },
             { label: 'Di bawah 60', to: 'abc#circulation-bradi' },
             { label: 'Di atas 100 dengan luka torso', to: 'abc#circulation-torso' },
             { label: 'Tidak ada denyut → CPR', to: 'abc#cpr' },
@@ -476,16 +476,26 @@ export default {
     },
     {
       id: 'circulation-normal',
-      name: 'Circulation — nadi 60–100 (normal)',
+      name: 'Cek Ulang (nadi 60–100, atau kembali normal)',
       steps: [
         {
           kind: 'note',
-          text: 'A, B, dan C sudah beres. Lanjut ke penanganan lukanya, baru muat korban.',
+          text: 'A, B, dan C sudah beres. Sebelum lompat ke penanganan luka, periksa sekali lagi seluruh tubuh korban — luka kedua sering luput waktu perhatian masih tertuju ke luka pertama.',
+        },
+        {
+          n: 148,
+          kind: 'me',
+          text: 'melakukan palpasi menyeluruh dari kepala hingga kaki korban, memeriksa apakah ada cedera lain yang belum tertangani.',
+        },
+        {
+          n: 149,
+          kind: 'do',
+          text: 'Apakah ditemukan cedera lain pada tubuh korban? (patah tulang / luka lecet / memar / tidak ada)',
           branches: [
             { label: 'Patah tulang', to: 'fracture#triangular' },
             { label: 'Luka lecet', to: 'wounds#graze' },
             { label: 'Memar', to: 'wounds#bruise' },
-            { label: 'Muat korban', to: 'load#load' },
+            { label: 'Tidak ada → muat korban', to: 'load#load' },
           ],
         },
       ],
@@ -508,7 +518,7 @@ export default {
           kind: 'do',
           text: 'Apakah denyut nadi korban naik setelah oksigen terpasang? (60 - 100 Normal)',
           branches: [
-            { label: 'Naik → lanjut penanganan luka', to: 'abc#circulation-normal' },
+            { label: 'Naik → Cek Ulang', to: 'abc#circulation-normal' },
             { label: 'Masih di bawah 60 → Atropine', to: 'drugs#atropine' },
             { label: 'Belum boleh pakai ILS', to: 'abc#tanpa-ils' },
           ],
@@ -599,7 +609,7 @@ export default {
           kind: 'do',
           text: 'Apakah ada perubahan pada ritme ECG atau respons korban? (60 - 100 Normal)',
           branches: [
-            { label: 'Kembali → lanjut penanganan luka', to: 'abc#circulation-normal' },
+            { label: 'Kembali → Cek Ulang', to: 'abc#circulation-normal' },
             { label: 'Belum → AED', to: 'abc#aed' },
           ],
         },
@@ -631,7 +641,7 @@ export default {
           kind: 'do',
           text: 'Apakah ritme jantung korban kembali setelah shock? (60 - 100 Normal)',
           branches: [
-            { label: 'Kembali → lanjut penanganan luka', to: 'abc#circulation-normal' },
+            { label: 'Kembali → Cek Ulang', to: 'abc#circulation-normal' },
             { label: 'Belum → Epinephrine', to: 'drugs#epinephrine' },
             { label: 'Belum boleh pakai ILS', to: 'abc#tanpa-ils' },
           ],
