@@ -200,6 +200,11 @@ export default {
       name: 'Breathing — Simple Face Mask (di bawah 12)',
       steps: [
         {
+          id: 'oxy-note',
+          kind: 'note',
+          text: 'Lewati dua langkah berikut kalau oxygen outlet sudah ada di samping korban dari tindakan sebelumnya.',
+        },
+        {
           id: 'oxy-fetch',
           n: 121,
           kind: 'me',
@@ -225,6 +230,7 @@ export default {
       id: 'breathing-nasal-cannula',
       name: 'Breathing — Nasal Cannula (laju napas di tengah)',
       steps: [
+        { ref: 'oxy-note' },
         { ref: 'oxy-fetch' },
         { ref: 'oxy-place' },
         {
@@ -246,6 +252,7 @@ export default {
       id: 'breathing-nrb',
       name: 'Breathing — Non-Rebreather Mask (di atas 20 / abnormal)',
       steps: [
+        { ref: 'oxy-note' },
         { ref: 'oxy-fetch' },
         { ref: 'oxy-place' },
         {
@@ -268,6 +275,7 @@ export default {
       id: 'breathing-intubasi',
       name: 'Breathing — Intubasi (airway berdarah terus)',
       steps: [
+        { ref: 'oxy-note' },
         { ref: 'oxy-fetch' },
         { ref: 'oxy-place' },
         { n: 136, kind: 'me', text: 'memposisikan kepala korban ke posisi sniffing untuk membuka jalan napas.' },
@@ -320,6 +328,9 @@ export default {
           kind: 'note',
           text: 'Di bawah 8 kali per menit, masker oksigen saja tidak cukup — korban menghirup oksigen yang bagus tapi terlalu jarang. Napasnya harus dibantu, bukan sekadar diberi. Ini bisa dilakukan tanpa izin ILS.',
         },
+        { ref: 'oxy-note' },
+        { ref: 'oxy-fetch' },
+        { ref: 'oxy-place' },
         { kind: 'me', text: 'mengeluarkan BVM dari dalam ILS Bag dan menyambungkannya ke oxygen outlet.' },
         {
           kind: 'me',
@@ -488,12 +499,12 @@ export default {
           text: 'Nadi melambat berarti aliran darah ke otak berkurang, dan korban akan ikut sesak. Topang napasnya dulu sebelum menyentuh obat.',
         },
         {
-          n: 146,
-          kind: 'me',
-          text: 'memasang Non-Rebreather Mask pada korban untuk menopang pasokan oksigen sambil memantau monitor.',
+          kind: 'note',
+          text: 'Pasang Non-Rebreather Mask lewat prosedurnya sendiri — di sana termasuk mengambil oxygen outlet dari unit, yang mungkin belum pernah dilakukan kalau napas korban tadi terbaca normal.',
+          branches: [{ label: 'Pasang NRB', to: 'abc#breathing-nrb' }],
         },
         {
-          n: 147,
+          n: 146,
           kind: 'do',
           text: 'Apakah denyut nadi korban naik setelah oksigen terpasang? (60 - 100 Normal)',
           branches: [
@@ -513,12 +524,12 @@ export default {
           text: 'Nadi di atas 100 hampir selalu disertai sesak, jadi pasang NRB lebih dulu. Sesudah itu penyebabnya menentukan obatnya — dan dua penyebab ini penanganannya berlawanan.',
         },
         {
-          n: 148,
-          kind: 'me',
-          text: 'memasang Non-Rebreather Mask pada korban lalu memantau ulang denyut nadi di monitor ECG.',
+          kind: 'note',
+          text: 'Pasang Non-Rebreather Mask lewat prosedurnya sendiri, lalu pantau ulang denyut nadi di monitor ECG.',
+          branches: [{ label: 'Pasang NRB', to: 'abc#breathing-nrb' }],
         },
         {
-          n: 149,
+          n: 147,
           kind: 'do',
           text: 'Apakah korban kehilangan banyak darah sebelum nadinya memacu?',
           branches: [
