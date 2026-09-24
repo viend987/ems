@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "deploy": "npm run build && wrangler deploy",
-    "logo": "node scripts/logo.mjs"
+    "logo": "node scripts/logo.mjs",
+    "units": "node scripts/units.mjs"
   },
   "dependencies": {
     "react": "^19.2.8",

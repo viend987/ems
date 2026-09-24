@@ -22,6 +22,7 @@ npx vitest run src/lib/copy.test.js   # single test file
 npm run lint     # oxlint
 npm run build    # production build to dist/
 npm run logo     # regenerate src/assets/lsfd.webp + public/favicon.png from lsfd.png
+npm run units    # convert images-incoming/*.{png,jpg} to WebP in src/assets/units/
 npm run deploy   # build + wrangler deploy (manual; normally not needed)
 ```
 
@@ -108,6 +109,19 @@ A step is `{ n?, id?, kind, text, label?, prefix?, note?, branches? }`:
 `src/lib/procedures.test.js` fails on a dangling `ref`, a duplicate id, an unknown `kind`, an empty
 copyable step, or a branch/flow target pointing at a section that does not exist. Adding content
 with a typo will not reach production silently.
+
+### Unit photos
+
+`npm run units` (`scripts/units.mjs`) resizes each file in `images-incoming/` to 960px wide WebP in
+`src/assets/units/` and moves the original into `images-incoming/done/`. **The filename becomes the
+id** — name incoming files after the callsign (`engine.jpeg`, `lifeflight.png`) and reference that
+id in `images` in `src/data/units.js`. Unlike arms-calc's coordinate gallery there is no crop and no
+full-size lightbox: unit photos are landscape 16:9 and the whole vehicle is the point, so the
+aspect ratio is kept and the card shows the image as-is.
+
+`images-incoming/` is gitignored — the raw 1920x1080 sources are several MB and only the converted
+WebP belongs in the repo. A unit with no `images` still renders its callsign and description, which
+is how the fleet list stays complete while photos arrive in batches.
 
 ### Adding a category
 

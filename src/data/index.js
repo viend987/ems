@@ -13,6 +13,7 @@ import radio from './procedures/radio.js'
 import vertical from './procedures/vertical.js'
 import wounds from './procedures/wounds.js'
 import LINKS from './links.js'
+import UNITS from './units.js'
 import { REFERENCE } from './reference.js'
 
 /** Urutan kategori di papan. Kategori baru cukup diimpor dan ditaruh di sini. */
@@ -33,9 +34,9 @@ export const PROCEDURES = [
   animals,
 ]
 
-export const CATEGORIES = [...PROCEDURES, ...REFERENCE, LINKS]
+export const CATEGORIES = [...PROCEDURES, ...REFERENCE, UNITS, LINKS]
 
-export { LINKS }
+export { LINKS, UNITS }
 
 /** Kelompok di papan status, berurutan dari yang paling sering dipakai. */
 export const GROUPS = [

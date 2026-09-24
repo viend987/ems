@@ -7,6 +7,7 @@ import LinkList from './components/LinkList.jsx'
 import Section from './components/Section.jsx'
 import SearchResults from './components/SearchResults.jsx'
 import SectionNav from './components/SectionNav.jsx'
+import UnitGallery from './components/UnitGallery.jsx'
 import { CATEGORIES, PROCEDURES } from './data/index.js'
 import { useCopy, useRoute } from './hooks.js'
 import { isCopyable } from './lib/copy.js'
@@ -80,7 +81,7 @@ export default function App() {
 
               <SectionNav
                 categoryId={category.id}
-                sections={category.sections ?? category.tables ?? category.groups ?? []}
+                sections={category.sections ?? category.tables ?? category.groups ?? category.fleet ?? []}
                 onGo={goAndClear}
               />
 
@@ -106,6 +107,9 @@ export default function App() {
                 ))}
                 {category.groups?.map((group) => (
                   <LinkList key={group.id} group={group} />
+                ))}
+                {category.fleet?.map((group) => (
+                  <UnitGallery key={group.id} categoryId={category.id} group={group} />
                 ))}
               </div>
             </>

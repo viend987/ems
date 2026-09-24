@@ -1,5 +1,6 @@
 import { PROCEDURES } from '../data/index.js'
 import { REFERENCE } from '../data/reference.js'
+import UNITS from '../data/units.js'
 import { copyText } from './copy.js'
 import { resolveCategory } from './procedures.js'
 
@@ -42,6 +43,19 @@ function buildIndex() {
           to: `${category.id}#${table.id}`,
         })
       }
+    }
+  }
+
+  for (const group of UNITS.fleet) {
+    for (const unit of group.units) {
+      entries.push({
+        kind: 'reference',
+        text: `${unit.callsign} (${unit.vehicle}) — ${unit.desc}`,
+        categoryId: UNITS.id,
+        categoryName: UNITS.name,
+        sectionName: group.name,
+        to: `${UNITS.id}#${group.id}`,
+      })
     }
   }
 
