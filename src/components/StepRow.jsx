@@ -64,7 +64,7 @@ export default function StepRow({ step, rowKey, status, onCopy, onGo }) {
       >
         <span
           className={`mt-px w-14 shrink-0 text-[10px] tabular-nums sm:w-16 sm:text-[11px] ${
-            copied ? (status.ok ? 'text-mech' : 'text-alarm') : 'text-dim'
+            copied ? (status.ok ? 'text-mech' : 'text-alarm') : 'text-bone'
           }`}
         >
           {copied ? marker : step.n ? `/${step.n}` : '—'}
