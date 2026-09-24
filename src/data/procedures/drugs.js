@@ -118,7 +118,13 @@ export default {
         { n: 175, kind: 'me', text: 'menyuntikkan Atropine ke otot korban dengan perlahan.' },
         { n: 176, kind: 'me', text: 'menarik jarum kemudian menekan area suntikan dengan kasa.' },
         { n: 177, kind: 'me', text: 'memantau ulang denyut nadi korban melalui pergelangan tangan.' },
-        { id: 'pulse-recheck', n: 178, kind: 'do', text: 'Apakah ada perubahan pada denyut nadi korban?' },
+        {
+          id: 'pulse-recheck',
+          n: 178,
+          kind: 'do',
+          text: 'Apakah ada perubahan pada denyut nadi korban?',
+          branches: [{ label: 'Normal → Cek Ulang', to: 'abc#circulation-normal' }],
+        },
       ],
     },
     {
@@ -152,7 +158,12 @@ export default {
         { n: 182, kind: 'me', text: 'menyiapkan spuit untuk injeksi intramuscular.' },
         { n: 183, kind: 'me', text: 'menyuntikkan Verapamil ke otot korban.' },
         { n: 184, kind: 'me', text: 'memantau denyut nadi korban untuk menilai penurunan detak jantung.' },
-        { n: 185, kind: 'do', text: 'Apakah ada perubahan pada denyut nadi korban?' },
+        {
+          n: 185,
+          kind: 'do',
+          text: 'Apakah ada perubahan pada denyut nadi korban?',
+          branches: [{ label: 'Normal → Cek Ulang', to: 'abc#circulation-normal' }],
+        },
       ],
     },
     {
