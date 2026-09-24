@@ -1,4 +1,4 @@
-// Vertical Rescue — chat RP dari "VERTICAL RESCUE" dan panduan LifeFlight di draft.md.
+// Vertical Rescue — chat RP dari "VERTICAL RESCUE" dan panduan helikopter di draft.md.
 //
 // Frasa radionya dirapikan mengikuti kebiasaan penerbangan Amerika:
 // - Helipad LSFD hanya DFS dan PBH. ASGH/CGH/FS di naskah asal terbawa dari
@@ -44,47 +44,47 @@ export default {
     },
     {
       id: 'radio-lifeflight',
-      name: 'Radio — panggilan LifeFlight',
+      name: 'Radio — panggilan helikopter',
       steps: [
         {
           kind: 'note',
-          text: 'OCD menanyakan 10-21 Pilot Certified lebih dulu. Jawaban itu wajib dibalas.',
+          text: 'OCD menanyakan 10-21 Pilot Certified lebih dulu, dan jawaban itu wajib dibalas. Pastikan unitmu sudah dibuat lewat /createunit supaya ~ terisi nama unit.',
         },
         {
           kind: 'radio',
           label: 'Jawab 10-21',
-          text: 'Fire Alrik on duty as Pilot of LifeFlight.',
+          text: 'Fire Alrik on duty as Pilot of ~.',
         },
         {
           kind: 'radio',
           label: 'Lepas landas',
-          text: 'LifeFlight-1 airborne from PBH helipad, alt 400, department call, VFR, heading North on departure, over.',
+          text: '~ airborne from PBH helipad, alt 400, department call, VFR, heading North on departure, over.',
         },
         {
           kind: 'deptradio',
           label: 'Lapor ke ATC',
-          text: 'ATC, LifeFlight-1 airborne from PBH helipad, alt 400, VFR, heading North on departure, squawk 1200.',
+          text: 'ATC, ~ airborne from PBH helipad, alt 400, VFR, heading North on departure, squawk 1200.',
         },
         {
           kind: 'radio',
           label: 'Mendarat darurat di lokasi',
-          text: 'LifeFlight-1 emergency landing on Angel Pine area.',
+          text: '~ emergency landing on Angel Pine area.',
         },
-        { kind: 'radio', label: 'Sampai lokasi', text: 'LifeFlight-1 Status-6 10-20 Angel Pine.' },
+        { kind: 'radio', label: 'Sampai lokasi', text: '~ Status-6 10-20 Angel Pine.' },
         {
           kind: 'radio',
           label: 'Selesai menangani',
-          text: 'LifeFlight-1 10-99 from Angel Pine scene, victim has been taken by Rescue, airborne from scene, alt 400, VFR, departing North for RTB.',
+          text: '~ 10-99 from Angel Pine scene, victim has been taken by Rescue, airborne from scene, alt 400, VFR, departing North for RTB.',
         },
         {
           kind: 'radio',
           label: 'Sudah mendarat',
-          text: 'LifeFlight-1 has fully landed on PBH helipad, full-stop.',
+          text: '~ has fully landed on PBH helipad, full-stop.',
         },
         {
           kind: 'deptradio',
           label: 'Lapor mendarat ke ATC',
-          text: 'ATC, LifeFlight-1 has fully landed on PBH helipad, full-stop.',
+          text: 'ATC, ~ has fully landed on PBH helipad, full-stop.',
         },
       ],
     },
@@ -96,7 +96,7 @@ export default {
         {
           kind: 'radio',
           label: 'IC',
-          text: 'LF take over IC. IC to Rescuer, bersiap untuk melakukan Vertical Rescue.',
+          text: '~ take over IC. IC to Rescuer, bersiap untuk melakukan Vertical Rescue.',
         },
         {
           kind: 'radio',
