@@ -144,6 +144,11 @@ export default {
           text: 'kembali menekan tombol shock pada AED sambil memantau respon jantung.',
         },
         { ref: 'pulse-recheck' },
+        {
+          kind: 'note',
+          text: 'Kalau setelah Epinephrine dan shock berulang tetap tidak ada respons sama sekali, itu titik untuk menyatakan korban tidak tertolong.',
+          branches: [{ label: 'Korban tidak tertolong', to: 'abc#meninggal' }],
+        },
       ],
     },
     {

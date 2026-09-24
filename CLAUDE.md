@@ -50,8 +50,15 @@ included) is "Compartement Engine". **The ambulance unit is called RA Unit**, no
 Some procedures here are **not** in any source document: they were written from real prehospital
 practice because the official material stops at the drug and leaves unlicensed members with nowhere
 to go. Chest seal, abdominal evisceration, flail chest, BVM-assisted ventilation, hyperventilation
-coaching, the recovery position, and the shock position are all in that group. They are deliberate
-additions, not transcription errors — do not delete them for failing to appear in the handbook.
+coaching, the recovery position, the shock position, and `abc#meninggal` (declaring a death after
+resuscitation fails) are all in that group. They are deliberate additions, not transcription errors
+— do not delete them for failing to appear in the handbook.
+
+`abc#meninggal` is reached only from Epinephrine's failure branch, deliberately — declaring death
+follows the same authority rule as RPLY: only an ILS-authorized responder gets there, so the
+`tanpa-ils` chain still funnels toward transport instead. Its condolence lines are written plain on
+purpose (no flowery religious language) after a request to tone that down; keep future additions to
+the same register.
 
 The site carries **only lines a player types into game chat**. `draft.md` also contains doctrine —
 role descriptions, equipment lists, the fire-extinguisher class table, risk classifications, the

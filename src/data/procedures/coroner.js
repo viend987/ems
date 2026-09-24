@@ -15,6 +15,7 @@ export default {
           text: 'RPLY singkatan dari Roleplay Lie: seluruh kedatangan dan kerja tim Coroner hanya dinarasikan lewat /do, tidak ada unit yang benar-benar datang.',
         },
         {
+          id: 'minta-coroner',
           n: 238,
           kind: 'radio',
           label: 'Minta unit MED',
@@ -54,7 +55,13 @@ export default {
         {
           n: 247,
           kind: 'say',
-          text: 'Huh... beliau sudah pergi, semoga Tuhan menaungi jiwanya dengan terang dan ketenangan.',
+          label: 'opsi 1',
+          text: 'Saya turut berduka. Kami sudah coba semua cara, tapi memang sudah tidak tertolong.',
+        },
+        {
+          kind: 'say',
+          label: 'opsi 2',
+          text: 'Maaf, kondisinya sudah tidak memungkinkan lagi. Turut berdukacita untuk keluarganya.',
         },
         { n: 248, kind: 'anim', text: '.prop_clipboard' },
         {

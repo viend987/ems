@@ -671,6 +671,52 @@ export default {
       ],
     },
     {
+      id: 'meninggal',
+      name: 'Kalau korban tidak tertolong',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Dipakai kalau CPR, AED, dan Epinephrine semua sudah dicoba dan nadi tidak pernah kembali. Menyatakan waktu kematian biasanya disepakati dulu dengan pemain lain di scene sebelum RP ini jalan — bukan keputusan sepihak.',
+        },
+        {
+          kind: 'me',
+          text: 'menghentikan kompresi dan menatap monitor ECG sekali lagi, memastikan benar-benar tidak ada aktivitas jantung.',
+        },
+        { kind: 'do', text: 'Monitor menunjukkan garis datar, tidak ada aktivitas jantung sama sekali.' },
+        {
+          kind: 'me',
+          text: 'melihat jam di radio lalu mencatat waktu kematian korban.',
+        },
+        {
+          kind: 'note',
+          text: 'Dua baris berikut buat menyampaikan ke orang di sekitar TKP — keluarga, saksi, atau rekan korban. Pilih salah satu, atau gabung sesuai situasinya.',
+        },
+        {
+          kind: 'say',
+          label: 'opsi 1',
+          text: 'Kami sudah coba semua cara yang bisa dilakukan, tapi kondisinya memang sudah tidak tertolong. Saya turut berduka.',
+        },
+        {
+          kind: 'say',
+          label: 'opsi 2',
+          text: 'Maaf, korban tidak bisa kami selamatkan. Kami turut berdukacita untuk keluarganya.',
+        },
+        {
+          kind: 'me',
+          text: 'menutup wajah korban dengan kain dari ILS Bag sambil menunggu unit Coroner tiba di lokasi.',
+        },
+        { ref: 'minta-coroner' },
+        {
+          kind: 'note',
+          text: 'Lanjut ke penanganan pasca-kematian sesuai situasi di scene.',
+          branches: [
+            { label: 'RPLY versi ringkas', to: 'coroner#rply' },
+            { label: 'Possible CK Scene', to: 'coroner#ck-scene' },
+          ],
+        },
+      ],
+    },
+    {
       id: 'tanpa-ils',
       name: 'Kalau belum boleh pakai ILS',
       steps: [
