@@ -228,19 +228,28 @@ saat menyusun teks salinan. Ini mencegah awalan salah ketik dan membuat pewarnaa
 Dokumen sumber mengulang langkah yang sama di banyak cabang. `/73` muncul lima kali, `/119`–`/121`
 muncul di empat varian bantuan napas, `/101`–`/103` di dua metode airway, `/31`–`/36` di dua tempat.
 
-Kemunculan pertama menuliskan langkahnya penuh; kemunculan berikutnya cukup `{ ref: 73 }` dan
-teksnya diambil dari definisi aslinya. Satu sumber kebenaran, tanpa memaksa penulis konten
-memindahkan apa pun ke berkas terpisah.
+Kemunculan pertama menuliskan langkahnya penuh dan diberi `id`; kemunculan berikutnya cukup
+`{ ref: 'id-itu' }` dan teksnya diambil dari definisi aslinya. Satu sumber kebenaran, tanpa memaksa
+penulis konten memindahkan apa pun ke berkas terpisah. Rujukan bekerja lintas berkas kategori,
+sehingga urutan definisi tidak perlu dipikirkan.
+
+Rujukan sengaja memakai `id`, bukan nomor `n`. Alasannya ditemukan saat memindahkan isi: dokumen
+sumber memakai `/73` untuk **dua kalimat berbeda** — "Apakah pendarahan berhenti?" di direct
+pressure, elevation, dan arterial pressure; lalu "Terlihat pendarahan mulai dapat diatasi." di
+tourniquet dan CRoC. Keduanya dipertahankan apa adanya. Karena `n` hanya penanda tampilan dan bukan
+kunci rujukan, ketidakkonsistenan itu tidak merusak apa pun — tapi perlu diketahui kalau suatu saat
+shortcut in-game mau dirapikan.
 
 ### Aturan yang ditegakkan tes
 
 `src/lib/procedures.test.js` gagal bila:
 
-1. Ada dua langkah berbeda memakai `n` yang sama dengan teks berbeda.
-2. Ada `ref` menunjuk nomor yang tidak pernah didefinisikan.
+1. Ada `id` langkah yang dipakai dua kali.
+2. Ada `ref` menunjuk `id` yang tidak pernah didefinisikan.
 3. Ada `kind` di luar daftar yang dikenal.
-4. Ada `id` kategori atau `id` bagian yang bentrok.
+4. Ada `id` kategori atau `id` bagian yang bentrok, atau kategori masuk kelompok tak terdaftar.
 5. Ada langkah yang bisa disalin tapi teksnya kosong.
+6. Ada percabangan atau simpul pita alur menunjuk bagian yang tidak ada.
 
 ### Berkas data lain
 
@@ -416,14 +425,16 @@ Cloudflare. Tidak ada GitHub Actions. `npm run deploy` tetap ada untuk deploy ma
 
 Vitest atas berkas murni di `src/lib/`, ditulis lebih dulu sesuai alur TDD:
 
-- `procedures.test.js` — lima aturan integritas data di §7, ditambah pemeriksaan bahwa setiap
-  kategori di peta §8 benar-benar ada dan setiap sasaran percabangan menunjuk `id` bagian yang ada.
+- `procedures.test.js` — enam aturan integritas data di §7, ditambah pemeriksaan bahwa setiap
+  rujukan benar-benar terselesaikan menjadi langkah utuh.
 - `copy.test.js` — `copyText` menghasilkan awalan yang benar per `kind`, tidak pernah menyertakan
   nomor, dan `copySection` melewati baris `note`.
 - `search.test.js` — pencocokan atas nomor, atas potongan teks tanpa memperhatikan huruf
   besar-kecil, dan atas nama bagian.
 
-Komponen tidak diuji otomatis; pemeriksaannya dilakukan dengan melihat halaman langsung.
+`smoke.test.jsx` merender seluruh halaman di jsdom untuk menangkap komponen yang crash dan
+memastikan setiap kategori sampai ke papan. Selebihnya, pemeriksaan tampilan dilakukan dengan
+melihat halaman langsung.
 
 ---
 
