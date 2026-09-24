@@ -40,9 +40,12 @@ Server vocabulary worth knowing before editing content: **RPLY means "Roleplay L
 narrated entirely through `/do` with nothing actually happening on screen, used when the mechanics
 or the rank do not allow the real thing (a firefighter narrating surgery when no doctor is on duty).
 It is not "reply". **`~` in a radio line is the unit name**, filled in automatically once
-`/createunit` has run; without it the radio broadcasts a literal `~`. **`/bls` extends the victim's
-injured timer** and should go in early — letting a victim slip into critical gets the responder
-blamed in character.
+`/createunit` (or `/joinunit` for a colleague's unit) has run; without it the radio broadcasts a
+literal `~`. **`/bls` extends the victim's injured timer** and should go in early — letting a victim
+slip into critical gets the responder blamed in character. **There is no separate "Truck" apparatus**
+— the field unit is called Engine, and every MVA compartment (extrication tools, stabilization rods,
+included) is "Compartement Engine". **The ambulance unit is called RA Unit**, not "ambulance" or
+"ambulans" — those words only survive in generic Indonesian prose like "unit kendaraan".
 
 Some procedures here are **not** in any source document: they were written from real prehospital
 practice because the official material stops at the drug and leaves unlicensed members with nowhere

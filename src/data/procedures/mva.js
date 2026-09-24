@@ -36,13 +36,13 @@ export default {
     },
     {
       id: 'stabilisasi',
-      name: 'Stabilisasi kendaraan (unit Truck)',
+      name: 'Stabilisasi kendaraan (unit Engine)',
       steps: [
         { kind: 'me', text: 'berjalan menuju ke arah mobil korban lalu melihat sekelilingnya.' },
         { kind: 'do', text: 'Apakah posisi mobil dalam keadaan miring?' },
         {
           kind: 'me',
-          text: 'kembali ke arah Truck, mengambil Stabilization Rods dari Compartement Truck lalu membawanya ke arah mobil korban.',
+          text: 'kembali ke arah Engine, mengambil Stabilization Rods dari Compartement Engine lalu membawanya ke arah mobil korban.',
         },
         { kind: 'me', text: 'memasangkan Stabilization Rods di kedua sisi mobil dengan perlahan.' },
         { kind: 'do', text: 'Terlihat mobil sudah tidak miring lagi setelah dipasangkan Stabilization Rods.' },
@@ -88,7 +88,7 @@ export default {
         {
           n: 263,
           kind: 'me',
-          text: 'mengambil Halligan Bar dan Plier dari Compartement Truck lalu membawanya ke arah mobil korban.',
+          text: 'mengambil Halligan Bar dan Plier dari Compartement Engine lalu membawanya ke arah mobil korban.',
         },
         { n: 264, kind: 'me', text: 'membuka Kap mobil dengan menggunakan Halligan bar.' },
         { n: 265, kind: 'do', text: 'terlihat kap mobil mulai terbuka.' },
@@ -101,7 +101,7 @@ export default {
         {
           n: 268,
           kind: 'me',
-          text: 'mengambil Halligan Bar dan Plier, membawanya ke arah Truck dan menaruhnya di Compartement Truck kembali.',
+          text: 'mengambil Halligan Bar dan Plier, membawanya ke arah Engine dan menaruhnya di Compartement Engine kembali.',
         },
       ],
     },
@@ -149,7 +149,7 @@ export default {
       steps: [
         {
           kind: 'me',
-          text: 'mengambil Hydraulic Rams dan Cutter dari Compartement Truck lalu membawanya ke arah mobil korban.',
+          text: 'mengambil Hydraulic Rams dan Cutter dari Compartement Engine lalu membawanya ke arah mobil korban.',
         },
         { kind: 'me', text: 'memeriksa kondisi kaki korban.' },
         { kind: 'do', text: 'Apakah kaki korban tersangkut di Dashboard?' },

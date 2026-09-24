@@ -61,7 +61,7 @@ export const COMMANDS = {
       rows: [
         { code: '/inspect [id]', desc: 'Memeriksa kondisi dan luka korban.' },
         {
-          code: '/bls',
+          code: '/bls [id]',
           desc: 'Memperpanjang durasi injured korban supaya tidak jatuh ke kondisi critical. Pakai sedini mungkin — kalau korban sampai critical, petugas bisa disalahkan secara IC karena dianggap kelamaan menangani.',
         },
         { code: '/gurney get [1-4]', desc: 'Mengeluarkan gurney dari unit. Biasanya dipakai 3.' },
@@ -80,6 +80,8 @@ export const COMMANDS = {
           desc: 'Memilih objek yang muncul sebagai visual di lapangan — tangga, cone, BLS bag, dan lainnya.',
         },
         { code: '/removebarrier', desc: 'Menghapus objek yang tadi dimunculkan lewat /fo.' },
+        { code: '/ado [nama_object]', desc: 'Menempelkan keterangan objek di suatu tempat.' },
+        { code: '/delado [id_object]', desc: 'Menghapus keterangan objek di suatu tempat.' },
         { code: '/stabilize [id]', desc: 'Menstabilkan pasien setelah operasi berhasil.' },
         { code: '/heal [id]', desc: 'Menyembuhkan pasien setelah notifikasi stabilize muncul.' },
         { code: '/medicreport [id]', desc: 'Mengirim laporan medis ke pasien.' },
@@ -97,7 +99,6 @@ export const COMMANDS = {
         { code: '/joinunit [nama_unit]', desc: 'Bergabung ke unit yang sudah dibuat rekan lain.' },
         { code: '/me', desc: 'Aksi karakter. Output diawali nama karakter.' },
         { code: '/do', desc: 'Keadaan atau pertanyaan untuk lawan RP. Output tanpa nama.' },
-        { code: '(tanpa awalan)', desc: 'Bicara biasa — cukup ketik teksnya langsung.' },
         { code: '/s', desc: 'Berteriak.' },
         { code: '/r', desc: 'Radio internal LSFD.' },
         { code: '/ro', desc: 'OOC lewat radio LSFD.' },
@@ -132,7 +133,7 @@ export const CODES = {
         { code: '10-22', desc: 'Datang langsung ke lokasi.' },
         { code: '10-27', desc: 'Ganti unit.' },
         { code: '10-70', desc: 'Butuh bantuan atau unit tambahan — sebutkan darurat atau tidak.' },
-        { code: '10-70A', desc: 'Butuh ambulans tambahan.' },
+        { code: '10-70A', desc: 'Butuh RA Unit tambahan.' },
         { code: '10-70E', desc: 'Butuh Engine/Truck tambahan — sebutkan unitnya.' },
         { code: '10-90', desc: 'Dalam keadaan terdesak, sebutkan lokasi bila sempat.' },
         { code: '10-97', desc: 'Sedang menuju lokasi.' },
@@ -217,6 +218,8 @@ export const CODES = {
         { code: 'OCD', desc: 'Operational Control Dispatch.' },
         { code: 'RID', desc: 'Nomor titik lokasi yang dipakai dispatch.' },
         { code: 'ER', desc: 'Emergency Room.' },
+        { code: 'RA Unit', desc: 'Penamaan unit ambulans.' },
+        { code: 'Engine', desc: 'Penamaan unit lapangan — bukan Truck. Semua compartment alat MVA ada di sini.' },
         {
           code: 'RPLY',
           desc: 'Roleplay Lie — adegan yang hanya diceritakan lewat /do tanpa ada kegiatan yang benar-benar terlihat. Dipakai saat sesuatu tidak mungkin dijalankan mekaniknya, misalnya firefighter menarasikan operasi karena tidak ada dokter yang bertugas.',

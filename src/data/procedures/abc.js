@@ -613,7 +613,7 @@ export default {
         {
           n: 156,
           kind: 'do',
-          text: 'Terlihat petugas mengambil AED dari dalam ambulans lalu kembali ke sisi korban.',
+          text: 'Terlihat petugas mengambil AED dari dalam RA Unit lalu kembali ke sisi korban.',
         },
         { n: 157, kind: 'me', text: 'meletakkan AED di samping korban dan menyalakannya.' },
         {
