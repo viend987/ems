@@ -149,9 +149,12 @@ export default {
           text: 'Berapa laju pernafasan korban yang terbaca pada monitor ECG? (12 - 20 Normal)',
           branches: [
             { label: 'Di bawah 12 → Simple Face Mask', to: 'abc#breathing-simple-face' },
+            { label: 'Di bawah 8 → bantu dengan BVM', to: 'abc#breathing-bvm' },
+            { label: 'Di atas 20 tanpa luka → hiperventilasi', to: 'abc#breathing-hiperventilasi' },
             { label: '12–20 → Nasal Cannula bila perlu', to: 'abc#breathing-nasal-cannula' },
             { label: 'Di atas 20 / abnormal → NRB', to: 'abc#breathing-nrb' },
             { label: 'Normal → lanjut Circulation', to: 'abc#circulation-ecg' },
+            { label: 'Ada luka di torso', to: 'abc#breathing-manual' },
           ],
         },
       ],
@@ -161,10 +164,35 @@ export default {
       name: 'Breathing — tanpa ECG (ada luka di torso)',
       steps: [
         {
+          kind: 'note',
+          text: 'Torso yang berdarah atau patah tidak bisa ditempeli 12-lead, jadi hitungannya manual. Tapi yang berubah bukan cuma cara mengukur — penyebabnya ada di torso itu, dan oksigen saja tidak menyelesaikannya.',
+        },
+        {
           kind: 'me',
           text: 'mendekatkan telinganya ke atas mulut korban sambil melihat ke arah dada korban lalu mendengarkan suara pernapasan korban.',
         },
-        { kind: 'do', text: 'Berapa laju pernapasan korban per menitnya? (12 - 20 Normal)' },
+        {
+          kind: 'me',
+          text: 'mengambil stetoskop dari ILS Bag, memasangnya di telinga lalu menempatkan membrannya pada dinding dada korban.',
+        },
+        {
+          kind: 'do',
+          text: 'Berapa laju pernapasan korban per menitnya? (12 - 20 Normal)',
+          branches: [{ label: 'Normal → Circulation', to: 'abc#circulation-manual' }],
+        },
+        {
+          kind: 'do',
+          text: 'Apa yang terlihat pada dinding dada korban? (luka tembus / segmen bergerak berlawanan / utuh)',
+          branches: [
+            { label: 'Luka tembus dada → chest seal', to: 'deat#chest-seal' },
+            { label: 'Segmen bergerak → rusuk patah', to: 'fracture#rusuk' },
+            { label: 'Utuh, hanya sesak → NRB', to: 'abc#breathing-nrb' },
+          ],
+        },
+        {
+          kind: 'note',
+          text: 'Tutup luka atau topang rusuknya dulu, baru pasang oksigen. Memasang masker lebih dulu di atas dada yang bocor tidak akan menaikkan angkanya.',
+        },
       ],
     },
     {
@@ -285,6 +313,76 @@ export default {
       ],
     },
     {
+      id: 'breathing-bvm',
+      name: 'Bantuan napas dengan BVM (napas sangat lambat)',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Di bawah 8 kali per menit, masker oksigen saja tidak cukup — korban menghirup oksigen yang bagus tapi terlalu jarang. Napasnya harus dibantu, bukan sekadar diberi. Ini bisa dilakukan tanpa izin ILS.',
+        },
+        { kind: 'me', text: 'mengeluarkan BVM dari dalam ILS Bag dan menyambungkannya ke oxygen outlet.' },
+        {
+          kind: 'me',
+          text: 'menempatkan masker BVM menutupi hidung dan mulut korban, menekan tepinya rapat dengan ibu jari dan telunjuk sambil mengangkat rahang dengan jari lainnya.',
+        },
+        {
+          kind: 'me',
+          text: 'memompa kantong BVM sekali setiap lima detik sambil memperhatikan dada korban terangkat setiap pompaan.',
+        },
+        { kind: 'do', text: 'Apakah dada korban terangkat setiap kali kantong BVM dipompa?' },
+        {
+          kind: 'note',
+          text: 'Kalau dadanya tidak terangkat, sealnya bocor atau airway-nya tertutup lagi. Perbaiki posisi kepala sebelum memompa lebih keras.',
+          branches: [{ label: 'Buka ulang airway', to: 'abc#airway-headtilt' }],
+        },
+        { ref: 'breathing-recheck' },
+      ],
+    },
+    {
+      id: 'breathing-hiperventilasi',
+      name: 'Napas terlalu cepat tanpa luka (hiperventilasi)',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Napas di atas 20 tanpa luka apa pun biasanya panik, bukan cedera. Yang dibutuhkan ketenangan, bukan oksigen aliran tinggi. Jangan pernah menyuruh korban bernapas ke dalam kantong kertas — itu cara lama yang berbahaya.',
+        },
+        {
+          kind: 'me',
+          text: 'berjongkok sejajar pandangan korban lalu berbicara dengan tenang untuk menarik perhatiannya.',
+        },
+        { kind: 'say', text: 'Tarik napas bareng saya ya, pelan-pelan. Empat hitungan masuk, empat hitungan keluar.' },
+        {
+          kind: 'me',
+          text: 'menuntun korban menarik dan mengembuskan napas dalam hitungan yang tetap sambil memegang bahunya.',
+        },
+        { kind: 'do', text: 'Apakah laju napas korban mulai turun setelah dituntun?' },
+        { ref: 'breathing-recheck' },
+      ],
+    },
+    {
+      id: 'posisi-pemulihan',
+      name: 'Posisi pemulihan (tidak sadar tapi bernapas)',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Korban tidak sadar yang telentang bisa tersedak lidah atau muntahannya sendiri. Kalau napas dan nadinya ada tapi dia tidak merespon, miringkan. Jangan lakukan ini bila dicurigai ada cedera tulang belakang.',
+        },
+        {
+          kind: 'me',
+          text: 'menekuk lengan korban yang dekat dengannya ke atas dan menyilangkan lengan satunya ke dada korban.',
+        },
+        {
+          kind: 'me',
+          text: 'menekuk lutut korban yang jauh darinya lalu menariknya perlahan sehingga tubuh korban berguling ke samping.',
+        },
+        {
+          kind: 'me',
+          text: 'menengadahkan sedikit kepala korban agar jalan napasnya tetap terbuka dan cairan bisa mengalir keluar.',
+        },
+        { kind: 'do', text: 'Terlihat korban bernapas lebih lega dalam posisi miring.' },
+      ],
+    },
+    {
       id: 'circulation-ecg',
       name: 'Circulation — pakai ECG (torso bersih)',
       steps: [
@@ -311,10 +409,58 @@ export default {
       name: 'Circulation — tanpa ECG (ada luka di torso)',
       steps: [
         {
+          kind: 'note',
+          text: 'Jangan periksa nadi di bagian yang terluka. Kalau pergelangan tangan terluka, pakai leher; kalau leher terluka, pakai pergelangan tangan.',
+        },
+        {
           kind: 'me',
           text: 'meletakkan jari telunjuk dan jari tengahnya ke carotid artery korban untuk memeriksa denyut nadinya.',
         },
-        { kind: 'do', text: 'Berapa denyut nadi per menit korban? (60 - 100 normal)' },
+        {
+          kind: 'do',
+          text: 'Berapa denyut nadi per menit korban? (60 - 100 normal)',
+          branches: [
+            { label: '60–100 → lanjut penanganan luka', to: 'abc#circulation-normal' },
+            { label: 'Di bawah 60', to: 'abc#circulation-bradi' },
+            { label: 'Di atas 100 dengan luka torso', to: 'abc#circulation-torso' },
+            { label: 'Tidak ada denyut → CPR', to: 'abc#cpr' },
+          ],
+        },
+      ],
+    },
+    {
+      id: 'circulation-torso',
+      name: 'Circulation — nadi tinggi dengan luka di torso',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Perdarahan di dalam dada atau perut tidak bisa ditekan dari luar dan tidak bisa ditourniquet. Nadi yang memacu di sini berarti korban kehilangan darah ke dalam rongga tubuhnya sendiri — ini kasus yang menang oleh kecepatan, bukan oleh alat.',
+        },
+        {
+          kind: 'me',
+          text: 'memeriksa perut dan dada korban dengan palpasi, mencari area yang mengeras atau membengkak.',
+        },
+        {
+          kind: 'do',
+          text: 'Apakah perut korban terasa mengeras atau tegang saat ditekan?',
+          branches: [
+            { label: 'Luka terbuka di perut', to: 'deat#luka-perut' },
+            { label: 'Luka tembus dada', to: 'deat#chest-seal' },
+          ],
+        },
+        {
+          kind: 'me',
+          text: 'menyelimuti korban agar tidak kehilangan panas tubuh lalu bersiap memuatnya ke unit kendaraan.',
+        },
+        {
+          kind: 'note',
+          text: 'Pasang Lactated Ringer kalau kamu berizin ILS, lalu jalan. Kalau belum berizin, jangan tertahan di TKP — muat dan transport.',
+          branches: [
+            { label: 'Lactated Ringer', to: 'drugs#lactated-ringer' },
+            { label: 'Belum boleh ILS', to: 'abc#tanpa-ils' },
+            { label: 'Muat korban', to: 'load#load' },
+          ],
+        },
       ],
     },
     {
@@ -378,13 +524,46 @@ export default {
           branches: [
             { label: 'Ya, banyak pendarahan → Lactated Ringer', to: 'drugs#lactated-ringer' },
             { label: 'Tidak ada pendarahan → Verapamil', to: 'drugs#verapamil' },
-            { label: 'Belum boleh pakai ILS', to: 'abc#tanpa-ils' },
+            { label: 'Tanpa obat → posisi syok', to: 'abc#circulation-syok' },
           ],
         },
         {
           kind: 'note',
           text: 'Kalau korban baru kehilangan banyak darah, jantungnya memacu justru karena volume darahnya kurang — yang dibutuhkan cairan pengganti, bukan obat penurun denyut. Verapamil baru tepat kalau nadi tinggi tanpa riwayat pendarahan, misalnya sakit kepala berat.',
         },
+      ],
+    },
+    {
+      id: 'circulation-syok',
+      name: 'Posisi syok (nadi memacu, tanpa obat)',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Kalau korban kehilangan darah dan kamu tidak punya cairan pengganti, darah yang tersisa bisa diarahkan ke tempat yang paling butuh. Ini yang dikerjakan unit BLS sambil menunggu atau sambil jalan.',
+        },
+        {
+          kind: 'me',
+          text: 'membaringkan korban telentang lalu mengangkat kedua tungkainya sekitar 30cm dengan ganjalan agar darah mengalir kembali ke tubuh bagian atas.',
+        },
+        {
+          kind: 'me',
+          text: 'menyelimuti korban dengan foam blanket dari unit kendaraan untuk menahan panas tubuhnya.',
+        },
+        {
+          kind: 'note',
+          text: 'Korban yang kehilangan banyak darah cepat kedinginan, dan darah yang dingin makin sulit membeku. Menjaganya hangat itu tindakan medis, bukan sekadar perhatian.',
+        },
+        { kind: 'me', text: 'memantau ulang denyut nadi dan napas korban setiap beberapa saat.' },
+        {
+          kind: 'do',
+          text: 'Apakah denyut nadi korban mulai melambat mendekati normal?',
+          branches: [
+            { label: 'Membaik → muat korban', to: 'load#load' },
+            { label: 'Belum → Lactated Ringer', to: 'drugs#lactated-ringer' },
+            { label: 'Belum boleh ILS', to: 'abc#tanpa-ils' },
+          ],
+        },
+        { kind: 'note', text: 'Jangan beri korban makan atau minum apa pun.' },
       ],
     },
     {
@@ -454,7 +633,16 @@ export default {
       steps: [
         {
           kind: 'note',
-          text: 'Berhenti di tengah bukan pilihan — itu menggantung buat lawan RP. Kalau B dan C tidak membaik dan kamu belum berizin ILS, urutannya: minta unit berizin, lalu kalau tidak ada, transport.',
+          text: 'Belum berizin ILS bukan berarti kehabisan tindakan. Yang di bawah ini semuanya boleh dikerjakan unit BLS, dan tiga di antaranya sering lebih menentukan daripada obat.',
+          branches: [
+            { label: 'Napas sangat lambat → bantu dengan BVM', to: 'abc#breathing-bvm' },
+            { label: 'Nadi memacu → posisi syok', to: 'abc#circulation-syok' },
+            { label: 'Tidak sadar tapi bernapas → posisi pemulihan', to: 'abc#posisi-pemulihan' },
+          ],
+        },
+        {
+          kind: 'note',
+          text: 'Sesudah itu, minta unit berizin. Kalau tidak ada yang bertugas, transport itu jawabannya — bukan berhenti di tengah.',
         },
         {
           kind: 'radio',

@@ -29,6 +29,8 @@ export default {
           branches: [
             { label: 'Berhenti → lanjut ABC', to: 'abc#airway-headtilt' },
             { label: 'Masih → Elevation', to: 'deat#elevation' },
+            { label: 'Luka tembus dada', to: 'deat#chest-seal' },
+            { label: 'Luka perut', to: 'deat#luka-perut' },
           ],
         },
         { kind: 'note', text: 'Jika belum berhenti, lapisi ulang dulu sebelum naik ke Elevation.' },
@@ -69,6 +71,91 @@ export default {
         { n: 79, kind: 'me', text: 'mengencangkan windlass sampai perdarahan berhenti.' },
         { n: 80, kind: 'me', text: 'memastikan tourniquet tetap pada posisi dan tidak longgar.' },
         { ref: 'bleed-check' },
+      ],
+    },
+    {
+      id: 'chest-seal',
+      name: 'Luka tembus dada (chest seal)',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Luka tembus dinding dada membuat udara masuk ke rongga dada setiap korban menarik napas. Menutupnya rapat-rapat di keempat sisi justru memerangkap udara itu dan menekan paru — karena itu satu sisi selalu dibiarkan terbuka.',
+        },
+        {
+          kind: 'me',
+          text: 'memeriksa dinding dada korban dan menemukan luka tembus yang mengeluarkan gelembung udara bersama darah.',
+        },
+        { kind: 'do', text: 'Apakah terdengar suara desis dari luka setiap korban menarik napas?' },
+        {
+          kind: 'me',
+          text: 'mengambil occlusive dressing dari ILS Bag lalu membersihkan kulit di sekitar luka agar plesternya bisa menempel.',
+        },
+        {
+          kind: 'me',
+          text: 'menempelkan occlusive dressing di atas luka dan merekatkan hanya tiga sisinya, menyisakan satu sisi terbuka sebagai jalan keluar udara.',
+        },
+        {
+          kind: 'me',
+          text: 'memiringkan tubuh korban sebentar untuk memeriksa punggungnya, mencari luka keluar yang mungkin ada.',
+        },
+        { kind: 'do', text: 'Apakah ada luka keluar di punggung korban?' },
+        {
+          kind: 'me',
+          text: 'menutup luka keluar dengan occlusive dressing kedua, juga hanya pada tiga sisinya.',
+        },
+        {
+          kind: 'do',
+          text: 'Apakah napas korban mulai membaik setelah luka ditutup?',
+          branches: [
+            { label: 'Membaik → pasang NRB', to: 'abc#breathing-nrb' },
+            { label: 'Makin berat → lepas tekanan', to: 'deat#chest-seal' },
+          ],
+        },
+        {
+          kind: 'note',
+          text: 'Kalau napasnya justru makin berat sesudah ditutup, berarti udara terjebak di dalam. Buka sebentar sisi yang direkatkan.',
+        },
+        {
+          kind: 'me',
+          text: 'membuka sebentar sisi dressing yang direkatkan untuk melepaskan tekanan udara yang terjebak di rongga dada korban.',
+        },
+        { kind: 'do', text: 'Terdengar udara keluar dari sela dressing dan napas korban mulai melonggar.' },
+      ],
+    },
+    {
+      id: 'luka-perut',
+      name: 'Luka perut & organ keluar',
+      steps: [
+        {
+          kind: 'me',
+          text: 'memeriksa perut korban dan menemukan luka terbuka pada dinding perutnya.',
+        },
+        { kind: 'do', text: 'Apakah ada organ yang keluar dari luka tersebut?' },
+        {
+          kind: 'note',
+          text: 'Organ yang sudah keluar tidak boleh didorong masuk kembali. Tugasnya menjaga tetap lembap dan tertutup sampai sampai di rumah sakit.',
+        },
+        {
+          kind: 'me',
+          text: 'membasahi kasa steril dengan saline solution lalu menutupkannya di atas organ yang keluar.',
+        },
+        {
+          kind: 'me',
+          text: 'melapisi kasa lembap tersebut dengan penutup kedap agar kelembapannya terjaga selama perjalanan.',
+        },
+        {
+          kind: 'me',
+          text: 'menekuk kedua lutut korban agar otot dinding perutnya mengendur dan tidak menarik lukanya.',
+        },
+        { kind: 'do', text: 'Terlihat luka perut korban sudah tertutup dan organnya tetap lembap.' },
+        {
+          kind: 'note',
+          text: 'Jangan beri korban minum. Perdarahan di dalam perut tidak bisa ditekan dari luar, jadi ini termasuk yang harus cepat dibawa.',
+          branches: [
+            { label: 'Muat korban', to: 'load#load' },
+            { label: 'Lactated Ringer', to: 'drugs#lactated-ringer' },
+          ],
+        },
       ],
     },
     {

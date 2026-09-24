@@ -33,8 +33,14 @@ workflow. Pushing to `main` is the deploy step.
 
 `draft.md` is the **current authoritative** source for RP text and step order; it supersedes
 `LSFD RP.md`, which is kept only as the previous revision. `LSFD Field Handbook.md` is secondary —
-it supplies the meaning of codes (10-code, Status, CAT, Triage, LOC) and the theory behind each
-stage.
+it supplies the meaning of codes (10-code, Status, CAT, Triage, LOC), the theory behind each stage,
+and the Intermediate Life Support chapter that defines drug doses and routes.
+
+Some procedures here are **not** in any source document: they were written from real prehospital
+practice because the official material stops at the drug and leaves unlicensed members with nowhere
+to go. Chest seal, abdominal evisceration, flail chest, BVM-assisted ventilation, hyperventilation
+coaching, the recovery position, and the shock position are all in that group. They are deliberate
+additions, not transcription errors — do not delete them for failing to appear in the handbook.
 
 The site carries **only lines a player types into game chat**. `draft.md` also contains doctrine —
 role descriptions, equipment lists, the fire-extinguisher class table, risk classifications, the
@@ -124,10 +130,14 @@ bundle.
 From the spec: JS under 90 KB gzip, CSS under 15 KB gzip, and no network request when switching
 categories (all content is in the bundle). Check `npm run build` output before adding a dependency.
 
-**The JS budget is nearly spent** (89.8 KB at last count) and content keeps growing. The next time
-it is exceeded, do not solve it by lazy-loading a category — that would put a network request
-between a tap and the text, which is the one thing this site must never do. Split the data into its
-own chunk that the page still preloads, so the shell renders sooner without delaying any category.
+Content has since pushed total JS past 90 KB (93.8 KB gzip: 25.5 app + 68.2 vendor). React is now
+split into a `vendor` chunk by `manualChunks` in `vite.config.js`, so editing RP text — which
+happens constantly — only invalidates the 25 KB app chunk instead of the whole bundle. Both chunks
+are preloaded, so switching category still costs no request.
+
+**Do not solve future growth by lazy-loading a category.** That would put a network request between
+a tap and the text, which is the one thing this site must never do. If the app chunk itself grows
+uncomfortable, split the data out as a third preloaded chunk.
 
 ## Deployment specifics
 

@@ -58,6 +58,45 @@ export default {
       ],
     },
     {
+      id: 'rusuk',
+      name: 'Rusuk patah / flail chest',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Rusuk patah membuat napas jadi dangkal dan cepat karena tiap tarikan napas terasa nyeri. Dadanya tidak boleh dibalut ketat — itu justru menghambat napas yang sudah susah.',
+        },
+        {
+          kind: 'me',
+          text: 'melakukan palpasi perlahan pada dinding dada korban untuk mencari titik nyeri dan tulang rusuk yang patah.',
+        },
+        {
+          kind: 'do',
+          text: 'Apakah ada bagian dinding dada yang bergerak berlawanan arah saat korban bernapas?',
+        },
+        {
+          kind: 'note',
+          text: 'Kalau ada, itu flail chest — satu segmen dinding dada lepas dan bergerak sendiri. Korban ini prioritas transport.',
+        },
+        {
+          kind: 'me',
+          text: 'menopang sisi dada yang patah dengan bantalan lembut tanpa membalutnya ketat, agar napas korban tidak makin terhambat.',
+        },
+        {
+          kind: 'me',
+          text: 'memposisikan korban setengah duduk bila memungkinkan agar dadanya lebih leluasa mengembang.',
+        },
+        {
+          kind: 'do',
+          text: 'Apakah napas korban mulai membaik setelah ditopang?',
+          branches: [
+            { label: 'Belum → pasang NRB', to: 'abc#breathing-nrb' },
+            { label: 'Nyeri berat → Ibuprofen', to: 'drugs#ibuprofen' },
+            { label: 'Muat korban', to: 'load#load' },
+          ],
+        },
+      ],
+    },
+    {
       id: 'traction-splint',
       name: 'Open kaki (Traction Splint)',
       steps: [
