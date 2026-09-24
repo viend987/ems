@@ -26,9 +26,21 @@ export const ANIMS = {
       ],
     },
     {
+      id: 'anim-sikap',
+      name: 'Sikap & gestur',
+      rows: [
+        {
+          code: '.atease2',
+          desc: 'Kedua tangan dilipat ke belakang seperti posisi istirahat — karakter tetap bisa berjalan, bukan anim mematung.',
+        },
+        { code: '.namaste', desc: 'Gestur mengatupkan kedua telapak tangan — untuk berterima kasih atau memberi hormat.' },
+      ],
+    },
+    {
       id: 'anim-prop',
       name: 'Prop',
       rows: [
+        { code: '.propbls', desc: 'Membawa BLS Bag di tangan.' },
         { code: '.prop_tablet2', desc: 'Memegang tablet — dipakai saat mengurus bill di lobi.' },
         { code: '.prop_clipboard', desc: 'Memegang clipboard — dipakai saat mencatat waktu kematian.' },
       ],
