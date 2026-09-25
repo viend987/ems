@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import Board from './components/Board.jsx'
 import CodeTable from './components/CodeTable.jsx'
 import FlowBar from './components/FlowBar.jsx'
@@ -50,10 +50,14 @@ export default function App() {
     el?.scrollIntoView({ block: 'start' })
   }, [route.category, route.section])
 
-  const goAndClear = (to) => {
-    setQuery('')
-    go(to)
-  }
+  // Stabil antar-render: StepRow melewatkan render ulang hanya kalau propnya sama.
+  const goAndClear = useCallback(
+    (to) => {
+      setQuery('')
+      go(to)
+    },
+    [go],
+  )
 
   return (
     <div className="min-h-dvh">

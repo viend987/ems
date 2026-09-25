@@ -1,3 +1,4 @@
+import { Component } from 'preact'
 import { copyText, isCopyable, prefixOf } from '../lib/copy.js'
 
 /**
@@ -52,7 +53,7 @@ function Branches({ branches, onGo }) {
   )
 }
 
-export default function StepRow({ step, rowKey, status, onCopy, onGo }) {
+function StepRowView({ step, rowKey, status, onCopy, onGo }) {
   if (!isCopyable(step)) return <Note step={step} onGo={onGo} />
 
   const tone = TONE[step.kind] ?? TONE.say
@@ -99,4 +100,33 @@ export default function StepRow({ step, rowKey, status, onCopy, onGo }) {
       )}
     </div>
   )
+}
+
+/**
+ * Setiap klik salin mengubah `status`, dan tanpa ini seluruh baris di kategori
+ * ikut di-render ulang — 167 baris di ABC — padahal yang berubah cuma penanda
+ * "tersalin" di satu atau dua baris. Baris hanya digambar ulang kalau isinya
+ * berganti atau status salinnya sendiri berubah.
+ *
+ * Preact inti tidak punya memo() tanpa preact/compat, jadi ini ditulis langsung.
+ */
+export default class StepRow extends Component {
+  shouldComponentUpdate(next) {
+    const prev = this.props
+    if (
+      prev.step !== next.step ||
+      prev.rowKey !== next.rowKey ||
+      prev.onCopy !== next.onCopy ||
+      prev.onGo !== next.onGo
+    ) {
+      return true
+    }
+    const was = prev.status?.key === prev.rowKey ? prev.status : null
+    const now = next.status?.key === next.rowKey ? next.status : null
+    return was !== now
+  }
+
+  render(props) {
+    return <StepRowView {...props} />
+  }
 }

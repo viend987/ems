@@ -59,14 +59,27 @@ function buildIndex() {
     }
   }
 
+  // Teks yang dicocokkan disiapkan sekali dalam huruf kecil, bukan diulang di
+  // setiap ketikan untuk ratusan entri. Pemisah NUL mencegah kata dari dua
+  // kolom berbeda tersambung jadi kecocokan palsu.
+  for (const entry of entries) {
+    entry.haystack = [entry.text, entry.sectionName, entry.categoryName, entry.label ?? '']
+      .join('\u0000')
+      .toLowerCase()
+  }
+
   return entries
 }
 
-const INDEX = buildIndex()
+// Dibangun saat pertama kali ada yang mencari, bukan saat halaman dibuka —
+// kebanyakan kunjungan tidak pernah menyentuh kolom cari sama sekali.
+let INDEX = null
 
 export function searchAll(query, limit = 40) {
   const q = query.trim().toLowerCase()
   if (!q) return []
+
+  INDEX ??= buildIndex()
 
   // "/71" dan "71" sama-sama berarti cari langkah bernomor 71.
   const asNumber = Number(q.replace(/^\//, ''))
@@ -74,14 +87,7 @@ export function searchAll(query, limit = 40) {
 
   const hits = []
   for (const entry of INDEX) {
-    const matched =
-      (numeric && entry.n === asNumber) ||
-      entry.text.toLowerCase().includes(q) ||
-      entry.sectionName.toLowerCase().includes(q) ||
-      entry.categoryName.toLowerCase().includes(q) ||
-      (entry.label ?? '').toLowerCase().includes(q)
-
-    if (matched) hits.push(entry)
+    if ((numeric && entry.n === asNumber) || entry.haystack.includes(q)) hits.push(entry)
     if (hits.length >= limit) break
   }
 

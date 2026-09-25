@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
 import { CATEGORIES, DEFAULT_CATEGORY } from './data/index.js'
 import { writeClipboard } from './lib/copy.js'
 

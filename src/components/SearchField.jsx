@@ -5,7 +5,7 @@ export default function SearchField({ value, onChange, inputRef }) {
         ref={inputRef}
         type="search"
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onInput={(e) => onChange(e.currentTarget.value)}
         onKeyDown={(e) => {
           if (e.key === 'Escape') {
             onChange('')

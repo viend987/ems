@@ -1,8 +1,22 @@
 @import 'tailwindcss';
 
-@import '@fontsource/saira-condensed/latin-800.css';
-@import '@fontsource/ibm-plex-mono/latin-400.css';
-@import '@fontsource/ibm-plex-mono/latin-500.css';
+/* Font self-host yang sudah dipotong ke glyph yang dipakai saja (npm run fonts).
+   Hanya woff2 — semua browser yang dituju mendukungnya, jadi cadangan .woff tidak ikut. */
+@font-face {
+  font-family: 'Saira Condensed';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('./assets/fonts/saira-condensed-800.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/ibm-plex-mono-400.woff2') format('woff2');
+}
 
 @theme {
   --font-display: 'Saira Condensed', 'Arial Narrow', sans-serif;
@@ -47,7 +61,10 @@
   html {
     background: var(--color-ink);
     color-scheme: light;
-    scroll-behavior: smooth;
+    /* Sengaja tanpa scroll-behavior: smooth. Loncat ke bagian jauh di ABC makan
+       1,5 detik animasi — padahal web ini dipakai sambil lawan RP menunggu. Smooth
+       scroll juga bentrok dengan .lazy-section: bagian yang tergambar di tengah
+       animasi mengubah tinggi halaman, sehingga loncatan mendarat meleset. */
   }
 
   body {
@@ -74,6 +91,16 @@
     letter-spacing: 0.035em;
     text-transform: uppercase;
     line-height: 0.95;
+  }
+
+  /* Bagian di luar layar dilewati saat layout dan paint sampai di-scroll mendekat.
+     Kategori ABC punya 24 bagian dan 167 baris, sedangkan yang terlihat saat dibuka
+     cuma dua-tiga — sisanya tidak perlu dihitung dulu. `auto` membuat browser
+     mengingat tinggi aslinya setelah sekali digambar, jadi scrollbar tidak melompat
+     saat menggulir balik. Ctrl+F tetap menemukan teks di bagian yang belum digambar. */
+  .lazy-section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 480px;
   }
 }
 
@@ -103,9 +130,6 @@
   .flow-track {
     animation: none;
     transform: none;
-  }
-  html {
-    scroll-behavior: auto;
   }
 }
 

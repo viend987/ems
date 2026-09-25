@@ -4,7 +4,7 @@
  */
 export default function LinkList({ group }) {
   return (
-    <section id={`links-${group.id}`} className="scroll-mt-28 lg:scroll-mt-6">
+    <section id={`links-${group.id}`} className="lazy-section scroll-mt-28 lg:scroll-mt-6">
       <h2 className="slab mb-2 flex items-center gap-2.5 text-lg text-bone sm:text-xl">
         <span aria-hidden="true" className="h-4 w-1 bg-alarm sm:h-5" />
         {group.name}
@@ -19,7 +19,7 @@ export default function LinkList({ group }) {
             rel="noreferrer noopener"
             className="flex w-full flex-col gap-1 bg-panel px-3 py-2.5 hover:bg-raise sm:px-4"
           >
-            <span className="flex items-baseline gap-2 text-[12.5px] font-medium text-calm">
+            <span className="flex items-baseline gap-2 text-[12.5px] text-calm">
               {item.label}
               <span aria-hidden="true" className="text-[10px] text-muted">
                 tab baru

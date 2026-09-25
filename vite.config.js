@@ -1,22 +1,15 @@
-import react from '@vitejs/plugin-react'
+import preact from '@preact/preset-vite'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  // reactAliasesEnabled: false — kode memakai Preact langsung (preact/hooks, onInput),
+  // tanpa lapisan compat React. Itu yang membuat runtime-nya ~4 KB, bukan ~68 KB.
+  plugins: [preact({ reactAliasesEnabled: false }), tailwindcss()],
   server: { port: Number(process.env.PORT) || 5173 },
   build: {
-    rollupOptions: {
-      output: {
-        // React dipisah dari kode aplikasi supaya menyunting teks RP — yang
-        // sering terjadi — tidak ikut membatalkan cache pustaka yang tidak
-        // berubah. Keduanya tetap di-preload, jadi tidak ada permintaan
-        // jaringan yang menyelip antara ketukan dan teksnya.
-        manualChunks: (id) =>
-          id.includes('node_modules/react') || id.includes('node_modules/scheduler')
-            ? 'vendor'
-            : undefined,
-      },
-    },
+    // Semua browser yang dituju sudah mendukung <link rel="modulepreload">,
+    // jadi polyfill kecil yang disuntikkan Vite ke entry tidak perlu ikut.
+    modulePreload: { polyfill: false },
   },
 })

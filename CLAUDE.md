@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A reference site for LSFD (Los Santos Fire Department) roleplay on JGVRP, a *typing* GTA V RP server.
 Every step of a procedure is a line of text the player types into game chat, so the whole site exists
-to get one of those lines into the clipboard fast. Built with Vite + React + Tailwind CSS v4,
+to get one of those lines into the clipboard fast. Built with Vite + **Preact** + Tailwind CSS v4,
 deployed as a static site on Cloudflare Workers. Live at https://ems.viend.my.id.
 
 The design brief and every decision behind it are in
@@ -22,7 +22,9 @@ npx vitest run src/lib/copy.test.js   # single test file
 npm run lint     # oxlint
 npm run build    # production build to dist/
 npm run logo     # regenerate src/assets/lsfd.webp + public/favicon.png from lsfd.png
-npm run units    # convert images-incoming/*.{png,jpg} to WebP in src/assets/units/
+npm run units    # convert images-incoming/*.{png,jpg} to AVIF+WebP (480/960w) in src/assets/units/
+npm run units -- --rebuild   # re-encode everything in images-incoming/done/ (after changing settings)
+npm run fonts    # re-subset the two self-hosted fonts into src/assets/fonts/
 npm run deploy   # build + wrangler deploy (manual; normally not needed)
 ```
 
@@ -112,8 +114,12 @@ with a typo will not reach production silently.
 
 ### Unit photos
 
-`npm run units` (`scripts/units.mjs`) resizes each file in `images-incoming/` to 960px wide WebP in
-`src/assets/units/` and moves the original into `images-incoming/done/`. **The filename becomes the
+`npm run units` (`scripts/units.mjs`) turns each file in `images-incoming/` into four files in
+`src/assets/units/` — `<id>-480.{avif,webp}` and `<id>-960.{avif,webp}` — and moves the original into
+`images-incoming/done/`. `UnitGallery.jsx` serves them through `<picture>` with `srcset`/`sizes`, so a
+1x desktop fetches the 480 AVIF (~7 KB) and only retina screens and phones fetch the 960. The widths
+are duplicated as `WIDTHS` in both the script and the component and must stay in sync;
+`src/lib/units.test.js` fails if any id in `images` is missing one of its four files. **The filename becomes the
 id** — name incoming files after the callsign (`engine.jpeg`, `lifeflight.png`) and reference that
 id in `images` in `src/data/units.js`. Unlike arms-calc's coordinate gallery there is no crop and no
 full-size lightbox: unit photos are landscape 16:9 and the whole vehicle is the point, so the
@@ -135,6 +141,11 @@ This is a product decision, not an oversight: the site is used mid-scene while o
 so nothing may need waiting on. Do not add scroll reveals, card hover transitions, or animated
 expand/collapse. The one exception already present is the "tersalin" marker that answers a click.
 
+**No `scroll-behavior: smooth`, deliberately.** Jumping to AED in ABC animated for 1.5 s, and it
+also broke `.lazy-section` (below): sections painted mid-animation changed the page height after the
+scroll target had been computed, so far jumps landed up to ~160 px short. Instant jumps were verified
+in a real browser to land exactly on every section, including cross-category flow-bar jumps.
+
 ### Routing and state
 
 `useRoute()` in `src/hooks.js` reads `location.hash` (`#/deat`, or `#/abc#breathing-nrb` to target a
@@ -155,23 +166,60 @@ darkened variants: the bright yellow/green/purple that read well on black fail c
 if you reintroduce a dark surface anywhere, those accents need their own values rather than reuse.
 `highlight` is the one bright yellow, and it is fill-only — never use it as text color.
 
-Fonts are self-hosted through `@fontsource` imports so the page makes no third-party request. Only
-the weights actually used are imported — adding a weight to the CSS without using it just grows the
-bundle.
+Fonts are self-hosted and **subset to the glyphs actually used** by `npm run fonts`
+(`scripts/fonts.mjs`, via `subset-font`), committed to `src/assets/fonts/` as woff2 only, and declared
+by hand with `@font-face` in `index.css`. Two files, 17 KB total. `@fontsource/*` stays as a
+devDependency purely as the subsetter's input — nothing from it ships.
+- **Saira Condensed 800** keeps no lowercase letters. It is used only by `.slab`, which is always
+  `text-transform: uppercase`, and browsers match glyphs after the transform. If you ever use the
+  display font without `.slab`, re-add a–z in `scripts/fonts.mjs` first.
+- **IBM Plex Mono 400** keeps printable ASCII plus the typographic marks used in content
+  (`— – · “ ” ‘ ’ › … → ≥`). New content using other non-ASCII characters (an accented letter, a new
+  symbol) falls back to the system monospace for that glyph — add it to `TYPO` and rerun.
+- There is **no weight 500**; `font-medium` would render as synthetic bold. Use color or size for
+  emphasis instead of adding a weight.
+- `index.html` preloads both fonts. The page is JS-rendered, so without preload the fonts are only
+  requested after the bundle runs; with it they start at ~60 ms alongside the CSS. The LCP element is
+  the Saira `<h1>`. Chrome logs a "preloaded but not used" warning for them — a false positive: each
+  font is fetched exactly once.
 
-### Performance budget
+### Preact, not React
 
-From the spec: JS under 90 KB gzip, CSS under 15 KB gzip, and no network request when switching
-categories (all content is in the bundle). Check `npm run build` output before adding a dependency.
+The app uses Preact directly (`@preact/preset-vite` with `reactAliasesEnabled: false`) — no
+`preact/compat`, no `react` package. That is what takes the runtime from ~68 KB to ~4 KB gzip.
+- Import hooks from `preact/hooks` and `render`/`Component` from `preact`; never from `'react'`.
+- Text inputs must use **`onInput`**, not `onChange` — Preact's `onChange` is the native DOM event and
+  fires only on blur, so the search field would stop filtering as you type.
+- There is no `memo()` without compat. `StepRow` is a class with `shouldComponentUpdate` instead —
+  see below.
+- `.oxlintrc.json` turns off `react/immutability`: it recognizes `useRef` from `'react'` as mutable
+  but not the one from `preact/hooks`, and flags `timer.current = …` as an error.
 
-Content has since pushed total JS past 90 KB (93.8 KB gzip: 25.5 app + 68.2 vendor). React is now
-split into a `vendor` chunk by `manualChunks` in `vite.config.js`, so editing RP text — which
-happens constantly — only invalidates the 25 KB app chunk instead of the whole bundle. Both chunks
-are preloaded, so switching category still costs no request.
+### Performance
+
+The user wants the site as light as possible. Measured on the production build in a real browser:
+first visit transfers ~66 KB (JS 35, fonts 17, CSS 5, logo 6, favicon 3), FCP/LCP ~200 ms. Weigh
+every new dependency, font weight, or asset against that, and check `npm run build` output before
+adding a dependency.
+
+- **`StepRow` skips re-render unless its own copy status changed.** Every copy click changes `status`
+  in `App`; without this, all 167 rows of ABC re-render per click. With it, 1–2 do (measured by
+  counting renders). It only works if `onCopy` and `onGo` are referentially stable — both are
+  `useCallback`, and **a new inline callback passed to `StepRow` silently turns the optimization
+  off**. `smoke.test.jsx` checks the marker moves between rows and does not stick, and was verified to
+  fail against a broken comparison.
+- **`.lazy-section`** (`content-visibility: auto`) on every section skips layout and paint for the
+  ones off screen. Switching to ABC measured 77 → 36 ms. It depends on instant scrolling; see Motion
+  budget.
+- **The search index is built on the first query**, not at page load, with each entry's searchable
+  text lowercased once rather than on every keystroke.
+- **`public/_headers`** marks `/assets/*` (hash-named by Vite) `immutable` for a year, so a return
+  visit fetches nothing but `index.html`.
+- `build.modulePreload.polyfill` is off — every target browser supports modulepreload natively.
 
 **Do not solve future growth by lazy-loading a category.** That would put a network request between
-a tap and the text, which is the one thing this site must never do. If the app chunk itself grows
-uncomfortable, split the data out as a third preloaded chunk.
+a tap and the text, which is the one thing this site must never do. All content ships in the one app
+chunk so switching category costs no request.
 
 ## Deployment specifics
 

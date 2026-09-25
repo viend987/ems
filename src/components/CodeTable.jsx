@@ -7,7 +7,7 @@ export default function CodeTable({ categoryId, table, status, onCopy }) {
   const anchor = `${categoryId}-${table.id}`
 
   return (
-    <section id={anchor} className="scroll-mt-28 lg:scroll-mt-6">
+    <section id={anchor} className="lazy-section scroll-mt-28 lg:scroll-mt-6">
       <h2 className="slab mb-2 flex items-center gap-2.5 text-lg text-bone sm:text-xl">
         <span aria-hidden="true" className="h-4 w-1 bg-alarm sm:h-5" />
         {table.name}
@@ -26,7 +26,7 @@ export default function CodeTable({ categoryId, table, status, onCopy }) {
               className="flex w-full flex-col gap-1 bg-panel px-3 py-2.5 text-left hover:bg-raise sm:flex-row sm:items-baseline sm:gap-4 sm:px-4"
             >
               <span
-                className={`w-full shrink-0 text-[12.5px] font-medium sm:w-56 ${
+                className={`w-full shrink-0 text-[12.5px] sm:w-56 ${
                   copied ? (status.ok ? 'text-mech' : 'text-alarm') : 'text-signal'
                 }`}
               >

@@ -1,0 +1,10 @@
+# Cloudflare Workers static assets.
+#
+# Semua file di /assets/ bernama hash dari Vite (index-XXXX.js, engine-960-XXXX.avif),
+# jadi isinya tidak pernah berubah di bawah nama yang sama — aman di-cache setahun
+# tanpa dicek ulang. Kunjungan kedua tidak mengunduh JS, CSS, font, maupun foto lagi.
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# index.html sengaja tidak disentuh: ia tetap dicek ulang tiap kunjungan, jadi
+# deploy baru langsung terlihat begitu push ke main.
