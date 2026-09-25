@@ -34,8 +34,10 @@ workflow. Pushing to `main` is the deploy step.
 
 ## Content sources
 
-`draft.md` is the **current authoritative** source for RP text and step order; it supersedes
-`LSFD RP.md`, which is kept only as the previous revision. `LSFD Field Handbook.md` is secondary —
+`draft.md` is an **inbox, not an archive**: the user pastes new material into it and overwrites it
+each batch, so its current contents are only the latest drop (earlier drops live in git history).
+Once content is in `src/data/`, the data files are the source of truth. `LSFD RP.md` is the original
+revision, kept for reference. `LSFD Field Handbook.md` is secondary —
 it supplies the meaning of codes (10-code, Status, CAT, Triage, LOC), the theory behind each stage,
 and the Intermediate Life Support chapter that defines drug doses and routes.
 
@@ -54,7 +56,10 @@ Some procedures here are **not** in any source document: they were written from 
 practice because the official material stops at the drug and leaves unlicensed members with nowhere
 to go. Chest seal, abdominal evisceration, flail chest, BVM-assisted ventilation, hyperventilation
 coaching, the recovery position, the shock position, and `abc#meninggal` (declaring a death after
-resuscitation fails) are all in that group. They are deliberate additions, not transcription errors
+resuscitation fails) are all in that group. So are the parts of the three later guides that were only
+named, never scripted: in `structure.js` forcible entry, ventilation, the in-building victim check,
+and termination; in `hydrant.js` the three flow-check fault cases and the hose hookup the guide
+skipped; in `blood.js` donor screening, the bedside label check, and transfusion-reaction handling. They are deliberate additions, not transcription errors
 — do not delete them for failing to appear in the handbook.
 
 `abc#meninggal` is reached only from Epinephrine's failure branch, deliberately — declaring death
@@ -71,6 +76,13 @@ extract the chat lines and leave the prose in the source document.
 In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
 `/do` step.
+
+`blood.js` is used during LSFD **blood-donation events**. Its "Transfusi saat operasi" section stays
+inside `blood.js` as written in the guide — do not move it into another category, and do not add a
+jump to it from the RPLY operation flow in `hospital.js` (the user rejected that link). It also corrects two errors in its source guide: needle size is
+"16 Gauge" (the guide wrote "Gauss", a unit of magnetism), and donors are asked whether they have
+eaten, because the guide's "fast for 6 hours" is backwards — an empty stomach is what makes donors
+faint.
 
 Two things in the source were deliberately corrected rather than transcribed, and should not be
 "fixed" back: the AED block was headed *BVM* though BVM belongs to CPR, and the Vertical Rescue
@@ -100,11 +112,13 @@ A step is `{ n?, id?, kind, text, label?, prefix?, note?, branches? }`:
   category files, so definition order does not matter.
 - **`kind` picks the chat channel**, and the prefix follows from it: `me` → `/me`, `do` → `/do`,
   `say` → no prefix, `shout` → `/s`, `radio` → `/r` (LSFD), `ooc` → `/ro`, `deptradio` → `/d`
-  (between departments, including ATC), `deptooc` → `/od`, and `command`/`anim` carry their own
-  text. Getting this wrong puts the line on the wrong channel in game, so pick the kind by *who
+  (between departments, including ATC), `deptooc` → `/od`, `wt` → `/wt` (walkie-talkie, e.g.
+  Fireground Frequency 917 at a fire), and `command`/`anim` carry their own text. `/wt` lines are
+  written as casual chat between crew on scene, not formal radio phrasing — the user asked for that
+  register specifically. Getting this wrong puts the line on the wrong channel in game, so pick the kind by *who
   hears it*, not by how it looks. Each channel also owns a color (`--color-chat-*` in
-  `index.css`): `/me` pink, `/do` purple, `/r` blue, `/d` orange, `/s` yellow, commands green,
-  anims teal. Those pairings come from the user and are not ours to re-theme.
+  `index.css`): `/me` pink, `/do` purple, `/r` blue, `/d` orange, `/s` yellow, `/wt` olive green,
+  commands green, anims teal. Those pairings come from the user and are not ours to re-theme.
 - **`kind: 'note'`** is guidance, not typed text: no number, no copy button.
 - **`branches`** are jump links to `'<categoryId>#<sectionId>'`.
 
@@ -198,7 +212,8 @@ The app uses Preact directly (`@preact/preset-vite` with `reactAliasesEnabled: f
 ### Performance
 
 The user wants the site as light as possible. Measured on the production build in a real browser:
-first visit transfers ~66 KB (JS 35, fonts 17, CSS 5, logo 6, favicon 3), FCP/LCP ~200 ms. Weigh
+first visit transfers ~74 KB (JS 44, fonts 17, CSS 5, logo 6, favicon 3), FCP/LCP ~200 ms. Most of
+the JS is RP text — each large guide adds a few KB gzip. Weigh
 every new dependency, font weight, or asset against that, and check `npm run build` output before
 adding a dependency.
 

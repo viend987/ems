@@ -20,6 +20,7 @@ const PREFIXES = {
   ooc: '/ro', // OOC lewat radio LSFD
   deptradio: '/d', // radio antar departemen
   deptooc: '/od', // OOC antar departemen
+  wt: '/wt', // walkie-talkie, mis. Fireground Frequency 917 di lokasi kebakaran
   command: '', // command mekanik, teksnya sudah termasuk garis miring
   anim: '', // nama animasi
   note: '', // catatan pedoman, tidak bisa disalin

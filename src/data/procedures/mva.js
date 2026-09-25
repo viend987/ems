@@ -4,8 +4,8 @@
 
 export default {
   id: 'mva',
-  group: 'khusus',
-  name: 'MVA & Kebakaran',
+  group: 'pemadam',
+  name: 'MVA & Mobil Terbakar',
   blurb: 'Kecelakaan kendaraan: padamkan api, stabilkan mobil, matikan mesin, keluarkan korban.',
   sections: [
     {

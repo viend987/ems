@@ -16,6 +16,7 @@ const TONE = {
   do: { edge: 'border-l-chat-do', prefix: 'text-chat-do' },
   radio: { edge: 'border-l-chat-radio', prefix: 'text-chat-radio' },
   deptradio: { edge: 'border-l-chat-dept', prefix: 'text-chat-dept' },
+  wt: { edge: 'border-l-chat-wt', prefix: 'text-chat-wt' },
   shout: { edge: 'border-l-chat-shout', prefix: 'text-chat-shout' },
   command: { edge: 'border-l-chat-cmd', prefix: 'text-chat-cmd' },
   anim: { edge: 'border-l-chat-anim', prefix: 'text-chat-anim' },

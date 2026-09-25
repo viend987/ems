@@ -1,15 +1,18 @@
 import abc from './procedures/abc.js'
 import animals from './procedures/animals.js'
+import blood from './procedures/blood.js'
 import coroner from './procedures/coroner.js'
 import deat from './procedures/deat.js'
 import drugs from './procedures/drugs.js'
 import field from './procedures/field.js'
 import fracture from './procedures/fracture.js'
 import hospital from './procedures/hospital.js'
+import hydrant from './procedures/hydrant.js'
 import load from './procedures/load.js'
 import mva from './procedures/mva.js'
 import ocd from './procedures/ocd.js'
 import radio from './procedures/radio.js'
+import structure from './procedures/structure.js'
 import vertical from './procedures/vertical.js'
 import wounds from './procedures/wounds.js'
 import LINKS from './links.js'
@@ -28,10 +31,13 @@ export const PROCEDURES = [
   ocd,
   load,
   hospital,
-  coroner,
+  structure,
   mva,
+  hydrant,
+  coroner,
   vertical,
   animals,
+  blood,
 ]
 
 export const CATEGORIES = [...PROCEDURES, ...REFERENCE, UNITS, LINKS]
@@ -43,6 +49,7 @@ export const GROUPS = [
   { id: 'tkp', name: 'TKP' },
   { id: 'radio', name: 'Radio' },
   { id: 'transport', name: 'Transport' },
+  { id: 'pemadam', name: 'Pemadam' },
   { id: 'khusus', name: 'Khusus' },
   { id: 'referensi', name: 'Referensi' },
 ]

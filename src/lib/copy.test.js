@@ -12,6 +12,7 @@ describe('prefixOf', () => {
     expect(prefixOf({ kind: 'ooc' })).toBe('/ro')
     expect(prefixOf({ kind: 'deptradio' })).toBe('/d')
     expect(prefixOf({ kind: 'deptooc' })).toBe('/od')
+    expect(prefixOf({ kind: 'wt' })).toBe('/wt')
   })
 
   it('memberi awalan teriak', () => {

@@ -104,6 +104,7 @@ export const COMMANDS = {
         { code: '/ro', desc: 'OOC lewat radio LSFD.' },
         { code: '/d', desc: 'Radio antar departemen, termasuk ke ATC.' },
         { code: '/od', desc: 'OOC antar departemen.' },
+        { code: '/wt', desc: 'Walkie-talkie — dipakai untuk Fireground Frequency 917 di lokasi kebakaran.' },
         { code: '/megaphone', desc: 'Pengeras suara unit.' },
         { code: '/ado', desc: 'Menempelkan keterangan objek di suatu tempat.' },
       ],
@@ -214,7 +215,7 @@ export const CODES = {
       name: 'Singkatan tempat & unit',
       rows: [
         { code: 'DFS', desc: 'Davis Fire Station — markas.' },
-        { code: 'PBH', desc: 'Pillbox Hill Medical Center.' },
+        { code: 'PBH', desc: 'Pillbox Hospital.' },
         { code: 'OCD', desc: 'Operational Control Dispatch.' },
         { code: 'RID', desc: 'Nomor titik lokasi yang dipakai dispatch.' },
         { code: 'ER', desc: 'Emergency Room.' },
