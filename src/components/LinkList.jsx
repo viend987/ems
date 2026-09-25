@@ -21,9 +21,6 @@ export default function LinkList({ group }) {
           >
             <span className="flex items-baseline gap-2 text-[12.5px] text-calm">
               {item.label}
-              <span aria-hidden="true" className="text-[10px] text-muted">
-                tab baru
-              </span>
             </span>
             <span className="text-[12.5px] leading-relaxed text-dim">{item.desc}</span>
             <span className="text-[10px] break-all text-muted">{item.url}</span>
