@@ -13,6 +13,11 @@ export default {
       name: "General",
       items: [
         {
+          url: "https://fire.los-santos.net/viewtopic.php?t=10",
+          label: "LSFD Handbook",
+          desc: "Rules, Penalty, Procedures, dan lain-lain.",
+        },
+        {
           url: "https://fire.los-santos.net/viewtopic.php?t=970",
           label: "[GUIDE] Blood Transfusion",
           desc: "RP donor darah.",
@@ -29,6 +34,11 @@ export default {
           desc: "Berkas draft LSFD.",
         },
         {
+          url: "https://fire.los-santos.net/viewforum.php?f=132",
+          label: "Tracker Reports",
+          desc: "Berkas untuk naik rank.",
+        },
+        {
           url: "https://fire.los-santos.net/viewforum.php?f=131",
           label: "Patrol Logs",
           desc: "Laporan weekly Patrol Log.",
@@ -38,6 +48,31 @@ export default {
           label: "Patient Care Reports",
           desc: "Laporan penanganan korban di lapangan.",
         },
+        {
+          url: "https://fire.los-santos.net/viewtopic.php?t=749",
+          label: "[GUIDE] Motor Vehicle Accident",
+          desc: "RP kecelakaan kendaraan.",
+        },
+        {
+          url: "https://fire.los-santos.net/viewtopic.php?t=649",
+          label: "[GUIDE] Vertical Rescue",
+          desc: "RP aerial support.",
+        },
+        {
+          url: "https://fire.los-santos.net/viewtopic.php?t=649",
+          label: "[GUIDE] Structure Fire Procedures",
+          desc: "RP kebakaran bangunan.",
+        },
+        {
+          url: "https://fire.los-santos.net/viewtopic.php?t=1921",
+          label: "[GUIDE] Wild Animal Handling",
+          desc: "RP kontrol hewan liar.",
+        },
+        {
+          url: "https://fire.los-santos.net/viewtopic.php?t=849",
+          label: "[GUIDE] Hydrant Pillar Inspection",
+          desc: "RP inspeksi hydrant.",
+        },
       ],
     },
     {
@@ -45,14 +80,9 @@ export default {
       name: "Pillbox Hospital",
       items: [
         {
-          url: "https://github.com/farhanmaul987/ems",
-          label: "Repo GitHub",
-          desc: "Sumber web ini. Teks RP ada di src/data/procedures/.",
-        },
-        {
-          url: "https://ems.viend.my.id",
-          label: "ems.viend.my.id",
-          desc: "Alamat web ini kalau mau dibagikan ke rekan satu faction.",
+          url: "https://fire.los-santos.net/viewtopic.php?t=27",
+          label: "Hospital General Information",
+          desc: "Informasi harga obat-obatan dan treatment di PBS.",
         },
       ],
     },
