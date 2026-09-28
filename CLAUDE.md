@@ -106,7 +106,10 @@ copy button puts on the clipboard.
   only, so `<strong>` in Plex Mono would be synthetic bold. Its styles live in `.bbcode` in
   `index.css`, which also keeps `white-space: pre-wrap` — on the forum every newline is a line break.
 - Colors from `[color=…]` are matched against `SAFE_COLOR` before reaching a style attribute, and
-  `[img]` only renders an `http(s)` source.
+  both `[img]` and `[url]` only accept an `http(s)` address (`SAFE_URL`). That guard matters because
+  Activity and Crew member are interpolated into the BBCode raw, so `[url=javascript:…]` can be typed
+  into the form; a blocked address still shows its text, just not as a link.
+  `BBCodePreview.test.jsx` covers each rejected scheme.
 
 `blood.js` is used during LSFD **blood-donation events**. Its "Transfusi saat operasi" section stays
 inside `blood.js` as written in the guide — do not move it into another category, and do not add a

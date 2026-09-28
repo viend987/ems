@@ -17,6 +17,14 @@ import { parseBBCode, textOf } from '../lib/bbcode.js'
 // Nilai warna dari BBCode tidak pernah masuk ke gaya begitu saja.
 const SAFE_COLOR = /^(#[0-9a-f]{3,8}|[a-z]+)$/i
 
+/**
+ * Hanya http(s) yang boleh jadi alamat gambar atau tautan. Isi Activity dan
+ * Crew member masuk ke BBCode apa adanya, jadi `[url=javascript:…]` bisa saja
+ * diketik ke sana; tanpa saringan ini pratinjau akan menggambarnya sebagai
+ * tautan yang benar-benar bisa diklik.
+ */
+const SAFE_URL = /^https?:\/\//i
+
 function render(node, key) {
   if (typeof node === 'string') return node
 
@@ -112,7 +120,7 @@ function render(node, key) {
     case 'img':
     case 'img-resize': {
       const src = textOf(node).trim()
-      if (!/^https?:\/\//i.test(src)) return null
+      if (!SAFE_URL.test(src)) return null
       const width = node.tag === 'img-resize' ? Number(value) || undefined : undefined
       return (
         <img
@@ -129,7 +137,9 @@ function render(node, key) {
     }
 
     case 'url': {
-      const href = value || textOf(node)
+      const href = (value || textOf(node)).trim()
+      // Skema selain http(s) tetap tampil sebagai teks, bukan tautan.
+      if (!SAFE_URL.test(href)) return <Fragment key={key}>{kids}</Fragment>
       return (
         <a key={key} href={href} target="_blank" rel="noreferrer noopener" className="text-[#0b57a4] underline">
           {kids}
