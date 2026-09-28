@@ -30,7 +30,7 @@ function Chain({ onGo, ariaHidden }) {
 export default function FlowBar({ onGo }) {
   return (
     <div className="overflow-hidden border-b border-line bg-panel">
-      <div className="flow-track flex w-max py-2 xl:mx-auto xl:w-full xl:max-w-7xl xl:justify-center xl:px-6">
+      <div className="flow-track flex w-max py-2 xl:mx-auto xl:w-full xl:max-w-[100rem] xl:justify-center xl:px-6">
         <Chain onGo={onGo} />
         {/* Salinan kedua menjaga pergeseran tetap mulus di layar sempit.
             Di layar lebar animasinya mati dan salinan ini disembunyikan. */}

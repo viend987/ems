@@ -66,7 +66,7 @@ export default function App() {
   // puncak halaman, sementara pita alur dan kepala halaman ikut kolom kanan.
   // Dengan begitu papan selalu berakhir tepat di dasar layar.
   return (
-    <div className="mx-auto flex min-h-dvh max-w-7xl border-line min-[1296px]:border-x">
+    <div className="mx-auto flex min-h-dvh max-w-[100rem] border-line min-[1616px]:border-x">
       <Board variant="rail" {...board} />
 
       <div className="flex min-w-0 flex-1 flex-col">

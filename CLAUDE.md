@@ -76,7 +76,8 @@ extract the chat lines and leave the prose in the source document.
 The one exception is **Patrol Log** (`#/patrol`), a form the user asked for that generates the
 BBCode of the forum's Weekly Patrol Log (min. 3 reports a week, min. 60 minutes of duty each). The
 template lives in `buildPatrolLog()` in `src/lib/patrol.js`, and `patrol.test.js` pins it
-byte-for-byte to a real finished report — change both together. Member details and signature
+byte-for-byte to a real finished report — change both together. The result panel has two tabs,
+**Pratinjau** (default) and **BBCode**; the copy button stays visible in both. Member details and signature
 links come from the master list in `src/data/staff.js`; adding a member is one object there. A
 duty under 60 minutes (end before start counts as crossing midnight) disables the copy button on
 purpose. The draft is kept in `localStorage` (`lsfd:patrol-draft`). Proof images are plain link
@@ -87,6 +88,25 @@ removed at the user's request, so the site stays fully static.
 In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
 `/do` step.
+
+### BBCode preview
+
+`src/lib/bbcode.js` parses BBCode into a tree and `BBCodePreview.jsx` draws it as the forum would.
+It reads **the generated BBCode**, not the form state, so the preview cannot drift from what the
+copy button puts on the clipboard.
+
+- It is not a general BBCode parser — only the tags the forum template uses are in `KNOWN`, and
+  anything else is deliberately left visible as literal text rather than silently dropped.
+- It must tolerate **unclosed tags**: the Patrol Log template opens `[list=0]` in Duty Information
+  and never closes it (that is the forum's own template, and `patrol.test.js` pins it), so a
+  dangling tag is closed when its parent closes or at end of input. `bbcode.test.js` covers that
+  shape directly.
+- The preview renders in the **system sans-serif**, not the site's IBM Plex Mono. That is both more
+  faithful to the forum and the only way to get real bold: the subsetted site font ships weight 400
+  only, so `<strong>` in Plex Mono would be synthetic bold. Its styles live in `.bbcode` in
+  `index.css`, which also keeps `white-space: pre-wrap` — on the forum every newline is a line break.
+- Colors from `[color=…]` are matched against `SAFE_COLOR` before reaching a style attribute, and
+  `[img]` only renders an `http(s)` source.
 
 `blood.js` is used during LSFD **blood-donation events**. Its "Transfusi saat operasi" section stays
 inside `blood.js` as written in the guide — do not move it into another category, and do not add a
@@ -159,6 +179,15 @@ is how the fleet list stays complete while photos arrive in batches.
 Create `src/data/procedures/<name>.js`, import it in `src/data/index.js`, and add it to
 `PROCEDURES`. Its `group` must be one of the ids in `GROUPS`. No component changes needed.
 
+A group may declare `subgroups: [{ id, name }]`, and a category picks one with `subgroup: '<id>'`.
+`Board.jsx` renders those one level in, under a smaller label with a left rule, in both the desktop
+rail and the mobile grid. Two rules keep it from becoming a maintenance trap: a category **without**
+`subgroup` still sits directly under its group heading, so existing groups needed no change, and an
+**empty subgroup is not drawn at all** — it appears by itself once something lands in it. `Laporan`
+declares `field` (Field Unit) and `hospital` (Hospital Unit); only Field Unit renders today, because
+Patrol Log is the one report that exists. `procedures.test.js` fails on a `subgroup` that its group
+does not declare, and on duplicate subgroup ids.
+
 ### Motion budget
 
 **The flow bar is the only thing that moves, and only when its chain does not fit** (below 1280px).
@@ -178,6 +207,12 @@ section) — no router library. The last category is mirrored to `localStorage` 
 every storage access is wrapped in `try/catch` and the page renders correctly without it.
 
 ### Layout
+
+The page shell is `max-w-[100rem]` (1600px), widened from 1280px because the gutters ate too much
+of a wide monitor. 1600 is a deliberate ceiling, not the largest that fits: the main column then runs
+about 1280px, which is already around 150 monospace characters per line for a step row. Going wider
+makes RP lines long enough to lose your place in. The shell border switches on at `min-[1616px]`
+(1600 + the 16px gutter), and `Header.jsx` and `FlowBar.jsx` carry the same max width.
 
 On desktop (`lg`+) the category board (`Board variant="rail"`) is its own column starting at the
 very top of the page, `sticky top-0 h-dvh`, with the flow bar and header in the right-hand column.

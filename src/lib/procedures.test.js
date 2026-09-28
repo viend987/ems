@@ -59,6 +59,24 @@ describe('integritas data prosedur', () => {
       expect(groups, `kelompok tak dikenal di ${category.id}`).toContain(category.group)
     }
   })
+
+  it('setiap subgroup kategori terdaftar di kelompoknya', () => {
+    const byGroup = new Map(GROUPS.map((g) => [g.id, (g.subgroups ?? []).map((s) => s.id)]))
+    for (const category of CATEGORIES) {
+      if (!category.subgroup) continue
+      expect(
+        byGroup.get(category.group) ?? [],
+        `subgroup "${category.subgroup}" di ${category.id} tidak ada di kelompok "${category.group}"`,
+      ).toContain(category.subgroup)
+    }
+  })
+
+  it('tidak ada id subgroup ganda dalam satu kelompok', () => {
+    for (const group of GROUPS) {
+      const ids = (group.subgroups ?? []).map((s) => s.id)
+      expect(new Set(ids).size, `subgroup ganda di kelompok ${group.id}`).toBe(ids.length)
+    }
+  })
 })
 
 describe('sasaran loncat', () => {

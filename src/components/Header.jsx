@@ -4,7 +4,7 @@ import logoWebp from '../assets/lsfd.webp'
 export default function Header({ stepCount }) {
   return (
     <header className="border-b border-line">
-      <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-5 sm:gap-6 sm:px-6 lg:px-8">
+      <div className="mx-auto flex max-w-[100rem] items-center gap-4 px-4 py-5 sm:gap-6 sm:px-6 lg:px-8">
         <picture className="contents">
           <source type="image/avif" srcSet={logoAvif} />
           <img

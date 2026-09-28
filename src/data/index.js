@@ -45,14 +45,29 @@ export const CATEGORIES = [...PROCEDURES, PATROL, ...REFERENCE, UNITS, LINKS]
 
 export { LINKS, UNITS }
 
-/** Kelompok di papan status, berurutan dari yang paling sering dipakai. */
+/**
+ * Kelompok di papan status, berurutan dari yang paling sering dipakai.
+ *
+ * Kelompok boleh punya `subgroups` untuk menata isinya satu tingkat lebih
+ * dalam; kategori memilih sub-kelompoknya lewat `subgroup: '<id>'`. Kategori
+ * tanpa `subgroup` tetap tampil langsung di bawah judul kelompoknya, jadi
+ * kelompok lama tidak perlu diubah. Sub-kelompok yang belum berisi apa pun
+ * tidak digambar — ia muncul sendiri begitu ada kategori yang masuk ke sana.
+ */
 export const GROUPS = [
   { id: 'tkp', name: 'TKP' },
   { id: 'radio', name: 'Radio' },
   { id: 'transport', name: 'Transport' },
   { id: 'pemadam', name: 'Pemadam' },
   { id: 'khusus', name: 'Khusus' },
-  { id: 'laporan', name: 'Laporan' },
+  {
+    id: 'laporan',
+    name: 'Laporan',
+    subgroups: [
+      { id: 'field', name: 'Field Unit' },
+      { id: 'hospital', name: 'Hospital Unit' },
+    ],
+  },
   { id: 'referensi', name: 'Referensi' },
 ]
 

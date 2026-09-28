@@ -4,6 +4,7 @@
 export default {
   id: 'patrol',
   group: 'laporan',
+  subgroup: 'field',
   name: 'Patrol Log',
   blurb:
     'Weekly Patrol Log untuk forum LSFD: minimal 3 laporan per minggu, tiap laporan minimal 1 jam duty. Isi kolomnya, BBCode lengkap tinggal disalin.',

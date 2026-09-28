@@ -144,6 +144,25 @@
   }
 }
 
+/* Pratinjau BBCode: meniru tampilan postingan forum, bukan tampilan situs ini.
+   Font bawaan sistem dipakai dengan sengaja — forum memang sans-serif biasa,
+   dan font sistem sudah punya huruf tebal sendiri, sedangkan subset font situs
+   ini hanya membawa ketebalan 400. Baris baru dipertahankan apa adanya karena
+   di forum pun setiap enter jadi baris baru. */
+.bbcode {
+  font-family: ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #111;
+}
+
+.bbcode img {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Batang gulir tipis untuk wadah yang menggulir sendiri, mis. papan kiri. */
 .scroll-thin {
   scrollbar-width: thin;

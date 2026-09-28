@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import STAFF from '../data/staff.js'
+import BBCodePreview from './BBCodePreview.jsx'
 import { writeClipboard } from '../lib/copy.js'
 import {
   buildPatrolLog,
@@ -141,6 +142,9 @@ function ImageField({ label, value, onChange }) {
 export default function PatrolLog() {
   const [draft, setDraft] = useState(readDraft)
   const [copied, setCopied] = useState(null)
+  // Pratinjau lebih dulu: yang dicari pemain biasanya "sudah benar belum
+  // tampilannya", bukan kode mentahnya.
+  const [tab, setTab] = useState('preview')
   const timer = useRef(null)
 
   useEffect(() => writeDraft(draft), [draft])
@@ -261,14 +265,33 @@ export default function PatrolLog() {
         </button>
       </form>
 
-      <section aria-label="Hasil BBCode" className="flex flex-col gap-3 xl:sticky xl:top-6">
-        <div className="flex items-center gap-3">
-          <h3 className="slab flex-1 text-lg text-bone">BBCode</h3>
+      <section aria-label="Hasil laporan" className="flex flex-col gap-3 xl:sticky xl:top-6">
+        <div className="flex flex-wrap items-center gap-2">
+          <div role="tablist" aria-label="Tampilan hasil" className="flex rounded-sm border border-line bg-panel p-0.5">
+            {[
+              ['preview', 'Pratinjau'],
+              ['bbcode', 'BBCode'],
+            ].map(([id, label]) => (
+              <button
+                key={id}
+                type="button"
+                role="tab"
+                aria-selected={tab === id}
+                onClick={() => setTab(id)}
+                className={`slab rounded-sm px-3 py-1.5 text-xs ${
+                  tab === id ? 'bg-alarm text-white' : 'text-dim hover:text-bone'
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
           <button
             type="button"
             onClick={copy}
             disabled={issues.length > 0}
-            className="slab rounded-sm bg-alarm px-4 py-2 text-sm text-white disabled:bg-line disabled:text-muted"
+            className="slab ml-auto rounded-sm bg-alarm px-4 py-2 text-sm text-white disabled:bg-line disabled:text-muted"
           >
             {copied === null ? 'Salin BBCode' : copied ? 'Tersalin' : 'Gagal menyalin'}
           </button>
@@ -282,14 +305,18 @@ export default function PatrolLog() {
           </ul>
         )}
 
-        <textarea
-          readOnly
-          value={bbcode}
-          aria-label="BBCode laporan"
-          rows={18}
-          onFocus={(e) => e.currentTarget.select()}
-          className="w-full resize-y rounded-sm border border-line bg-panel p-3 text-[11.5px] leading-relaxed text-dim"
-        />
+        {tab === 'preview' ? (
+          <BBCodePreview code={bbcode} className="max-h-[32rem] xl:max-h-[calc(100dvh-10rem)]" />
+        ) : (
+          <textarea
+            readOnly
+            value={bbcode}
+            aria-label="BBCode laporan"
+            rows={18}
+            onFocus={(e) => e.currentTarget.select()}
+            className="scroll-thin w-full resize-y rounded-sm border border-line bg-panel p-3 text-[11.5px] leading-relaxed text-dim"
+          />
+        )}
       </section>
     </div>
   )
