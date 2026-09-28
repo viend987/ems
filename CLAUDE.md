@@ -73,6 +73,17 @@ role descriptions, equipment lists, the fire-extinguisher class table, risk clas
 skunk-deodorizer recipe, bat-guano cleanup — and none of it belongs here. When new content arrives,
 extract the chat lines and leave the prose in the source document.
 
+The one exception is **Patrol Log** (`#/patrol`), a form the user asked for that generates the
+BBCode of the forum's Weekly Patrol Log (min. 3 reports a week, min. 60 minutes of duty each). The
+template lives in `buildPatrolLog()` in `src/lib/patrol.js`, and `patrol.test.js` pins it
+byte-for-byte to a real finished report — change both together. Member details and signature
+links come from the master list in `src/data/staff.js`; adding a member is one object there. A
+duty under 60 minutes (end before start counts as crossing midnight) disables the copy button on
+purpose. The draft is kept in `localStorage` (`lsfd:patrol-draft`). Proof images are plain link
+fields — the user uploads elsewhere and pastes the link. They accept any http(s) host (not locked
+to imgur), reject plain text, and show a live preview; an Imgur upload proxy was built once and
+removed at the user's request, so the site stays fully static.
+
 In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
 `/do` step.
@@ -166,6 +177,15 @@ in a real browser to land exactly on every section, including cross-category flo
 section) — no router library. The last category is mirrored to `localStorage` as the landing target;
 every storage access is wrapped in `try/catch` and the page renders correctly without it.
 
+### Layout
+
+On desktop (`lg`+) the category board (`Board variant="rail"`) is its own column starting at the
+very top of the page, `sticky top-0 h-dvh`, with the flow bar and header in the right-hand column.
+That keeps the board ending exactly at the bottom of the screen; the search stays pinned and only
+the category list scrolls, inside the board. Below `lg` the same component renders as the grid
+menu (`variant="grid"`). Scrollbars are themed once in `index.css` (`scrollbar-color` on `html` is
+inherited; `.scroll-thin` narrows a container's bar).
+
 ### Styling
 
 Tailwind v4 via `@tailwindcss/vite`, no `tailwind.config.js` — tokens live in `@theme` in
@@ -240,4 +260,6 @@ chunk so switching category costs no request.
 
 `wrangler.jsonc` configures a Workers static-assets deployment (`assets.directory: ./dist`,
 `not_found_handling: single-page-application`) with a `custom_domain` route for `ems.viend.my.id`.
-There is no server or API — this is 100% static output from `vite build`.
+There is no server or API — this is 100% static output from `vite build`. The empty `previews`
+block is required: Workers Builds runs `wrangler preview` for non-`main` branches, which refuses to
+run without it.
