@@ -6,6 +6,7 @@ import {
   durationMinutes,
   formatDuration,
   isImageUrl,
+  isLink,
   MIN_DUTY_MINUTES,
   normalizeImageUrl,
   problems,
@@ -64,104 +65,74 @@ function Field({ label, hint, children }) {
   )
 }
 
-async function uploadImage(file) {
-  const body = new FormData()
-  body.append('image', file)
-  const res = await fetch('/api/imgur', { method: 'POST', body })
-  const data = await res.json().catch(() => null)
-  if (!res.ok || !data?.link) throw new Error(data?.error ?? `Upload gagal (status ${res.status}).`)
-  return data.link
-}
-
 /**
- * Link gambar bukti. Selalu bisa diisi manual; upload (tombol, tempel
- * screenshot dengan Ctrl+V, atau seret berkas ke kotak ini) hanya jalan pintas
- * yang mengisi kolom yang sama.
+ * Link gambar bukti. Kolomnya hanya menerima link http(s) — dari host mana pun,
+ * tidak dikunci ke imgur — dan gambarnya langsung dipratinjau, supaya link
+ * yang salah ketahuan sebelum laporan dikirim ke forum.
  */
 function ImageField({ label, value, onChange }) {
-  const [state, setState] = useState({ busy: false, error: '' })
-  const [broken, setBroken] = useState('')
-  const picker = useRef(null)
-
-  const send = async (file) => {
-    if (!file?.type.startsWith('image/')) return
-    setState({ busy: true, error: '' })
-    try {
-      onChange(await uploadImage(file))
-      setState({ busy: false, error: '' })
-    } catch (err) {
-      setState({ busy: false, error: `${err.message} Upload manual ke imgur.com lalu tempel link-nya.` })
-    }
-  }
+  // Status muat per link: gambar lama yang gagal tidak menandai link baru.
+  const [loaded, setLoaded] = useState({ url: '', ok: false })
 
   const url = normalizeImageUrl(value)
-  const showPreview = url && isImageUrl(url) && broken !== url
+  const valid = url && isImageUrl(url)
+  const state = !valid || loaded.url !== url ? 'loading' : loaded.ok ? 'ok' : 'broken'
+  const bad = url && (!valid || state === 'broken')
+
+  let message = 'Tempel link gambar langsung, mis. https://i.imgur.com/xxxx.jpeg.'
+  let tone = 'text-muted'
+  if (url && !valid) {
+    message = isLink(url)
+      ? 'Ini link halaman, bukan gambar. Buka gambarnya, klik kanan, lalu "Copy image address".'
+      : 'Kolom ini hanya menerima link (diawali https://), bukan teks biasa.'
+    tone = 'text-alarm'
+  } else if (valid && state === 'broken') {
+    message = 'Gambar dari link ini tidak bisa dimuat. Pastikan link-nya mengarah langsung ke gambar.'
+    tone = 'text-alarm'
+  } else if (valid && state === 'loading') {
+    message = 'Memuat pratinjau…'
+  } else if (valid && state === 'ok') {
+    message = 'Gambar termuat.'
+    tone = 'text-mech'
+  }
 
   return (
-    <div
-      className="flex flex-col gap-1.5"
-      onPaste={(e) => {
-        const file = [...(e.clipboardData?.files ?? [])].find((f) => f.type.startsWith('image/'))
-        if (file) {
-          e.preventDefault()
-          send(file)
-        }
-      }}
-      onDragOver={(e) => e.preventDefault()}
-      onDrop={(e) => {
-        e.preventDefault()
-        send(e.dataTransfer?.files?.[0])
-      }}
-    >
+    <div className="flex flex-col gap-1.5">
       <span className="slab text-[11px] tracking-[0.18em] text-muted">Gambar {label}</span>
-      <div className="flex gap-1.5">
-        <input
-          type="url"
-          value={value}
-          onInput={(e) => onChange(e.currentTarget.value)}
-          placeholder="https://i.imgur.com/xxxx.jpeg"
-          aria-label={`Link gambar ${label}`}
-          className={inputClass}
-        />
-        <button
-          type="button"
-          disabled={state.busy}
-          onClick={() => picker.current?.click()}
-          className="shrink-0 rounded-sm border border-line bg-panel px-3 py-2 text-[11px] text-dim hover:border-signal hover:text-signal disabled:opacity-60"
+      <input
+        type="url"
+        inputMode="url"
+        value={value}
+        onInput={(e) => onChange(e.currentTarget.value.trim())}
+        placeholder="https://i.imgur.com/xxxx.jpeg"
+        aria-label={`Link gambar ${label}`}
+        aria-invalid={bad ? 'true' : undefined}
+        spellcheck={false}
+        autoComplete="off"
+        className={bad ? inputClass.replace('border-line', 'border-alarm') : inputClass}
+      />
+      <span className={`text-[11px] leading-relaxed ${tone}`}>{message}</span>
+      {valid && (
+        <a
+          href={url}
+          target="_blank"
+          rel="noreferrer noopener"
+          title="Buka gambar di tab baru"
+          className={`block w-full overflow-hidden rounded-sm border border-line bg-raise ${
+            state === 'broken' ? 'hidden' : ''
+          }`}
         >
-          {state.busy ? 'Mengunggah…' : 'Upload'}
-        </button>
-        <input
-          ref={picker}
-          type="file"
-          accept="image/*"
-          hidden
-          onChange={(e) => {
-            send(e.currentTarget.files?.[0])
-            e.currentTarget.value = ''
-          }}
-        />
-      </div>
-      {state.error ? (
-        <span className="text-[11px] leading-relaxed text-alarm">{state.error}</span>
-      ) : url && broken === url ? (
-        <span className="text-[11px] leading-relaxed text-alarm">
-          Gambar dari link ini tidak bisa dimuat. Cek lagi link-nya.
-        </span>
-      ) : (
-        <span className="text-[11px] leading-relaxed text-muted">
-          Tempel link, klik Upload, atau Ctrl+V screenshot di kolom ini.
-        </span>
-      )}
-      {showPreview && (
-        <img
-          src={url}
-          alt={`Bukti ${label}`}
-          referrerPolicy="no-referrer"
-          loading="lazy"
-          onError={() => setBroken(url)}
-          className="aspect-video w-full max-w-72 rounded-sm border border-line bg-raise object-cover"
-        />
+          <img
+            key={url}
+            src={url}
+            alt={`Bukti ${label}`}
+            referrerPolicy="no-referrer"
+            decoding="async"
+            onLoad={() => setLoaded({ url, ok: true })}
+            onError={() => setLoaded({ url, ok: false })}
+            className="aspect-video w-full object-contain"
+          />
+        </a>
       )}
     </div>
   )

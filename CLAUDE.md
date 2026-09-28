@@ -79,7 +79,10 @@ template lives in `buildPatrolLog()` in `src/lib/patrol.js`, and `patrol.test.js
 byte-for-byte to a real finished report — change both together. Member details and signature
 links come from the master list in `src/data/staff.js`; adding a member is one object there. A
 duty under 60 minutes (end before start counts as crossing midnight) disables the copy button on
-purpose. The draft is kept in `localStorage` (`lsfd:patrol-draft`).
+purpose. The draft is kept in `localStorage` (`lsfd:patrol-draft`). Proof images are plain link
+fields — the user uploads elsewhere and pastes the link. They accept any http(s) host (not locked
+to imgur), reject plain text, and show a live preview; an Imgur upload proxy was built once and
+removed at the user's request, so the site stays fully static.
 
 In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
@@ -150,17 +153,6 @@ aspect ratio is kept and the card shows the image as-is.
 `images-incoming/` is gitignored — the raw 1920x1080 sources are several MB and only the converted
 WebP belongs in the repo. A unit with no `images` still renders its callsign and description, which
 is how the fleet list stays complete while photos arrive in batches.
-
-### Imgur upload Worker
-
-`worker/index.js` is the only server code: `wrangler.jsonc` runs it first for `/api/*` only, and
-everything else is plain static assets. `POST /api/imgur` forwards an image to Imgur with the
-`IMGUR_CLIENT_ID` **secret** (set in the Cloudflare dashboard or `npx wrangler secret put
-IMGUR_CLIENT_ID`; register an anonymous client at https://api.imgur.com/oauth2/addclient). Without
-the secret it answers 503 and the form falls back to pasting a link by hand — the manual link field
-is always there, upload only fills it. Requests from another Origin are refused so other sites
-cannot spend the Client-ID's quota. `npm run dev` has no `/api`; use `npm run build && npx wrangler
-dev` to exercise uploads locally.
 
 ### Adding a category
 
@@ -268,4 +260,6 @@ chunk so switching category costs no request.
 
 `wrangler.jsonc` configures a Workers static-assets deployment (`assets.directory: ./dist`,
 `not_found_handling: single-page-application`) with a `custom_domain` route for `ems.viend.my.id`.
-Apart from the small `/api/*` Worker above, this is static output from `vite build`.
+There is no server or API — this is 100% static output from `vite build`. The empty `previews`
+block is required: Workers Builds runs `wrangler preview` for non-`main` branches, which refuses to
+run without it.

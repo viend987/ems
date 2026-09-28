@@ -82,6 +82,15 @@ describe('link gambar', () => {
     expect(isImageUrl('https://i.postimg.cc/x/y.png')).toBe(true)
   })
 
+  it('hanya menerima link, dari host mana pun', () => {
+    expect(isImageUrl('https://cdn.discordapp.com/attachments/1/2/shot.png')).toBe(true)
+    expect(isImageUrl('bukti start duty')).toBe(false)
+    expect(isImageUrl('i.imgur.com/abc.png')).toBe(false)
+    expect(isImageUrl('https://i.imgur.com/a b.png')).toBe(false)
+    expect(isImageUrl('javascript:alert(1)')).toBe(false)
+    expect(problems({ ...FORM, startImage: 'foto start' }).join()).toMatch(/harus berupa link/)
+  })
+
   it('format tanggal forum', () => {
     expect(formatDate('2026-09-21')).toBe('21/09/2026')
     expect(formatDate('')).toBe('')

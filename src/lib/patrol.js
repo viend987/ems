@@ -61,9 +61,23 @@ export function normalizeImageUrl(raw) {
   return page ? `https://i.imgur.com/${page[1]}.jpeg` : url
 }
 
-/** Link yang layak masuk [img]: http(s) dan bukan halaman/album imgur. */
+/** Link http(s) utuh ke sebuah host — bukan teks biasa. */
+export function isLink(value) {
+  if (/\s/.test(value ?? '')) return false
+  try {
+    const url = new URL(value)
+    return (url.protocol === 'https:' || url.protocol === 'http:') && url.hostname.includes('.')
+  } catch {
+    return false
+  }
+}
+
+/**
+ * Link yang layak masuk [img]: link dari host mana pun, kecuali halaman atau
+ * album imgur — keduanya halaman web, bukan gambar, jadi tidak tampil di forum.
+ */
 export function isImageUrl(url) {
-  if (!/^https?:\/\/\S+$/.test(url)) return false
+  if (!isLink(url)) return false
   return !/^https?:\/\/(?:www\.|m\.)?imgur\.com\//.test(url)
 }
 
@@ -92,6 +106,7 @@ export function problems(form) {
   ]) {
     const url = normalizeImageUrl(form[key])
     if (!url) list.push(`Gambar bukti ${label} belum diisi.`)
+    else if (!isLink(url)) list.push(`Gambar bukti ${label} harus berupa link, bukan teks biasa.`)
     else if (!isImageUrl(url)) {
       list.push(`Link gambar ${label} bukan link gambar langsung (contoh: https://i.imgur.com/xxxx.jpeg).`)
     }
