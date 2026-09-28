@@ -16,6 +16,7 @@ import structure from './procedures/structure.js'
 import vertical from './procedures/vertical.js'
 import wounds from './procedures/wounds.js'
 import LINKS from './links.js'
+import PATROL from './patrol.js'
 import UNITS from './units.js'
 import { REFERENCE } from './reference.js'
 
@@ -40,7 +41,7 @@ export const PROCEDURES = [
   blood,
 ]
 
-export const CATEGORIES = [...PROCEDURES, ...REFERENCE, UNITS, LINKS]
+export const CATEGORIES = [...PROCEDURES, PATROL, ...REFERENCE, UNITS, LINKS]
 
 export { LINKS, UNITS }
 
@@ -51,6 +52,7 @@ export const GROUPS = [
   { id: 'transport', name: 'Transport' },
   { id: 'pemadam', name: 'Pemadam' },
   { id: 'khusus', name: 'Khusus' },
+  { id: 'laporan', name: 'Laporan' },
   { id: 'referensi', name: 'Referensi' },
 ]
 

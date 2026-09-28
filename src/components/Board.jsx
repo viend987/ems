@@ -2,9 +2,11 @@ import { CATEGORIES, GROUPS } from '../data/index.js'
 import SearchField from './SearchField.jsx'
 
 /**
- * Papan status stasiun. Di desktop ia kolom menempel di kiri; di layar kecil
- * ia jadi menu kotak-kotak yang membungkus ke bawah, supaya semua kategori
- * kelihatan sekaligus tanpa perlu digeser ke samping.
+ * Papan status stasiun. Di desktop (`variant="rail"`) ia kolom kiri setinggi
+ * layar yang menempel sejak puncak halaman; kolom cari tetap di atas dan hanya
+ * daftar kategorinya yang menggulir, di dalam papan itu sendiri. Di layar kecil
+ * (`variant="grid"`) ia jadi menu kotak-kotak yang membungkus ke bawah, supaya
+ * semua kategori kelihatan sekaligus tanpa perlu digeser ke samping.
  */
 
 const BY_GROUP = GROUPS.map((group) => ({
@@ -18,10 +20,9 @@ function Light({ active }) {
   )
 }
 
-export default function Board({ active, onGo, query, onQuery, searchRef }) {
-  return (
-    <>
-      {/* Layar kecil: menu kotak-kotak */}
+export default function Board({ variant, active, onGo, query, onQuery, searchRef }) {
+  if (variant === 'grid') {
+    return (
       <div className="border-b border-line px-4 py-4 sm:px-6 lg:hidden">
         <SearchField value={query} onChange={onQuery} inputRef={searchRef} />
 
@@ -51,16 +52,19 @@ export default function Board({ active, onGo, query, onQuery, searchRef }) {
           ))}
         </nav>
       </div>
+    )
+  }
 
-      {/* Desktop: papan menempel */}
-      <nav
-        aria-label="Kategori prosedur"
-        className="sticky top-0 hidden h-dvh w-60 shrink-0 overflow-y-auto border-r border-line bg-panel lg:block xl:w-64"
-      >
-        <div className="border-b border-line p-3">
-          <SearchField value={query} onChange={onQuery} inputRef={searchRef} />
-        </div>
+  return (
+    <nav
+      aria-label="Kategori prosedur"
+      className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-line bg-panel lg:flex xl:w-64"
+    >
+      <div className="shrink-0 border-b border-line p-3">
+        <SearchField value={query} onChange={onQuery} inputRef={searchRef} />
+      </div>
 
+      <div className="scroll-thin min-h-0 flex-1 overflow-y-auto overscroll-contain">
         {BY_GROUP.map((group) => (
           <div key={group.id} className="border-b border-line py-2">
             <div className="slab px-3 py-1.5 text-[10px] tracking-[0.24em] text-muted">{group.name}</div>
@@ -85,7 +89,7 @@ export default function Board({ active, onGo, query, onQuery, searchRef }) {
             })}
           </div>
         ))}
-      </nav>
-    </>
+      </div>
+    </nav>
   )
 }

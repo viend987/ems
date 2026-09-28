@@ -73,6 +73,14 @@ role descriptions, equipment lists, the fire-extinguisher class table, risk clas
 skunk-deodorizer recipe, bat-guano cleanup — and none of it belongs here. When new content arrives,
 extract the chat lines and leave the prose in the source document.
 
+The one exception is **Patrol Log** (`#/patrol`), a form the user asked for that generates the
+BBCode of the forum's Weekly Patrol Log (min. 3 reports a week, min. 60 minutes of duty each). The
+template lives in `buildPatrolLog()` in `src/lib/patrol.js`, and `patrol.test.js` pins it
+byte-for-byte to a real finished report — change both together. Member details and signature
+links come from the master list in `src/data/staff.js`; adding a member is one object there. A
+duty under 60 minutes (end before start counts as crossing midnight) disables the copy button on
+purpose. The draft is kept in `localStorage` (`lsfd:patrol-draft`).
+
 In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
 `/do` step.
@@ -143,6 +151,17 @@ aspect ratio is kept and the card shows the image as-is.
 WebP belongs in the repo. A unit with no `images` still renders its callsign and description, which
 is how the fleet list stays complete while photos arrive in batches.
 
+### Imgur upload Worker
+
+`worker/index.js` is the only server code: `wrangler.jsonc` runs it first for `/api/*` only, and
+everything else is plain static assets. `POST /api/imgur` forwards an image to Imgur with the
+`IMGUR_CLIENT_ID` **secret** (set in the Cloudflare dashboard or `npx wrangler secret put
+IMGUR_CLIENT_ID`; register an anonymous client at https://api.imgur.com/oauth2/addclient). Without
+the secret it answers 503 and the form falls back to pasting a link by hand — the manual link field
+is always there, upload only fills it. Requests from another Origin are refused so other sites
+cannot spend the Client-ID's quota. `npm run dev` has no `/api`; use `npm run build && npx wrangler
+dev` to exercise uploads locally.
+
 ### Adding a category
 
 Create `src/data/procedures/<name>.js`, import it in `src/data/index.js`, and add it to
@@ -165,6 +184,15 @@ in a real browser to land exactly on every section, including cross-category flo
 `useRoute()` in `src/hooks.js` reads `location.hash` (`#/deat`, or `#/abc#breathing-nrb` to target a
 section) — no router library. The last category is mirrored to `localStorage` as the landing target;
 every storage access is wrapped in `try/catch` and the page renders correctly without it.
+
+### Layout
+
+On desktop (`lg`+) the category board (`Board variant="rail"`) is its own column starting at the
+very top of the page, `sticky top-0 h-dvh`, with the flow bar and header in the right-hand column.
+That keeps the board ending exactly at the bottom of the screen; the search stays pinned and only
+the category list scrolls, inside the board. Below `lg` the same component renders as the grid
+menu (`variant="grid"`). Scrollbars are themed once in `index.css` (`scrollbar-color` on `html` is
+inherited; `.scroll-thin` narrows a container's bar).
 
 ### Styling
 
@@ -240,4 +268,4 @@ chunk so switching category costs no request.
 
 `wrangler.jsonc` configures a Workers static-assets deployment (`assets.directory: ./dist`,
 `not_found_handling: single-page-application`) with a `custom_domain` route for `ems.viend.my.id`.
-There is no server or API — this is 100% static output from `vite build`.
+Apart from the small `/api/*` Worker above, this is static output from `vite build`.

@@ -4,6 +4,7 @@ import CodeTable from './components/CodeTable.jsx'
 import FlowBar from './components/FlowBar.jsx'
 import Header from './components/Header.jsx'
 import LinkList from './components/LinkList.jsx'
+import PatrolLog from './components/PatrolLog.jsx'
 import Section from './components/Section.jsx'
 import SearchResults from './components/SearchResults.jsx'
 import SectionNav from './components/SectionNav.jsx'
@@ -59,19 +60,19 @@ export default function App() {
     [go],
   )
 
-  return (
-    <div className="min-h-dvh">
-      <FlowBar onGo={goAndClear} />
-      <Header stepCount={STEP_COUNT} />
+  const board = { active: route.category, onGo: goAndClear, query, onQuery: setQuery, searchRef }
 
-      <div className="mx-auto flex max-w-7xl flex-col lg:flex-row">
-        <Board
-          active={route.category}
-          onGo={goAndClear}
-          query={query}
-          onQuery={setQuery}
-          searchRef={searchRef}
-        />
+  // Di desktop papan kategori berdiri sendiri di kiri, setinggi layar sejak
+  // puncak halaman, sementara pita alur dan kepala halaman ikut kolom kanan.
+  // Dengan begitu papan selalu berakhir tepat di dasar layar.
+  return (
+    <div className="mx-auto flex min-h-dvh max-w-7xl border-line min-[1296px]:border-x">
+      <Board variant="rail" {...board} />
+
+      <div className="flex min-w-0 flex-1 flex-col">
+        <FlowBar onGo={goAndClear} />
+        <Header stepCount={STEP_COUNT} />
+        <Board variant="grid" {...board} />
 
         <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">
           {query.trim() ? (
@@ -115,19 +116,20 @@ export default function App() {
                 {category.fleet?.map((group) => (
                   <UnitGallery key={group.id} categoryId={category.id} group={group} />
                 ))}
+                {category.form === 'patrol' && <PatrolLog />}
               </div>
             </>
           )}
         </main>
+
+        <footer className="border-t border-line px-4 py-6 text-center text-[11px] text-muted sm:px-6">
+          Fan-made tool by JGVRP Player. Based on LSFD Handbook Procedure + Some Adjustments· JGVRP
+        </footer>
       </div>
 
       <div aria-live="polite" className="sr-only">
         {status ? (status.ok ? 'Teks tersalin ke clipboard.' : 'Gagal menyalin. Salin manual dari baris.') : ''}
       </div>
-
-      <footer className="border-t border-line px-4 py-6 text-center text-[11px] text-muted sm:px-6">
-        Fan-made tool by JGVRP Player. Based on LSFD Handbook Procedure + Some Adjustments· JGVRP
-      </footer>
     </div>
   )
 }

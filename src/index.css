@@ -56,6 +56,10 @@
 
   /* Kuning cerah hanya dipakai sebagai isian, tidak pernah sebagai teks. */
   --color-highlight: #ffd24d;
+
+  /* Batang gulir: abu tipis yang menggelap saat disentuh, di atas jalur bening. */
+  --color-scroll: #c6c6cf;
+  --color-scroll-hover: #8e8e99;
 }
 
 @layer base {
@@ -66,6 +70,12 @@
        1,5 detik animasi — padahal web ini dipakai sambil lawan RP menunggu. Smooth
        scroll juga bentrok dengan .lazy-section: bagian yang tergambar di tengah
        animasi mengubah tinggi halaman, sehingga loncatan mendarat meleset. */
+  }
+
+  /* scrollbar-color diwariskan, jadi satu deklarasi di sini mewarnai batang
+     gulir halaman sekaligus papan kiri, textarea, dan wadah gulir lainnya. */
+  html {
+    scrollbar-color: var(--color-scroll) transparent;
   }
 
   body {
@@ -131,6 +141,40 @@
   .flow-track {
     animation: none;
     transform: none;
+  }
+}
+
+/* Batang gulir tipis untuk wadah yang menggulir sendiri, mis. papan kiri. */
+.scroll-thin {
+  scrollbar-width: thin;
+}
+.scroll-thin:hover {
+  scrollbar-color: var(--color-scroll-hover) transparent;
+}
+
+/* Safari lama belum mengenal scrollbar-color; beri gaya lewat pseudo-elemen. */
+@supports not (scrollbar-color: auto) {
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  .scroll-thin::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-scroll);
+    border: 2px solid transparent;
+    border-radius: 999px;
+    background-clip: padding-box;
+  }
+  .scroll-thin::-webkit-scrollbar-thumb {
+    border-width: 1px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-scroll-hover);
   }
 }
 
