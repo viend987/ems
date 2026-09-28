@@ -11,5 +11,9 @@
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
   },
-  "routes": [{ "pattern": "ems.viend.my.id", "custom_domain": true }]
+  "routes": [{ "pattern": "ems.viend.my.id", "custom_domain": true }],
+  // Workers Builds menjalankan `wrangler preview` untuk branch selain main, dan
+  // perintah itu menolak jalan tanpa blok ini. Kosong berarti preview memakai
+  // aset, compatibility, dan binding yang sama dengan produksi.
+  "previews": {}
 }
