@@ -55,14 +55,14 @@ included) is "Compartement Engine". **The ambulance unit is called RA Unit**, no
 Some procedures here are **not** in any source document: they were written from real prehospital
 practice because the official material stops at the drug and leaves unlicensed members with nowhere
 to go. Chest seal, abdominal evisceration, flail chest, BVM-assisted ventilation, hyperventilation
-coaching, the recovery position, the shock position, and `abc#meninggal` (declaring a death after
+coaching, the recovery position, the shock position, and `circulation#meninggal` (declaring a death after
 resuscitation fails) are all in that group. So are the parts of the three later guides that were only
 named, never scripted: in `structure.js` forcible entry, ventilation, the in-building victim check,
 and termination; in `hydrant.js` the three flow-check fault cases and the hose hookup the guide
 skipped; in `blood.js` donor screening, the bedside label check, and transfusion-reaction handling. They are deliberate additions, not transcription errors
 — do not delete them for failing to appear in the handbook.
 
-`abc#meninggal` is reached only from Epinephrine's failure branch, deliberately — declaring death
+`circulation#meninggal` is reached only from Epinephrine's failure branch, deliberately — declaring death
 follows the same authority rule as RPLY: only an ILS-authorized responder gets there, so the
 `tanpa-ils` chain still funnels toward transport instead. Its condolence lines are written plain on
 purpose (no flowery religious language) after a request to tone that down; keep future additions to
@@ -205,7 +205,7 @@ in a real browser to land exactly on every section, including cross-category flo
 
 ### Routing and state
 
-`useRoute()` in `src/hooks.js` reads `location.hash` (`#/deat`, or `#/abc#breathing-nrb` to target a
+`useRoute()` in `src/hooks.js` reads `location.hash` (`#/deat`, or `#/breathing#breathing-nrb` to target a
 section) — no router library. The last category is mirrored to `localStorage` as the landing target;
 every storage access is wrapped in `try/catch` and the page renders correctly without it.
 

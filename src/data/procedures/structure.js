@@ -139,7 +139,7 @@ export default {
         { kind: 'note', text: 'Kalau tidak ada hydrant di dekat lokasi:' },
         {
           kind: 'me',
-          text: 'memeriksa indikator tekanan pada panel, lalu mengaktifkan internal water tank dengan menekan toggle switch utama, memastikan air masuk ke fire pump dengan normal.',
+          text: 'memeriksa indikator panel, lalu mengaktifkan internal water tank untuk menyalurkan air ke fire pump.',
         },
       ],
     },
@@ -320,11 +320,11 @@ export default {
       steps: [
         {
           kind: 'me',
-          text: 'masuk ke dalam struktur dalam posisi crouch, menjaga tubuh tetap rendah untuk menghindari heat layer sambil mengikuti dinding sebagai reference point.',
+          text: 'masuk ke dalam struktur dengan posisi merendah, mengikuti dinding untuk menghindari heat layer.',
         },
         {
           kind: 'me',
-          text: 'melakukan systematic search dengan meraba sepanjang dinding, pintu, dan objek di sekitar untuk memastikan tidak ada korban tersembunyi.',
+          text: 'melakukan pencarian sistematis di sepanjang dinding dan ruangan untuk mencari korban.',
         },
         {
           kind: 'me',
@@ -393,7 +393,7 @@ export default {
           text: 'Korban kebakaran hampir selalu menghirup asap. Pasang NRB walau napasnya terlihat normal — keracunan asap tidak selalu kelihatan dari luar.',
           branches: [
             { label: 'Penanganan korban', to: 'field#response' },
-            { label: 'Pasang NRB', to: 'abc#breathing-nrb' },
+            { label: 'Pasang NRB', to: 'breathing#breathing-nrb' },
             { label: 'Luka bakar', to: 'wounds#luka-bakar-ringan' },
           ],
         },

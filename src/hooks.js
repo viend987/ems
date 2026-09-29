@@ -22,7 +22,7 @@ function writeStore(value) {
   }
 }
 
-/** Membaca "#/deat" atau "#/abc#breathing-nrb" jadi { category, section }. */
+/** Membaca "#/deat" atau "#/breathing#breathing-nrb" jadi { category, section }. */
 function parseHash() {
   const raw = location.hash.replace(/^#\/?/, '')
   if (!raw) return { category: null, section: null }

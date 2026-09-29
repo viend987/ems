@@ -54,31 +54,18 @@ export default {
       steps: [
         {
           kind: 'me',
-          text: 'berjalan ke arah mobil korban, berhenti tepat di sebelah pintunya lalu mencoba membukanya.',
+          text: 'mencoba membuka pintu di samping korban.',
         },
         { kind: 'do', text: 'Apakah pintu terkunci atau tidak?' },
         {
           kind: 'me',
-          text: 'bergegas menuju ke Engine dan mengambil Glass-Master dari Compartement Engine kemudian membawanya ke arah mobil korban.',
+          text: 'mengambil Glass-Master dari Engine lalu memecahkan kaca jendela samping korban secara terarah.',
         },
         {
           kind: 'me',
-          text: 'meletakkan Glass-Master di tengah kaca pintu mobil samping korban lalu menekan tombol "ON".',
+          text: 'membersihkan serpihan kaca pada tepi jendela menggunakan cutter agar aman.',
         },
-        {
-          kind: 'me',
-          text: 'memecahkan kaca pintu mobil di samping korban menggunakan Glass-Master secara perlahan.',
-        },
-        { kind: 'me', text: 'menekan tombol "OFF" pada Glass-Master dan menaruhnya di bawah.' },
-        {
-          kind: 'me',
-          text: 'mengambil Cutter dari kantung saku Turnout Trousers lalu membersihkan serpihan kaca pada sisi-sisi jendela dengan perlahan hingga bersih.',
-        },
-        { kind: 'do', text: 'Sisi-sisi jendela sudah bersih dari serpihan kaca.' },
-        {
-          kind: 'me',
-          text: 'memasukkan kembali Cutter ke kantung saku Turnout Trousers lalu membawa Glass-Master kembali ke Compartement Engine.',
-        },
+        { kind: 'do', text: 'Jendela telah terbuka dan tepi kaca sudah bersih dari serpihan.' },
       ],
     },
     {
@@ -111,34 +98,19 @@ export default {
       steps: [
         {
           kind: 'me',
-          text: 'berjalan ke arah mobil korban, mencoba untuk membuka pintu di samping korban.',
-        },
-        { kind: 'do', text: 'Apakah pintu mobil masih terkunci atau tidak?' },
-        {
-          kind: 'me',
-          text: 'bergegas ke arah Engine, mengambil JoL dari Compartement Engine dan membawanya ke arah mobil korban.',
-        },
-        {
-          kind: 'me',
-          text: 'mengubah JoL menjadi Spreader lalu melebarkan engsel pintu mobil di sebelah korban.',
+          text: 'mengambil Jaws of Life dari Engine lalu memasang mode Spreader untuk melebarkan celah engsel pintu.',
         },
         {
           kind: 'do',
-          text: 'Engsel pintu mobil melebar setelah dilebarkan menggunakan JoL yang diubah menjadi Spreader.',
+          text: 'Engsel pintu mobil mulai terbuka dan merenggang.',
         },
         {
           kind: 'me',
-          text: 'mengubah JoL dari Spreader menjadi Cutter lalu memotong engsel pintu mobil di sebelah korban.',
+          text: 'mengganti mode JoL ke Cutter lalu memotong engsel pintu mobil di samping korban.',
         },
-        { kind: 'me', text: 'menahan pintu mobil yang terpotong engselnya sendirian.' },
-        { kind: 'me', text: 'meneriaki rekannya untuk membantu menahan pintu mobil tersebut.' },
-        { kind: 'shout', text: 'Tolong bantu saya menahan pintu mobil ini!' },
-        { kind: 'shout', label: 'rekan', text: 'Oke, saya akan membantu anda menahan pintu mobil tersebut!' },
-        { kind: 'me', text: 'berjalan mendekat lalu ikut menahan pintu mobil tersebut bersama rekannya.' },
-        { kind: 'say', text: 'Ayo pindahin pintu mobil ini ke tempat lain.' },
         {
           kind: 'me',
-          text: 'membawa pintu mobil yang terpotong lalu menaruhnya ke lantai secara perlahan dibantu rekannya.',
+          text: 'memindahkan pintu mobil yang terpotong ke area aman bersama rekan.',
         },
         { kind: 'command', text: '/ado Pintu mobil yang terpotong', note: 'di tempat pintu ditaruh' },
       ],

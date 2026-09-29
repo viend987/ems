@@ -31,27 +31,22 @@ export default {
         {
           n: 54,
           kind: 'me',
-          text: 'mengambil ILS Bag dari dalam unit kendaraan, kemudian berjalan cepat menuju korban.',
-        },
-        {
-          n: 55,
-          kind: 'me',
-          text: 'meletakkan ILS Bag di samping korban, membukanya lalu mengeluarkan perangkat ECG dari dalam ILS Bag.',
+          text: 'mengambil ILS Bag dari unit kendaraan, berjalan cepat menuju korban, dan meletakkan ILS Bag di sampingnya.',
         },
         { kind: 'command', text: '/fo', note: 'pilih BLS bag sebagai visual di lapangan' },
         { kind: 'anim', text: '.medic2' },
         {
           n: 56,
           kind: 'me',
-          text: 'mengambil sepasang N-Gloves dari dalam ILS Bag lalu mengenakannya dengan rapi pada kedua tangan.',
+          text: 'mengambil N-Gloves dari ILS Bag lalu mengenakannya pada kedua tangan.',
         },
         { n: 57, kind: 'say', text: 'Halo, apakah bisa mendengar suara saya?' },
-        { n: 58, kind: 'me', text: 'mencubit kulit korban dengan tangan kanan untuk memicu respon nyeri.' },
+        { n: 58, kind: 'me', text: 'mencubit kulit korban untuk memicu respon nyeri.' },
         { n: 59, kind: 'do', text: 'Apakah terlihat ada reaksi otot atau rasa nyeri dari cubitan?' },
         { kind: 'command', text: '/inspect [id]' },
         {
           kind: 'note',
-          text: 'Pasang /bls sedini mungkin. Command ini memperpanjang durasi injured korban; kalau durasinya habis dan korban jatuh ke critical, petugas yang menangani bisa disalahkan secara IC karena dianggap kelamaan.',
+          text: 'Pasang /bls sedini mungkin — memperpanjang durasi injured korban. Kalau durasinya habis dan korban jatuh ke critical, petugas bisa disalahkan IC.',
         },
         { kind: 'command', text: '/bls' },
         {
@@ -78,7 +73,7 @@ export default {
           kind: 'do',
           text: 'Patah tulang jenis apa yang dialami korban? (Open Fracture / Close Fracture)',
           branches: [
-            { label: 'Close Fracture → ABC, lalu bidai', to: 'abc#airway-headtilt' },
+            { label: 'Close Fracture → ABC, lalu bidai', to: 'airway#airway-headtilt' },
             { label: 'Open Fracture → DEAT dulu', to: 'deat#direct-pressure' },
           ],
         },
@@ -98,7 +93,7 @@ export default {
           text: 'Kondisi ini disebut X (Exsanguinating Hemorrhage). Penanganannya DEAT, lalu lanjut A-B-C.',
           branches: [
             { label: 'Lanjut DEAT', to: 'deat#direct-pressure' },
-            { label: 'Lalu ABC', to: 'abc#airway-headtilt' },
+            { label: 'Lalu ABC', to: 'airway#airway-headtilt' },
           ],
         },
       ],

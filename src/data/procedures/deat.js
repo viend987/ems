@@ -27,7 +27,7 @@ export default {
           kind: 'do',
           text: 'Apakah pendarahan berhenti?',
           branches: [
-            { label: 'Berhenti → lanjut ABC', to: 'abc#airway-headtilt' },
+            { label: 'Berhenti → lanjut Airway', to: 'airway#airway-headtilt' },
             { label: 'Masih → Elevation', to: 'deat#elevation' },
             { label: 'Luka tembus dada', to: 'deat#chest-seal' },
             { label: 'Luka perut', to: 'deat#luka-perut' },
@@ -88,26 +88,22 @@ export default {
         { kind: 'do', text: 'Apakah terdengar suara desis dari luka setiap korban menarik napas?' },
         {
           kind: 'me',
-          text: 'mengambil occlusive dressing dari ILS Bag lalu membersihkan kulit di sekitar luka agar plesternya bisa menempel.',
+          text: 'membersihkan sekitar luka lalu menempelkan occlusive dressing dengan merekatkan tiga sisinya (three-sided seal).',
         },
         {
           kind: 'me',
-          text: 'menempelkan occlusive dressing di atas luka dan merekatkan hanya tiga sisinya, menyisakan satu sisi terbuka sebagai jalan keluar udara.',
-        },
-        {
-          kind: 'me',
-          text: 'memiringkan tubuh korban sebentar untuk memeriksa punggungnya, mencari luka keluar yang mungkin ada.',
+          text: 'memiringkan tubuh korban untuk memeriksa punggung, mencari kemungkinan luka keluar.',
         },
         { kind: 'do', text: 'Apakah ada luka keluar di punggung korban?' },
         {
           kind: 'me',
-          text: 'menutup luka keluar dengan occlusive dressing kedua, juga hanya pada tiga sisinya.',
+          text: 'menutup luka keluar dengan occlusive dressing kedua pada tiga sisinya.',
         },
         {
           kind: 'do',
           text: 'Apakah napas korban mulai membaik setelah luka ditutup?',
           branches: [
-            { label: 'Membaik → pasang NRB', to: 'abc#breathing-nrb' },
+            { label: 'Membaik → pasang NRB', to: 'breathing#breathing-nrb' },
             { label: 'Makin berat → lepas tekanan', to: 'deat#chest-seal' },
           ],
         },
@@ -117,7 +113,7 @@ export default {
         },
         {
           kind: 'me',
-          text: 'membuka sebentar sisi dressing yang direkatkan untuk melepaskan tekanan udara yang terjebak di rongga dada korban.',
+          text: 'membuka salah satu sisi dressing untuk melepaskan tekanan udara yang terjebak di rongga dada.',
         },
         { kind: 'do', text: 'Terdengar udara keluar dari sela dressing dan napas korban mulai melonggar.' },
       ],

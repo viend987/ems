@@ -89,7 +89,7 @@ export default {
           kind: 'do',
           text: 'Apakah napas korban mulai membaik setelah ditopang?',
           branches: [
-            { label: 'Belum → pasang NRB', to: 'abc#breathing-nrb' },
+            { label: 'Belum → pasang NRB', to: 'breathing#breathing-nrb' },
             { label: 'Nyeri berat → Ibuprofen', to: 'drugs#ibuprofen' },
             { label: 'Muat korban', to: 'load#load' },
           ],

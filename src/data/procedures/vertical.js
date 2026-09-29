@@ -147,11 +147,11 @@ export default {
         },
         {
           kind: 'me',
-          text: 'memasangkan static rope ke anchor, memasangkan descender ke harness dengan carabiner, lalu memasangkan descender ke static rope.',
+          text: 'memasang static rope ke anchor lalu mengaitkan descender ke harness dengan carabiner.',
         },
         {
           kind: 'me',
-          text: 'memasangkan static rope kedua ke anchor dan memasangkan figure of eight ke ujung basket stretcher dengan carabiner lalu melilitkan FOE ke static rope.',
+          text: 'memasang static rope kedua ke anchor lalu mengaitkan figure of eight ke basket stretcher.',
         },
         { kind: 'me', text: 'menurunkan basket stretcher terlebih dahulu dengan teknik katrol.' },
         {

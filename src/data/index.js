@@ -1,6 +1,8 @@
-import abc from './procedures/abc.js'
+import airway from './procedures/airway.js'
 import animals from './procedures/animals.js'
 import blood from './procedures/blood.js'
+import breathing from './procedures/breathing.js'
+import circulation from './procedures/circulation.js'
 import coroner from './procedures/coroner.js'
 import deat from './procedures/deat.js'
 import drugs from './procedures/drugs.js'
@@ -24,7 +26,9 @@ import { REFERENCE } from './reference.js'
 export const PROCEDURES = [
   field,
   deat,
-  abc,
+  airway,
+  breathing,
+  circulation,
   fracture,
   wounds,
   drugs,
@@ -79,10 +83,10 @@ export const FLOW = [
   { label: 'Danger', to: 'field#danger' },
   { label: 'Response', to: 'field#response' },
   { label: 'X — Pendarahan', to: 'deat#direct-pressure' },
-  { label: 'Airway', to: 'abc#airway-headtilt' },
-  { label: 'Breathing', to: 'abc#breathing-ecg' },
-  { label: 'Circulation', to: 'abc#circulation-ecg' },
-  { label: 'Cek Ulang', to: 'abc#circulation-normal' },
+  { label: 'Airway', to: 'airway#airway-headtilt' },
+  { label: 'Breathing', to: 'breathing#breathing-ecg' },
+  { label: 'Circulation', to: 'circulation#circulation-ecg' },
+  { label: 'Cek Ulang', to: 'circulation#circulation-normal' },
   { label: 'Load', to: 'load#load' },
   { label: 'Transport', to: 'hospital#arrive' },
 ]
