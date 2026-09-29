@@ -17,6 +17,7 @@ import radio from './procedures/radio.js'
 import structure from './procedures/structure.js'
 import vertical from './procedures/vertical.js'
 import wounds from './procedures/wounds.js'
+import BUILDER from './builder.js'
 import LINKS from './links.js'
 import PATROL from './patrol.js'
 import UNITS from './units.js'
@@ -45,7 +46,7 @@ export const PROCEDURES = [
   blood,
 ]
 
-export const CATEGORIES = [...PROCEDURES, PATROL, ...REFERENCE, UNITS, LINKS]
+export const CATEGORIES = [...PROCEDURES, BUILDER, PATROL, ...REFERENCE, UNITS, LINKS]
 
 export { LINKS, UNITS }
 
@@ -68,6 +69,7 @@ export const GROUPS = [
     id: 'laporan',
     name: 'Laporan',
     subgroups: [
+      { id: 'general', name: 'General' },
       { id: 'field', name: 'Field Unit' },
       { id: 'hospital', name: 'Hospital Unit' },
     ],

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks'
+import BBCodeBuilder from './components/BBCodeBuilder.jsx'
 import Board from './components/Board.jsx'
 import CodeTable from './components/CodeTable.jsx'
 import FlowBar from './components/FlowBar.jsx'
@@ -117,6 +118,7 @@ export default function App() {
                   <UnitGallery key={group.id} categoryId={category.id} group={group} />
                 ))}
                 {category.form === 'patrol' && <PatrolLog />}
+                {category.form === 'builder' && <BBCodeBuilder />}
               </div>
             </>
           )}

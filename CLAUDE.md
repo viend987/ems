@@ -89,6 +89,33 @@ In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobr
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
 `/do` step.
 
+### BBCode Builder
+
+`#/builder` (subgroup `general` in Laporan) is a free-form BBCode editor: a toolbar that inserts
+tags, a textarea, and the same `BBCodePreview` beside it. No dependency — every BBCode editor on npm
+is either a React component (which would need `preact/compat`, the ~6 KB the Preact setup exists to
+avoid) or a parser with no UI, and a second parser could disagree with this one. The whole thing is
++1.65 KB gzip.
+
+- `src/lib/bbcode-tags.js` is the button catalogue **as data**: `{ before, after, body?, pick?,
+  block?, solo? }`. Adding a tag is one object; no component change. Every tag here must also be in
+  `KNOWN` in `bbcode.js` — `bbcode-tags.test.js` fails otherwise, because an unknown tag would
+  render as literal text.
+- `src/lib/bbcode-insert.js` holds `applyTag(text, start, end, spec)`, deliberately **pure and
+  DOM-free** so the selection logic can be tested without a browser. `bbcode-insert.test.js` writes
+  expected results with `«»` marking the selection.
+- **No `prompt()`** for tags needing a value. `pick` names a substring of the inserted skeleton to
+  select instead, so `[url=https://]` lands with `https://` highlighted and the user types over it.
+  A modal dialog blocks the page and breaks the typing flow.
+- `[hr]` is in `VOID` in the parser: it is not pushed on the stack, and a stray `[/hr]` is swallowed.
+  Without that, a lone `[hr]` became a parent and every later line ended up as its children — which
+  the preview drops, since it renders `hr` childless. The forum writes `[hr][/hr]`, so both spellings
+  have to work.
+- Table tags (`table`, `tr`, `th`, `td`) were added for this. `src/lib/bbcode-example.js` holds the
+  forum's real Patient Care Report, used both by the editor's "Muat contoh" button and as a parser
+  fixture — it covers uppercase `[/LIST]`, paired `[hr][/hr]`, and a `[list]` left open until the
+  closing `[/divbox]`.
+
 ### BBCode preview
 
 `src/lib/bbcode.js` parses BBCode into a tree and `BBCodePreview.jsx` draws it as the forum would.
@@ -105,6 +132,7 @@ copy button puts on the clipboard.
   faithful to the forum and the only way to get real bold: the subsetted site font ships weight 400
   only, so `<strong>` in Plex Mono would be synthetic bold. Its styles live in `.bbcode` in
   `index.css`, which also keeps `white-space: pre-wrap` — on the forum every newline is a line break.
+- It is shared by Patrol Log and BBCode Builder, so a change here shows up in both.
 - Colors from `[color=…]` are matched against `SAFE_COLOR` before reaching a style attribute, and
   both `[img]` and `[url]` only accept an `http(s)` address (`SAFE_URL`). That guard matters because
   Activity and Crew member are interpolated into the BBCode raw, so `[url=javascript:…]` can be typed
@@ -187,8 +215,8 @@ A group may declare `subgroups: [{ id, name }]`, and a category picks one with `
 rail and the mobile grid. Two rules keep it from becoming a maintenance trap: a category **without**
 `subgroup` still sits directly under its group heading, so existing groups needed no change, and an
 **empty subgroup is not drawn at all** — it appears by itself once something lands in it. `Laporan`
-declares `field` (Field Unit) and `hospital` (Hospital Unit); only Field Unit renders today, because
-Patrol Log is the one report that exists. `procedures.test.js` fails on a `subgroup` that its group
+declares `general` (BBCode Builder), `field` (Field Unit, Patrol Log) and `hospital` (Hospital Unit);
+Hospital Unit does not render today, because no report has landed in it yet. `procedures.test.js` fails on a `subgroup` that its group
 does not declare, and on duplicate subgroup ids.
 
 ### Motion budget

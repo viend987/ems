@@ -158,6 +158,12 @@
   color: #111;
 }
 
+.bbcode table {
+  /* Sel tabel tidak boleh memaksa pratinjau melebar di layar sempit. */
+  max-width: 100%;
+  white-space: normal;
+}
+
 .bbcode img {
   max-width: 100%;
   height: auto;

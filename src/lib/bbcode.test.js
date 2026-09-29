@@ -90,3 +90,16 @@ describe('BBCode Patrol Log', () => {
     expect(found).toContain('https://i.imgur.com/bbbb.jpeg')
   })
 })
+
+describe('tag tanpa isi', () => {
+  it('tidak menelan teks sesudah [hr] yang tanpa penutup', () => {
+    const root = parseBBCode('atas[hr]bawah')
+    expect(textOf(root)).toBe('atasbawah')
+    expect(tags(root)).toEqual(['hr'])
+    expect(root.children[2]).toBe('bawah')
+  })
+
+  it('menelan [/hr] tanpa menyisakannya sebagai teks', () => {
+    expect(textOf(parseBBCode('[hr][/hr]sesudah'))).toBe('sesudah')
+  })
+})

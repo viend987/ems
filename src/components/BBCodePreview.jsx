@@ -100,6 +100,27 @@ function render(node, key) {
     case '*':
       return <li key={key}>{kids}</li>
 
+    case 'table':
+      return (
+        <table key={key} className="my-1.5 border-collapse">
+          <tbody>{kids}</tbody>
+        </table>
+      )
+    case 'tr':
+      return <tr key={key}>{kids}</tr>
+    case 'th':
+      return (
+        <th key={key} className="border border-[#c9c9c9] bg-black/5 px-2 py-1 text-left align-top">
+          {kids}
+        </th>
+      )
+    case 'td':
+      return (
+        <td key={key} className="border border-[#c9c9c9] px-2 py-1 align-top">
+          {kids}
+        </td>
+      )
+
     case 'quote':
       return (
         <blockquote key={key} className="my-1.5 border-l-2 border-[#c9c9c9] bg-black/5 px-2.5 py-1.5">

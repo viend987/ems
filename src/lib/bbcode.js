@@ -31,12 +31,37 @@ const KNOWN = new Set([
   'img-resize',
   'hr',
   'url',
+  'table',
+  'tr',
+  'th',
+  'td',
 ])
 
 /** Tag yang berperilaku seperti blok: ujung spasinya dirapikan saat mengurai. */
-const BLOCK = new Set(['root', 'divbox', 'center', 'right', 'justify', 'list', '*', 'quote', 'spoiler'])
+const BLOCK = new Set([
+  'root',
+  'divbox',
+  'center',
+  'right',
+  'justify',
+  'list',
+  '*',
+  'quote',
+  'spoiler',
+  'table',
+  'tr',
+  'th',
+  'td',
+])
 
 const TAG = /\[(\/?)([a-z0-9*-]+)(?:=([^\]\n]*))?\]/gi
+
+/**
+ * Tag tanpa isi. Forum menulisnya berpasangan (`[hr][/hr]`), tapi `[hr]` sendiri
+ * juga sah — kalau ia ikut ditumpuk, semua teks sesudahnya jadi isinya dan
+ * hilang saat digambar, karena pratinjau membuang isi `hr`.
+ */
+const VOID = new Set(['hr'])
 
 function openTagIndex(stack, name) {
   for (let i = stack.length - 1; i > 0; i--) if (stack[i].tag === name) return i
@@ -76,6 +101,12 @@ export function parseBBCode(input) {
     if (!KNOWN.has(name)) continue
 
     if (match[1] === '/') {
+      // Penutup tag tanpa isi cukup ditelan; pembukanya sudah lengkap.
+      if (VOID.has(name)) {
+        pushText(input.slice(last, match.index))
+        last = TAG.lastIndex
+        continue
+      }
       const at = openTagIndex(stack, name)
       if (at < 1) continue // penutup tanpa pembuka — biarkan jadi teks
       pushText(input.slice(last, match.index))
@@ -92,7 +123,7 @@ export function parseBBCode(input) {
 
     const node = { tag: name, value: match[3] ?? '', children: [] }
     top().children.push(node)
-    stack.push(node)
+    if (!VOID.has(name)) stack.push(node)
   }
 
   pushText(input.slice(last))
