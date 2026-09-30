@@ -144,7 +144,21 @@ describe('terjemahan Inggris', () => {
   // Penerjemahan dikerjakan bertahap dan disengaja: yang tersering dipakai
   // lebih dulu. Tes ini bukan untuk memaksa semuanya selesai, tapi untuk
   // menjaga yang sudah selesai supaya tidak pelan-pelan bolong lagi.
-  const LENGKAP = ['field', 'deat', 'airway', 'breathing', 'circulation', 'load']
+  const LENGKAP = [
+    'field',
+    'deat',
+    'airway',
+    'breathing',
+    'circulation',
+    'load',
+    'fracture',
+    'wounds',
+    'hospital',
+    'drugs',
+    'radio',
+    'ocd',
+    'coroner',
+  ]
 
   // Yang butuh versi Inggris: baris yang diketik sebagai narasi atau ucapan.
   // Dikecualikan:
@@ -197,7 +211,9 @@ describe('terjemahan Inggris', () => {
   it('kategori yang sudah selesai tetap utuh terjemahannya', () => {
     for (const id of LENGKAP) {
       const cat = resolveCategory(PROCEDURES.find((c) => c.id === id))
-      const bolong = copyable(cat).filter((st) => !st.en)
+      // `alreadyEn` menandai baris yang teksnya sudah Inggris di data, mis.
+      // format Doctor Report — tidak ada yang perlu diterjemahkan di sana.
+      const bolong = copyable(cat).filter((st) => !st.en && !st.alreadyEn)
       expect(bolong.map((st) => st.text), `${id} punya baris tanpa terjemahan`).toEqual([])
     }
   })
@@ -241,7 +257,7 @@ describe('terjemahan Inggris', () => {
     let jadi = 0
     for (const cat of PROCEDURES) {
       const steps = copyable(resolveCategory(cat))
-      const n = steps.filter((st) => st.en).length
+      const n = steps.filter((st) => st.en || st.alreadyEn).length
       total += steps.length
       jadi += n
       baris.push(`${cat.id}: ${n}/${steps.length}`)
