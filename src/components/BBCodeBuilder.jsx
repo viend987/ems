@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import BBCodePreview from './BBCodePreview.jsx'
+import Icon from './Icon.jsx'
 import { writeClipboard } from '../lib/copy.js'
 import { applyTag } from '../lib/bbcode-insert.js'
-import { SHORTCUTS, TAG_GROUPS } from '../lib/bbcode-tags.js'
+import { SHORTCUTS, SIZES, sizeSpec, TAG_GROUPS } from '../lib/bbcode-tags.js'
 import { PATIENT_CARE_REPORT } from '../lib/bbcode-example.js'
 
 /**
@@ -10,6 +11,10 @@ import { PATIENT_CARE_REPORT } from '../lib/bbcode-example.js'
  * kursor — atau membungkus teks yang terpilih — dan pratinjaunya memakai
  * komponen yang sama dengan Patrol Log, jadi apa yang terlihat di sini sama
  * dengan yang nanti muncul di forum.
+ *
+ * Tombolnya bericon, dan namanya Inggris mengikuti tag yang disisipkannya:
+ * "Align centre", bukan "Tengah". Nama Indonesia justru menyulitkan, karena
+ * yang masuk ke teks tetap `[center]`.
  *
  * Tidak ada dialog `prompt()` untuk tag yang butuh alamat atau angka: yang
  * disisipkan kerangka dengan bagian nilainya sudah tersorot, tinggal ditimpa
@@ -30,6 +35,9 @@ function readDraft() {
   }
   return ''
 }
+
+const buttonClass =
+  'flex min-h-8 min-w-8 items-center justify-center gap-0.5 rounded-sm border border-line bg-ink px-1.5 py-1 text-dim hover:border-alarm hover:text-bone'
 
 export default function BBCodeBuilder() {
   const [code, setCode] = useState(readDraft)
@@ -62,9 +70,12 @@ export default function BBCodeBuilder() {
 
   const insert = (spec) => {
     const el = area.current
-    const from = el ? el.selectionStart : code.length
-    const to = el ? el.selectionEnd : code.length
-    const out = applyTag(code, from, to, spec)
+    // Isi diambil dari textarea, bukan dari `code` hasil render: kalau ada
+    // perubahan yang belum sempat ter-render, nilai lama akan menimpanya.
+    const text = el ? el.value : code
+    const from = el ? el.selectionStart : text.length
+    const to = el ? el.selectionEnd : text.length
+    const out = applyTag(text, from, to, spec)
     pending.current = { start: out.start, end: out.end }
     setCode(out.text)
   }
@@ -89,23 +100,62 @@ export default function BBCodeBuilder() {
   return (
     <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
       <section aria-label="Editor BBCode" className="flex min-w-0 flex-col gap-3">
-        {/* flex-wrap: di layar sempit tombolnya turun baris, bukan digeser ke samping. */}
-        <div className="flex flex-wrap items-center gap-1 rounded-sm border border-line bg-panel p-1.5">
-          {TAG_GROUPS.map((group, i) => (
-            <div key={group.id} className="flex flex-wrap items-center gap-1">
-              {i > 0 && <span aria-hidden="true" className="mx-1 hidden h-5 w-px bg-line sm:block" />}
+        {/* flex-wrap di dua tingkat: kelompoknya turun baris, dan tombol di dalam
+            kelompok juga, jadi di layar sempit tidak ada yang keluar layar. */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-sm border border-line bg-panel p-1.5">
+          {TAG_GROUPS.map((group) => (
+            <div
+              key={group.id}
+              role="group"
+              aria-label={group.name}
+              title={group.name}
+              className="flex flex-wrap items-center gap-1"
+            >
               {group.tags.map((spec) => (
                 <button
                   key={spec.id}
                   type="button"
                   onClick={() => insert(spec)}
-                  title={spec.title}
-                  aria-label={spec.title}
-                  className="min-h-8 rounded-sm border border-line bg-ink px-2 py-1 text-[11px] text-dim hover:border-alarm hover:text-bone"
+                  title={spec.name}
+                  aria-label={spec.name}
+                  className={buttonClass}
                 >
-                  {spec.label}
+                  {spec.icon && <Icon name={spec.icon} />}
+                  {spec.label && (
+                    <span
+                      className={`text-[11px] leading-none ${
+                        spec.icon ? 'text-[9px] text-muted' : ''
+                      } ${spec.id === 'b' ? 'font-bold' : ''} ${spec.id === 'i' ? 'italic' : ''} ${
+                        spec.id === 'u' ? 'underline' : ''
+                      }`}
+                    >
+                      {spec.label}
+                    </span>
+                  )}
                 </button>
               ))}
+
+              {/* Lima ukuran huruf jadi satu dropdown; berderet cuma makan tempat. */}
+              {group.id === 'text' && (
+                <select
+                  aria-label="Font size"
+                  title="Font size"
+                  value=""
+                  onChange={(e) => {
+                    const value = Number(e.currentTarget.value)
+                    e.currentTarget.value = ''
+                    if (value) insert(sizeSpec(value))
+                  }}
+                  className="min-h-8 rounded-sm border border-line bg-ink px-1.5 text-[11px] text-dim hover:border-alarm"
+                >
+                  <option value="">Size</option>
+                  {SIZES.map((s) => (
+                    <option key={s.value} value={s.value}>
+                      {s.label} ({s.value})
+                    </option>
+                  ))}
+                </select>
+              )}
             </div>
           ))}
         </div>

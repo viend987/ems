@@ -35,6 +35,18 @@ const KNOWN = new Set([
   'tr',
   'th',
   'td',
+  'code',
+  'left',
+  'font',
+  'info',
+  'success',
+  'warn',
+  'error',
+  'progress',
+  'imageleft',
+  'aligntable',
+  'secspoiler',
+  'space',
 ])
 
 /** Tag yang berperilaku seperti blok: ujung spasinya dirapikan saat mengurai. */
@@ -48,10 +60,18 @@ const BLOCK = new Set([
   '*',
   'quote',
   'spoiler',
+  'secspoiler',
   'table',
   'tr',
   'th',
   'td',
+  'code',
+  'left',
+  'info',
+  'success',
+  'warn',
+  'error',
+  'aligntable',
 ])
 
 const TAG = /\[(\/?)([a-z0-9*-]+)(?:=([^\]\n]*))?\]/gi
@@ -61,7 +81,7 @@ const TAG = /\[(\/?)([a-z0-9*-]+)(?:=([^\]\n]*))?\]/gi
  * juga sah — kalau ia ikut ditumpuk, semua teks sesudahnya jadi isinya dan
  * hilang saat digambar, karena pratinjau membuang isi `hr`.
  */
-const VOID = new Set(['hr'])
+const VOID = new Set(['hr', 'space'])
 
 function openTagIndex(stack, name) {
   for (let i = stack.length - 1; i > 0; i--) if (stack[i].tag === name) return i

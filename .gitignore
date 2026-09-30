@@ -6,3 +6,6 @@ dist/
 *.local
 images-incoming/
 .playwright-mcp/
+
+# Salinan repo dari perkakas lain, bukan bagian dari proyek.
+.kilo/

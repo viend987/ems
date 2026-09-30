@@ -18,6 +18,7 @@ palette, or motion — several things that look arbitrary are deliberate.
 ```bash
 npm run dev      # dev server (Vite)
 npm test         # vitest run — data integrity + copy + search
+                 # vite.config.js excludes .kilo/** — a repo copy another tool leaves there
 npx vitest run src/lib/copy.test.js   # single test file
 npm run lint     # oxlint
 npm run build    # production build to dist/
@@ -98,9 +99,23 @@ avoid) or a parser with no UI, and a second parser could disagree with this one.
 +1.65 KB gzip.
 
 - `src/lib/bbcode-tags.js` is the button catalogue **as data**: `{ before, after, body?, pick?,
-  block?, solo? }`. Adding a tag is one object; no component change. Every tag here must also be in
-  `KNOWN` in `bbcode.js` — `bbcode-tags.test.js` fails otherwise, because an unknown tag would
-  render as literal text.
+  block?, solo? }` plus `{ icon?, label?, name }` for how it looks. Adding a tag is one object; no
+  component change. Every tag here must also be in `KNOWN` in `bbcode.js` — `bbcode-tags.test.js`
+  fails otherwise, because an unknown tag would render as literal text.
+- **Button names are English**, and a test enforces it. The label has to match the tag it types:
+  "Align centre" next to `[center]`, not "Tengah". This is the one place in the UI that stays English
+  regardless of the language toggle, because the names are really the tags' names.
+- Icons are inline SVG in `src/components/Icon.jsx`, one 16×16 `currentColor` path each — no icon
+  package, since any of them outweighs the two dozen shapes actually used. `bbcode-tags.test.js`
+  fails on a tag pointing at an icon that does not exist. B/I/U stay letters, by convention.
+- The five font sizes are a **dropdown**, not five buttons: Tiny 50, Small 85, Normal 100, Large 150,
+  Huge 200. `sizeSpec(value)` builds the spec, so the dropdown goes through the same `applyTag` path.
+- `insert()` reads the **live textarea value**, not the `code` from render. With the render value, two
+  changes in one tick (typing then immediately clicking a button) let the stale text overwrite the
+  newer one.
+- `src/data/bbcodes.js` (`#/bbcodes`) is the tag reference, written in the `tables` shape from
+  `reference.js` so `CodeTable` renders it and every row copies its tag. **`[blink]` is deliberately
+  absent** — the user asked for it to be left out.
 - `src/lib/bbcode-insert.js` holds `applyTag(text, start, end, spec)`, deliberately **pure and
   DOM-free** so the selection logic can be tested without a browser. `bbcode-insert.test.js` writes
   expected results with `«»` marking the selection.
@@ -111,7 +126,11 @@ avoid) or a parser with no UI, and a second parser could disagree with this one.
   Without that, a lone `[hr]` became a parent and every later line ended up as its children — which
   the preview drops, since it renders `hr` childless. The forum writes `[hr][/hr]`, so both spellings
   have to work.
-- Table tags (`table`, `tr`, `th`, `td`) were added for this. `src/lib/bbcode-example.js` holds the
+- Supported tags beyond the Patrol Log set: `table`/`tr`/`th`/`td`, `code`, `left`, `font`, `info`,
+  `success`, `warn`, `error`, `progress`, `imageleft`, `aligntable`, `secspoiler`, `space`. The notice
+  boxes carry **fixed forum colours**, not site theme tokens: what they imitate is the forum, not this
+  page. `space` joins `hr` in `VOID`. `font` values are filtered by `SAFE_FONT` the way colours are by
+  `SAFE_COLOR`. `src/lib/bbcode-example.js` holds the
   forum's real Patient Care Report, used both by the editor's "Muat contoh" button and as a parser
   fixture — it covers uppercase `[/LIST]`, paired `[hr][/hr]`, and a `[list]` left open until the
   closing `[/divbox]`.

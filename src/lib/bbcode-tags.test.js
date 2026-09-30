@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { applyTag } from './bbcode-insert.js'
-import { SHORTCUTS, TAG_GROUPS, TAGS } from './bbcode-tags.js'
+import { readFile } from 'node:fs/promises'
+import { SHORTCUTS, SIZES, sizeSpec, TAG_GROUPS, TAGS } from './bbcode-tags.js'
 import { parseBBCode, textOf } from './bbcode.js'
 import { PATIENT_CARE_REPORT } from './bbcode-example.js'
 
@@ -11,16 +12,39 @@ describe('katalog tombol', () => {
     expect(new Set(TAGS.map((t) => t.id)).size).toBe(TAGS.length)
   })
 
-  it('setiap tombol punya label dan keterangan', () => {
+  it('setiap tombol punya nama dan sesuatu untuk digambar', () => {
     for (const spec of TAGS) {
-      expect(spec.label, spec.id).toBeTruthy()
-      expect(spec.title, spec.id).toBeTruthy()
+      // `name` jadi tooltip sekaligus label pembaca layar, jadi wajib ada.
+      expect(spec.name, `${spec.id} tanpa name`).toBeTruthy()
+      expect(spec.icon || spec.label, `${spec.id} tanpa ikon maupun label`).toBeTruthy()
     }
+  })
+
+  it('menamai tombol dalam bahasa Inggris, sejalan dengan tag yang disisipkan', () => {
+    const indonesia = /(tengah|kiri|kanan|garis|gambar|tautan|ukuran|warna|huruf|kotak|daftar)/i
+    for (const spec of TAGS) {
+      expect(spec.name, `${spec.id}: "${spec.name}"`).not.toMatch(indonesia)
+    }
+  })
+
+  it('memakai ikon yang benar-benar ada di Icon.jsx', async () => {
+    const src = await readFile(new URL('../components/Icon.jsx', import.meta.url), 'utf8')
+    for (const spec of TAGS) {
+      if (!spec.icon) continue
+      expect(src, `ikon "${spec.icon}" (${spec.id}) tidak ada`).toContain(`${spec.icon}:`)
+    }
+  })
+
+  it('menyediakan lima ukuran huruf sesuai angka forum', () => {
+    expect(SIZES.map((s) => s.value)).toEqual([50, 85, 100, 150, 200])
+    expect(SIZES.map((s) => s.label)).toEqual(['Tiny', 'Small', 'Normal', 'Large', 'Huge'])
+    expect(sizeSpec(150).before).toBe('[size=150]')
+    expect(sizeSpec(150).after).toBe('[/size]')
   })
 
   it('hanya menyisipkan tag yang dikenali pratinjau', () => {
     // Tag di luar `KNOWN` akan tampil sebagai teks mentah, bukan hasil format.
-    for (const spec of TAGS) {
+    for (const spec of [...TAGS, ...SIZES.map((s) => sizeSpec(s.value))]) {
       const sisa = textOf(parseBBCode(applyTag('', 0, 0, spec).text))
       expect(sisa, `${spec.id} menyisakan tag mentah: ${sisa}`).not.toMatch(/\[\/?[a-z]/i)
     }
@@ -44,7 +68,7 @@ describe('katalog tombol', () => {
   })
 
   it('mengelompokkan tombol sesuai yang tampil di toolbar', () => {
-    expect(TAG_GROUPS.map((g) => g.id)).toEqual(['format', 'blok', 'media'])
+    expect(TAG_GROUPS.map((g) => g.id)).toEqual(['text', 'align', 'blocks', 'notices', 'media'])
   })
 })
 

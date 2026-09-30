@@ -17,6 +17,7 @@ import radio from './procedures/radio.js'
 import structure from './procedures/structure.js'
 import vertical from './procedures/vertical.js'
 import wounds from './procedures/wounds.js'
+import BBCODES from './bbcodes.js'
 import BUILDER from './builder.js'
 import LINKS from './links.js'
 import PATROL from './patrol.js'
@@ -46,7 +47,7 @@ export const PROCEDURES = [
   blood,
 ]
 
-export const CATEGORIES = [...PROCEDURES, BUILDER, PATROL, ...REFERENCE, UNITS, LINKS]
+export const CATEGORIES = [...PROCEDURES, BUILDER, BBCODES, PATROL, ...REFERENCE, UNITS, LINKS]
 
 export { LINKS, UNITS }
 

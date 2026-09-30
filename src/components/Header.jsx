@@ -26,7 +26,6 @@ export default function Header({ stepCount }) {
         </div>
         <div className="hidden shrink-0 text-right text-[11px] leading-relaxed text-muted lg:block">
           <div className="text-signal">{stepCount} baris siap salin</div>
-          <div>nomor di kiri tidak ikut tersalin</div>
         </div>
       </div>
     </header>
