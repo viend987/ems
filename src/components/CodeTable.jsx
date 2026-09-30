@@ -3,14 +3,18 @@
  * pasangan "kode + arti", bukan urutan langkah, jadi yang bisa disalin hanya
  * kodenya.
  */
-export default function CodeTable({ categoryId, table, status, onCopy }) {
+import { pick } from '../lib/lang.js'
+import { strings } from '../lib/strings.js'
+
+export default function CodeTable({ categoryId, table, status, onCopy, lang }) {
+  const s = strings(lang)
   const anchor = `${categoryId}-${table.id}`
 
   return (
     <section id={anchor} className="lazy-section scroll-mt-28 lg:scroll-mt-6">
       <h2 className="slab mb-2 flex items-center gap-2.5 text-lg text-bone sm:text-xl">
         <span aria-hidden="true" className="h-4 w-1 bg-alarm sm:h-5" />
-        {table.name}
+        {pick(table, 'name', lang)}
       </h2>
 
       <div className="flex flex-col gap-px overflow-hidden rounded-sm border border-line bg-line">
@@ -22,7 +26,7 @@ export default function CodeTable({ categoryId, table, status, onCopy }) {
               key={rowKey}
               type="button"
               onClick={() => onCopy(rowKey, row.code)}
-              title="Klik untuk menyalin kodenya"
+              title={s.copyHintCode}
               className="flex w-full flex-col gap-1 bg-panel px-3 py-2.5 text-left hover:bg-raise sm:flex-row sm:items-baseline sm:gap-4 sm:px-4"
             >
               <span
@@ -30,9 +34,9 @@ export default function CodeTable({ categoryId, table, status, onCopy }) {
                   copied ? (status.ok ? 'text-mech' : 'text-alarm') : 'text-signal'
                 }`}
               >
-                {copied ? (status.ok ? 'tersalin' : 'gagal menyalin') : row.code}
+                {copied ? (status.ok ? s.copied : s.copyFailedLong) : row.code}
               </span>
-              <span className="text-[12.5px] leading-relaxed text-dim">{row.desc}</span>
+              <span className="text-[12.5px] leading-relaxed text-dim">{pick(row, 'desc', lang)}</span>
             </button>
           )
         })}

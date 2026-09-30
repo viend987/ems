@@ -13,7 +13,10 @@ export default {
   id: 'vertical',
   group: 'khusus',
   name: 'Vertical Rescue',
+  nameEn: 'Vertical Rescue',
   blurb: 'Radio penerbangan, koordinasi IC dengan Rescuer, dan penurunan korban dari tebing.',
+  blurbEn:
+    'Aviation radio, IC coordinating with the Rescuer, and lowering the victim off a cliff.',
   sections: [
     {
       id: 'radio-latihan',

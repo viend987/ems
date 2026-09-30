@@ -1,3 +1,5 @@
+import { pick } from '../lib/lang.js'
+
 // Vite mengurus hashing dan path akhir untuk semua foto unit (hanya URL, bukan isi file).
 const IMAGES = import.meta.glob('../assets/units/*.{avif,webp}', {
   eager: true,
@@ -22,7 +24,7 @@ const SIZES = '(min-width: 1024px) 480px, (min-width: 640px) 50vw, 100vw'
  *
  * Unit yang fotonya belum ada tetap tampil dengan callsign dan keterangannya.
  */
-function UnitCard({ unit }) {
+function UnitCard({ unit, lang }) {
   const images = (unit.images ?? []).filter((name) => urlOf(name, WIDTHS[0], 'webp'))
 
   return (
@@ -52,24 +54,24 @@ function UnitCard({ unit }) {
           <h3 className="slab text-lg text-alarm sm:text-xl">{unit.callsign}</h3>
           <span className="text-[11px] text-muted">{unit.vehicle}</span>
         </div>
-        <p className="text-[12.5px] leading-relaxed text-dim">{unit.desc}</p>
+        <p className="text-[12.5px] leading-relaxed text-dim">{pick(unit, 'desc', lang)}</p>
       </div>
     </li>
   )
 }
 
-export default function UnitGallery({ categoryId, group }) {
+export default function UnitGallery({ categoryId, group, lang }) {
   return (
     <section id={`${categoryId}-${group.id}`} className="lazy-section scroll-mt-28 lg:scroll-mt-6">
       <h2 className="slab mb-1 flex items-center gap-2.5 text-lg text-bone sm:text-xl">
         <span aria-hidden="true" className="h-4 w-1 bg-alarm sm:h-5" />
-        {group.name}
+        {pick(group, 'name', lang)}
       </h2>
-      <p className="mb-3 text-xs leading-relaxed text-dim">{group.blurb}</p>
+      <p className="mb-3 text-xs leading-relaxed text-dim">{pick(group, 'blurb', lang)}</p>
 
       <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {group.units.map((unit) => (
-          <UnitCard key={unit.callsign} unit={unit} />
+          <UnitCard key={unit.callsign} unit={unit} lang={lang} />
         ))}
       </ul>
     </section>

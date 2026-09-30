@@ -4,7 +4,10 @@ export default {
   id: 'coroner',
   group: 'khusus',
   name: 'Coroner',
+  nameEn: 'Coroner',
   blurb: 'Korban sudah tidak bernyawa. Dua versi: RPLY yang dinarasikan, atau adegan penuh untuk possible CK.',
+  blurbEn:
+    'The victim is already dead. Two versions: a narrated RPLY, or a full scene for a possible CK.',
   sections: [
     {
       id: 'rply',

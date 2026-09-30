@@ -2,12 +2,14 @@
  * Kumpulan rujukan. Bentuknya tautan keluar, bukan teks yang disalin, jadi
  * tiap barisnya anchor sungguhan yang membuka tab baru.
  */
-export default function LinkList({ group }) {
+import { pick } from '../lib/lang.js'
+
+export default function LinkList({ group, lang }) {
   return (
     <section id={`links-${group.id}`} className="lazy-section scroll-mt-28 lg:scroll-mt-6">
       <h2 className="slab mb-2 flex items-center gap-2.5 text-lg text-bone sm:text-xl">
         <span aria-hidden="true" className="h-4 w-1 bg-alarm sm:h-5" />
-        {group.name}
+        {pick(group, 'name', lang)}
       </h2>
 
       <div className="flex flex-col gap-px overflow-hidden rounded-sm border border-line bg-line">
@@ -22,7 +24,7 @@ export default function LinkList({ group }) {
             <span className="flex items-baseline gap-2 text-[12.5px] text-calm">
               {item.label}
             </span>
-            <span className="text-[12.5px] leading-relaxed text-dim">{item.desc}</span>
+            <span className="text-[12.5px] leading-relaxed text-dim">{pick(item, 'desc', lang)}</span>
             <span className="text-[10px] break-all text-muted">{item.url}</span>
           </a>
         ))}

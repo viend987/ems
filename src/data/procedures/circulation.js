@@ -4,7 +4,10 @@ export default {
   id: 'circulation',
   group: 'tkp',
   name: 'Circulation',
+  nameEn: 'Circulation',
   blurb: 'Pemeriksaan denyut nadi, penanganan syok, resusitasi (CPR & AED), dan cek ulang.',
+  blurbEn:
+    'Checking the pulse, treating shock, resuscitation (CPR & AED), and the re-check.',
   sections: [
     {
       id: 'circulation-ecg',

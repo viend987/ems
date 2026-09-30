@@ -81,3 +81,31 @@ describe('copySection', () => {
     expect(copySection({ steps: [{ kind: 'note', text: 'Cuma catatan.' }] })).toBe('')
   })
 })
+
+describe('teks salin per bahasa', () => {
+  const step = { n: 51, kind: 'me', text: 'mengamankan area', en: 'secures the area' }
+
+  it('menyalin versi Inggris saat bahasanya en', () => {
+    expect(copyText(step, 'en')).toBe('/me secures the area')
+  })
+
+  it('menyalin versi Indonesia saat bahasanya id', () => {
+    expect(copyText(step, 'id')).toBe('/me mengamankan area')
+  })
+
+  it('jatuh ke Indonesia kalau terjemahannya belum ada', () => {
+    expect(copyText({ kind: 'do', text: 'Apakah sadar?' }, 'en')).toBe('/do Apakah sadar?')
+  })
+
+  it('nomor shortcut tetap tidak pernah ikut tersalin, di bahasa mana pun', () => {
+    for (const lang of ['id', 'en']) expect(copyText(step, lang)).not.toContain('51')
+  })
+
+  it('copySection menyusun seluruh bagian dalam satu bahasa', () => {
+    const section = {
+      steps: [step, { kind: 'note', text: 'catatan', en: 'a note' }, { kind: 'command', text: '/bls' }],
+    }
+    // Catatan tidak bisa disalin, jadi tidak ikut.
+    expect(copySection(section, 'en')).toBe('/me secures the area\n/bls')
+  })
+})

@@ -4,7 +4,10 @@ export default {
   id: 'ocd',
   group: 'radio',
   name: 'OCD Takeover',
+  nameEn: 'OCD Takeover',
   blurb: 'Radio saat kamu yang memegang dispatch.',
+  blurbEn:
+    'Radio traffic for when you are the one holding dispatch.',
   sections: [
     {
       id: 'ocd-radio',

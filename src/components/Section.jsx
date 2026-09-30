@@ -1,7 +1,10 @@
 import { copySection, isCopyable } from '../lib/copy.js'
+import { pick } from '../lib/lang.js'
+import { strings } from '../lib/strings.js'
 import StepRow from './StepRow.jsx'
 
-export default function Section({ categoryId, section, status, onCopy, onGo }) {
+export default function Section({ categoryId, section, status, onCopy, onGo, lang }) {
+  const s = strings(lang)
   const anchor = `${categoryId}-${section.id}`
   const allKey = `${anchor}:all`
   const count = section.steps.filter(isCopyable).length
@@ -12,15 +15,15 @@ export default function Section({ categoryId, section, status, onCopy, onGo }) {
       <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <h2 className="slab flex items-center gap-2.5 text-lg text-bone sm:text-xl">
           <span aria-hidden="true" className="h-4 w-1 bg-alarm sm:h-5" />
-          {section.name}
+          {pick(section, 'name', lang)}
         </h2>
         {count > 0 && (
           <button
             type="button"
-            onClick={() => onCopy(allKey, copySection(section))}
+            onClick={() => onCopy(allKey, copySection(section, lang))}
             className={`text-[11px] ${copiedAll ? 'text-mech' : 'text-muted hover:text-signal'}`}
           >
-            {copiedAll ? (status.ok ? `${count} baris tersalin` : 'gagal menyalin') : 'Salin semua'}
+            {copiedAll ? (status.ok ? s.copiedAllCount(count) : s.copyFailedLong) : s.copyAll}
           </button>
         )}
       </div>
@@ -34,6 +37,7 @@ export default function Section({ categoryId, section, status, onCopy, onGo }) {
             status={status}
             onCopy={onCopy}
             onGo={onGo}
+            lang={lang}
           />
         ))}
       </div>

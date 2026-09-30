@@ -7,7 +7,10 @@ export default {
   id: 'animals',
   group: 'khusus',
   name: 'Hewan Liar',
+  nameEn: 'Wild Animals',
   blurb: 'Penanganan hewan liar di permukiman. Semua alat ada di kompartemen unit Engine.',
+  blurbEn:
+    'Wild animals in residential areas. Every tool is in the Engine compartment.',
   sections: [
     {
       id: 'tikus',

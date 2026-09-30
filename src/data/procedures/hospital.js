@@ -4,7 +4,10 @@ export default {
   id: 'hospital',
   group: 'transport',
   name: 'Rumah Sakit',
+  nameEn: 'Hospital',
   blurb: 'Serah terima di PBH, laporan ke dokter, reply NPC kalau dokter kosong, dan RP bill.',
+  blurbEn:
+    'Handover at PBH, the report to the doctor, NPC replies when no doctor is on, and the RP bill.',
   sections: [
     {
       id: 'arrive',

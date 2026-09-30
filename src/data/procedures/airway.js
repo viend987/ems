@@ -8,7 +8,10 @@ export default {
   id: 'airway',
   group: 'tkp',
   name: 'Airway',
+  nameEn: 'Airway',
   blurb: 'Pemeriksaan dan pembukaan jalan napas korban. Setiap tindakan diikuti pemeriksaan ulang sebelum lanjut.',
+  blurbEn:
+    'Checking and opening the victim’s airway. Every action is followed by a re-check before moving on.',
   sections: [
     {
       id: 'airway-headtilt',

@@ -5,8 +5,11 @@ export default {
   id: "links",
   group: "referensi",
   name: "Link Referensi",
+  nameEn: 'Reference Links',
   blurb:
     "Berkas dan halaman yang sering dibuka, biar tidak dicari manual tiap kali.",
+  blurbEn:
+    'Source documents and the LSFD forum, opened in a new tab.',
   groups: [
     {
       id: "general",

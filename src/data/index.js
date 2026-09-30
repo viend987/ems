@@ -61,21 +61,22 @@ export { LINKS, UNITS }
  * tidak digambar — ia muncul sendiri begitu ada kategori yang masuk ke sana.
  */
 export const GROUPS = [
-  { id: 'tkp', name: 'TKP' },
-  { id: 'radio', name: 'Radio' },
-  { id: 'transport', name: 'Transport' },
-  { id: 'pemadam', name: 'Pemadam' },
-  { id: 'khusus', name: 'Khusus' },
+  { id: 'tkp', name: 'TKP', nameEn: 'On Scene' },
+  { id: 'radio', name: 'Radio', nameEn: 'Radio' },
+  { id: 'transport', name: 'Transport', nameEn: 'Transport' },
+  { id: 'pemadam', name: 'Pemadam', nameEn: 'Fire' },
+  { id: 'khusus', name: 'Khusus', nameEn: 'Special' },
   {
     id: 'laporan',
     name: 'Laporan',
+    nameEn: 'Reports',
     subgroups: [
-      { id: 'general', name: 'General' },
-      { id: 'field', name: 'Field Unit' },
-      { id: 'hospital', name: 'Hospital Unit' },
+      { id: 'general', name: 'General', nameEn: 'General' },
+      { id: 'field', name: 'Field Unit', nameEn: 'Field Unit' },
+      { id: 'hospital', name: 'Hospital Unit', nameEn: 'Hospital Unit' },
     ],
   },
-  { id: 'referensi', name: 'Referensi' },
+  { id: 'referensi', name: 'Referensi', nameEn: 'Reference' },
 ]
 
 /**
@@ -83,15 +84,15 @@ export const GROUPS = [
  * Field Handbook, dipetakan ke bagian yang menanganinya.
  */
 export const FLOW = [
-  { label: 'Danger', to: 'field#danger' },
-  { label: 'Response', to: 'field#response' },
-  { label: 'X — Pendarahan', to: 'deat#direct-pressure' },
-  { label: 'Airway', to: 'airway#airway-headtilt' },
-  { label: 'Breathing', to: 'breathing#breathing-ecg' },
-  { label: 'Circulation', to: 'circulation#circulation-ecg' },
-  { label: 'Cek Ulang', to: 'circulation#circulation-normal' },
-  { label: 'Load', to: 'load#load' },
-  { label: 'Transport', to: 'hospital#arrive' },
+  { label: 'Danger', labelEn: 'Danger', to: 'field#danger' },
+  { label: 'Response', labelEn: 'Response', to: 'field#response' },
+  { label: 'X — Pendarahan', labelEn: 'X — Bleeding', to: 'deat#direct-pressure' },
+  { label: 'Airway', labelEn: 'Airway', to: 'airway#airway-headtilt' },
+  { label: 'Breathing', labelEn: 'Breathing', to: 'breathing#breathing-ecg' },
+  { label: 'Circulation', labelEn: 'Circulation', to: 'circulation#circulation-ecg' },
+  { label: 'Cek Ulang', labelEn: 'Re-check', to: 'circulation#circulation-normal' },
+  { label: 'Load', labelEn: 'Load', to: 'load#load' },
+  { label: 'Transport', labelEn: 'Transport', to: 'hospital#arrive' },
 ]
 
 export const DEFAULT_CATEGORY = 'field'

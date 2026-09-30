@@ -1,4 +1,6 @@
 import { CATEGORIES, GROUPS } from '../data/index.js'
+import { pick } from '../lib/lang.js'
+import { strings } from '../lib/strings.js'
 import SearchField from './SearchField.jsx'
 
 /**
@@ -30,7 +32,7 @@ function Light({ active }) {
   )
 }
 
-export default function Board({ variant, active, onGo, query, onQuery, searchRef }) {
+export default function Board({ variant, active, onGo, query, onQuery, searchRef, lang }) {
   if (variant === 'grid') {
     const Tiles = ({ items }) => (
       <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
@@ -46,7 +48,7 @@ export default function Board({ variant, active, onGo, query, onQuery, searchRef
                 isActive ? 'bg-alarm text-white' : 'border border-line bg-panel text-bone'
               }`}
             >
-              {cat.name}
+              {pick(cat, 'name', lang)}
             </button>
           )
         })}
@@ -55,17 +57,19 @@ export default function Board({ variant, active, onGo, query, onQuery, searchRef
 
     return (
       <div className="border-b border-line px-4 py-4 sm:px-6 lg:hidden">
-        <SearchField value={query} onChange={onQuery} inputRef={searchRef} />
+        <SearchField value={query} onChange={onQuery} inputRef={searchRef} lang={lang} />
 
-        <nav aria-label="Kategori prosedur" className="mt-3 flex flex-col gap-3">
+        <nav aria-label={strings(lang).navCategories} className="mt-3 flex flex-col gap-3">
           {BY_GROUP.map((group) => (
             <div key={group.id}>
-              <div className="slab mb-1.5 text-[10px] tracking-[0.24em] text-muted">{group.name}</div>
+              <div className="slab mb-1.5 text-[10px] tracking-[0.24em] text-muted">
+                {pick(group, 'name', lang)}
+              </div>
               {group.loose.length > 0 && <Tiles items={group.loose} />}
 
               {group.subgroups.map((sub) => (
                 <div key={sub.id} className="mt-2 border-l border-line pl-2.5">
-                  <div className="mb-1.5 text-[11px] text-muted">{sub.name}</div>
+                  <div className="mb-1.5 text-[11px] text-muted">{pick(sub, 'name', lang)}</div>
                   <Tiles items={sub.items} />
                 </div>
               ))}
@@ -88,24 +92,28 @@ export default function Board({ variant, active, onGo, query, onQuery, searchRef
         }`}
       >
         <Light active={isActive} />
-        <span className={`slab flex-1 text-sm ${isActive ? 'text-white' : 'text-bone'}`}>{cat.name}</span>
+        <span className={`slab flex-1 text-sm ${isActive ? 'text-white' : 'text-bone'}`}>
+          {pick(cat, 'name', lang)}
+        </span>
       </button>
     )
   }
 
   return (
     <nav
-      aria-label="Kategori prosedur"
+      aria-label={strings(lang).navCategories}
       className="sticky top-0 hidden h-dvh w-60 shrink-0 flex-col border-r border-line bg-panel lg:flex xl:w-64"
     >
       <div className="shrink-0 border-b border-line p-3">
-        <SearchField value={query} onChange={onQuery} inputRef={searchRef} />
+        <SearchField value={query} onChange={onQuery} inputRef={searchRef} lang={lang} />
       </div>
 
       <div className="scroll-thin min-h-0 flex-1 overflow-y-auto overscroll-contain">
         {BY_GROUP.map((group) => (
           <div key={group.id} className="border-b border-line py-2">
-            <div className="slab px-3 py-1.5 text-[10px] tracking-[0.24em] text-muted">{group.name}</div>
+            <div className="slab px-3 py-1.5 text-[10px] tracking-[0.24em] text-muted">
+              {pick(group, 'name', lang)}
+            </div>
 
             {group.loose.map((cat) => (
               <Item key={cat.id} cat={cat} indent="pl-3" />
@@ -113,7 +121,7 @@ export default function Board({ variant, active, onGo, query, onQuery, searchRef
 
             {group.subgroups.map((sub) => (
               <div key={sub.id} className="mt-0.5 ml-3 border-l border-line">
-                <div className="py-1 pl-3 text-[11px] text-muted">{sub.name}</div>
+                <div className="py-1 pl-3 text-[11px] text-muted">{pick(sub, 'name', lang)}</div>
                 {sub.items.map((cat) => (
                   <Item key={cat.id} cat={cat} indent="pl-3" />
                 ))}

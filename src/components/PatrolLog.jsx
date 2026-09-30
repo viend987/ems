@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import STAFF from '../data/staff.js'
 import BBCodePreview from './BBCodePreview.jsx'
 import { writeClipboard } from '../lib/copy.js'
+import { strings } from '../lib/strings.js'
 import {
   buildPatrolLog,
   durationMinutes,
@@ -71,7 +72,7 @@ function Field({ label, hint, children }) {
  * tidak dikunci ke imgur — dan gambarnya langsung dipratinjau, supaya link
  * yang salah ketahuan sebelum laporan dikirim ke forum.
  */
-function ImageField({ label, value, onChange }) {
+function ImageField({ label, value, onChange, s }) {
   // Status muat per link: gambar lama yang gagal tidak menandai link baru.
   const [loaded, setLoaded] = useState({ url: '', ok: false })
 
@@ -80,33 +81,31 @@ function ImageField({ label, value, onChange }) {
   const state = !valid || loaded.url !== url ? 'loading' : loaded.ok ? 'ok' : 'broken'
   const bad = url && (!valid || state === 'broken')
 
-  let message = 'Tempel link gambar langsung, mis. https://i.imgur.com/xxxx.jpeg.'
+  let message = s.plImageHint
   let tone = 'text-muted'
   if (url && !valid) {
-    message = isLink(url)
-      ? 'Ini link halaman, bukan gambar. Buka gambarnya, klik kanan, lalu "Copy image address".'
-      : 'Kolom ini hanya menerima link (diawali https://), bukan teks biasa.'
+    message = isLink(url) ? s.plImageIsPage : s.plImageNotLink
     tone = 'text-alarm'
   } else if (valid && state === 'broken') {
-    message = 'Gambar dari link ini tidak bisa dimuat. Pastikan link-nya mengarah langsung ke gambar.'
+    message = s.plImageBroken
     tone = 'text-alarm'
   } else if (valid && state === 'loading') {
-    message = 'Memuat pratinjau…'
+    message = s.plImageLoading
   } else if (valid && state === 'ok') {
-    message = 'Gambar termuat.'
+    message = s.plImageOk
     tone = 'text-mech'
   }
 
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="slab text-[11px] tracking-[0.18em] text-muted">Gambar {label}</span>
+      <span className="slab text-[11px] tracking-[0.18em] text-muted">{s.plImageOf(label)}</span>
       <input
         type="url"
         inputMode="url"
         value={value}
         onInput={(e) => onChange(e.currentTarget.value.trim())}
         placeholder="https://i.imgur.com/xxxx.jpeg"
-        aria-label={`Link gambar ${label}`}
+        aria-label={s.plImageLinkOf(label)}
         aria-invalid={bad ? 'true' : undefined}
         spellcheck={false}
         autoComplete="off"
@@ -118,7 +117,7 @@ function ImageField({ label, value, onChange }) {
           href={url}
           target="_blank"
           rel="noreferrer noopener"
-          title="Buka gambar di tab baru"
+          title={s.plOpenImage}
           className={`block w-full overflow-hidden rounded-sm border border-line bg-raise ${
             state === 'broken' ? 'hidden' : ''
           }`}
@@ -126,7 +125,7 @@ function ImageField({ label, value, onChange }) {
           <img
             key={url}
             src={url}
-            alt={`Bukti ${label}`}
+            alt={s.plProofOf(label)}
             referrerPolicy="no-referrer"
             decoding="async"
             onLoad={() => setLoaded({ url, ok: true })}
@@ -139,7 +138,8 @@ function ImageField({ label, value, onChange }) {
   )
 }
 
-export default function PatrolLog() {
+export default function PatrolLog({ lang }) {
+  const s = strings(lang)
   const [draft, setDraft] = useState(readDraft)
   const [copied, setCopied] = useState(null)
   // Pratinjau lebih dulu: yang dicari pemain biasanya "sudah benar belum
@@ -170,7 +170,7 @@ export default function PatrolLog() {
       <form className="flex flex-col gap-5" onSubmit={(e) => e.preventDefault()}>
         <fieldset className="flex flex-col gap-3 rounded-sm border border-line bg-panel p-3 sm:p-4">
           <legend className="slab px-1 text-sm text-bone">Personal Details</legend>
-          <Field label="Nama anggota">
+          <Field label={s.plMember}>
             <select
               value={staff?.id}
               onChange={(e) => set('staffId')(e.currentTarget.value)}
@@ -206,7 +206,7 @@ export default function PatrolLog() {
                 className={inputClass}
               />
             </Field>
-            <Field label="Crew member" hint="Kosongkan atau biarkan N/A kalau duty sendiri.">
+            <Field label="Crew member" hint={s.plCrewHint}>
               <input
                 type="text"
                 value={draft.crew}
@@ -230,19 +230,19 @@ export default function PatrolLog() {
                   className={inputClass}
                 />
               </Field>
-              <ImageField label={label} value={draft[image]} onChange={set(image)} />
+              <ImageField label={label} value={draft[image]} onChange={set(image)} s={s} />
             </div>
           ))}
 
           {minutes !== null && (
             <p className={`text-xs ${minutes < MIN_DUTY_MINUTES ? 'text-alarm' : 'text-mech'}`}>
-              Durasi duty: {formatDuration(minutes)}
-              {minutes < MIN_DUTY_MINUTES && ` — minimal ${MIN_DUTY_MINUTES} menit`}
-              {draft.end < draft.start && ' (melewati tengah malam)'}
+              {s.plDuration(formatDuration(minutes))}
+              {minutes < MIN_DUTY_MINUTES && s.plMinimum(MIN_DUTY_MINUTES)}
+              {draft.end < draft.start && s.plMidnight}
             </p>
           )}
 
-          <Field label="Activity" hint="Ceritakan patroli ke mana saja dan apa yang dikerjakan selama duty.">
+          <Field label="Activity" hint={s.plActivityHint}>
             <textarea
               value={draft.activity}
               onInput={(e) => set('activity')(e.currentTarget.value)}
@@ -255,21 +255,21 @@ export default function PatrolLog() {
         <button
           type="button"
           onClick={() => {
-            if (confirm('Kosongkan form untuk laporan baru? Nama anggota tetap dipilih.')) {
+            if (confirm(s.plNewConfirm)) {
               setDraft(blank(draft.staffId))
             }
           }}
           className="self-start rounded-sm border border-line bg-panel px-3 py-2 text-[11px] text-dim hover:border-alarm hover:text-alarm"
         >
-          Laporan baru
+          {s.plNewReport}
         </button>
       </form>
 
-      <section aria-label="Hasil laporan" className="flex flex-col gap-3 xl:sticky xl:top-6">
+      <section aria-label={s.plResult} className="flex flex-col gap-3 xl:sticky xl:top-6">
         <div className="flex flex-wrap items-center gap-2">
-          <div role="tablist" aria-label="Tampilan hasil" className="flex rounded-sm border border-line bg-panel p-0.5">
+          <div role="tablist" aria-label={s.plTabs} className="flex rounded-sm border border-line bg-panel p-0.5">
             {[
-              ['preview', 'Pratinjau'],
+              ['preview', s.bbPreview],
               ['bbcode', 'BBCode'],
             ].map(([id, label]) => (
               <button
@@ -293,7 +293,7 @@ export default function PatrolLog() {
             disabled={issues.length > 0}
             className="slab ml-auto rounded-sm bg-alarm px-4 py-2 text-sm text-white disabled:bg-line disabled:text-muted"
           >
-            {copied === null ? 'Salin BBCode' : copied ? 'Tersalin' : 'Gagal menyalin'}
+            {copied === null ? s.bbCopy : copied ? s.bbCopied : s.bbCopyFailed}
           </button>
         </div>
 
@@ -311,7 +311,7 @@ export default function PatrolLog() {
           <textarea
             readOnly
             value={bbcode}
-            aria-label="BBCode laporan"
+            aria-label={s.plBbcodeLabel}
             rows={18}
             onFocus={(e) => e.currentTarget.select()}
             className="scroll-thin w-full resize-y rounded-sm border border-line bg-panel p-3 text-[11.5px] leading-relaxed text-dim"

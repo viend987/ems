@@ -14,7 +14,10 @@ export default {
   id: 'structure',
   group: 'pemadam',
   name: 'Kebakaran Bangunan',
+  nameEn: 'Structure Fire',
   blurb: 'Structure fire dari dispatch sampai RTB: size-up, fire attack, search & rescue, overhaul.',
+  blurbEn:
+    'A structure fire from dispatch to RTB: size-up, fire attack, search and rescue, overhaul.',
   sections: [
     {
       id: 'respon',

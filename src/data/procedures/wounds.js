@@ -4,7 +4,10 @@ export default {
   id: 'wounds',
   group: 'tkp',
   name: 'Luka Ringan',
+  nameEn: 'Minor Wounds',
   blurb: 'Luka lecet dan memar — tanpa pendarahan masif.',
+  blurbEn:
+    'Grazes and bruises — nothing with massive bleeding.',
   sections: [
     {
       id: 'graze',

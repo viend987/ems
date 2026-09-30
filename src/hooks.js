@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
 import { CATEGORIES, DEFAULT_CATEGORY } from './data/index.js'
 import { writeClipboard } from './lib/copy.js'
+import { applyLang, nextLang, readLang, writeLang } from './lib/lang.js'
 import { applyTheme, nextTheme, readTheme, writeTheme } from './lib/theme.js'
 
 const VALID = new Set(CATEGORIES.map((c) => c.id))
@@ -105,4 +106,21 @@ export function useTheme() {
   const toggle = useCallback(() => setTheme((t) => nextTheme(t)), [])
 
   return [theme, toggle]
+}
+
+/**
+ * Bahasa situs. Sama pola dengan `useTheme`: nilainya dipasang ke `<html lang>`
+ * dan diingat di localStorage. Bawaannya Indonesia.
+ */
+export function useLang() {
+  const [lang, setLang] = useState(readLang)
+
+  useEffect(() => {
+    applyLang(lang)
+    writeLang(lang)
+  }, [lang])
+
+  const toggle = useCallback(() => setLang((l) => nextLang(l)), [])
+
+  return [lang, toggle]
 }

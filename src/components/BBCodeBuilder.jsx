@@ -5,6 +5,7 @@ import { writeClipboard } from '../lib/copy.js'
 import { applyTag } from '../lib/bbcode-insert.js'
 import { SHORTCUTS, SIZES, sizeSpec, TAG_GROUPS } from '../lib/bbcode-tags.js'
 import { PATIENT_CARE_REPORT } from '../lib/bbcode-example.js'
+import { strings } from '../lib/strings.js'
 
 /**
  * Meracik BBCode bebas untuk forum. Tombol toolbar menyisipkan tag ke posisi
@@ -39,7 +40,8 @@ function readDraft() {
 const buttonClass =
   'flex min-h-8 min-w-8 items-center justify-center gap-0.5 rounded-sm border border-line bg-ink px-1.5 py-1 text-dim hover:border-alarm hover:text-bone'
 
-export default function BBCodeBuilder() {
+export default function BBCodeBuilder({ lang }) {
+  const s = strings(lang)
   const [code, setCode] = useState(readDraft)
   const [copied, setCopied] = useState(null)
   const area = useRef(null)
@@ -99,7 +101,7 @@ export default function BBCodeBuilder() {
 
   return (
     <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
-      <section aria-label="Editor BBCode" className="flex min-w-0 flex-col gap-3">
+      <section aria-label={s.bbEditor} className="flex min-w-0 flex-col gap-3">
         {/* flex-wrap di dua tingkat: kelompoknya turun baris, dan tombol di dalam
             kelompok juga, jadi di layar sempit tidak ada yang keluar layar. */}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5 rounded-sm border border-line bg-panel p-1.5">
@@ -168,7 +170,7 @@ export default function BBCodeBuilder() {
           rows={20}
           spellcheck={false}
           aria-label="BBCode"
-          placeholder="Racik BBCode di sini, atau mulai dari tombol di atas."
+          placeholder={s.bbPlaceholder}
           className="scroll-thin w-full resize-y rounded-sm border border-line bg-ink p-3 text-[11.5px] leading-relaxed text-bone placeholder:text-muted"
         />
 
@@ -179,7 +181,7 @@ export default function BBCodeBuilder() {
             disabled={kosong}
             className="slab rounded-sm bg-alarm px-4 py-2 text-sm text-white disabled:bg-line disabled:text-muted"
           >
-            {copied === null ? 'Salin BBCode' : copied ? 'Tersalin' : 'Gagal menyalin'}
+            {copied === null ? s.bbCopy : copied ? s.bbCopied : s.bbCopyFailed}
           </button>
 
           {kosong ? (
@@ -188,26 +190,26 @@ export default function BBCodeBuilder() {
               onClick={() => setCode(PATIENT_CARE_REPORT)}
               className="rounded-sm border border-line bg-panel px-3 py-2 text-[11px] text-dim hover:border-alarm hover:text-alarm"
             >
-              Muat contoh
+              {s.bbLoadExample}
             </button>
           ) : (
             <button
               type="button"
               onClick={() => {
-                if (confirm('Kosongkan editor? Racikan sekarang akan hilang.')) setCode('')
+                if (confirm(s.bbClearConfirm)) setCode('')
               }}
               className="rounded-sm border border-line bg-panel px-3 py-2 text-[11px] text-dim hover:border-alarm hover:text-alarm"
             >
-              Kosongkan
+              {s.bbClear}
             </button>
           )}
 
-          <span className="ml-auto text-[11px] text-muted">{code.length} karakter</span>
+          <span className="ml-auto text-[11px] text-muted">{s.bbChars(code.length)}</span>
         </div>
       </section>
 
-      <section aria-label="Pratinjau" className="flex min-w-0 flex-col gap-2 xl:sticky xl:top-6">
-        <span className="slab text-[11px] tracking-[0.18em] text-muted">Pratinjau</span>
+      <section aria-label={s.bbPreview} className="flex min-w-0 flex-col gap-2 xl:sticky xl:top-6">
+        <span className="slab text-[11px] tracking-[0.18em] text-muted">{s.bbPreview}</span>
         <BBCodePreview code={code} className="max-h-[32rem] xl:max-h-[calc(100dvh-8rem)]" />
       </section>
     </div>

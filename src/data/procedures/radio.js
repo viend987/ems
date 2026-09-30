@@ -5,7 +5,10 @@ export default {
   id: 'radio',
   group: 'radio',
   name: 'Radio & Status',
+  nameEn: 'Radio & Status',
   blurb: 'Pager, on/off duty, panggilan OCD, dan lalu lintas radio di TKP.',
+  blurbEn:
+    'Pager, on and off duty, calling OCD, and radio traffic on scene.',
   sections: [
     {
       id: 'unit',

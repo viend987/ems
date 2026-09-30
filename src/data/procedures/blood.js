@@ -9,7 +9,10 @@ export default {
   id: 'blood',
   group: 'khusus',
   name: 'Transfusi Darah',
+  nameEn: 'Blood Transfusion',
   blurb: 'Untuk event donor darah LSFD: tes golongan darah, skrining pendonor, pengambilan darah, dan transfusi saat operasi.',
+  blurbEn:
+    'For LSFD blood-donation events: blood typing, donor screening, drawing blood, and transfusion during surgery.',
   sections: [
     {
       id: 'golongan-darah',

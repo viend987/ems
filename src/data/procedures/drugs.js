@@ -11,7 +11,10 @@ export default {
   id: 'drugs',
   group: 'tkp',
   name: 'Obat ILS',
+  nameEn: 'ILS Drugs',
   blurb: 'BLS dulu, ILS kemudian. Obat lewat infus butuh jalur IV terpasang sebelum apa pun mengalir.',
+  blurbEn:
+    'BLS first, ILS after. Anything given by drip needs an IV line running before it can flow.',
   sections: [
     {
       id: 'setup-iv',

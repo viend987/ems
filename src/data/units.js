@@ -8,7 +8,10 @@ export default {
   id: 'units',
   group: 'referensi',
   name: 'Unit LSFD',
+  nameEn: 'LSFD Units',
   blurb: 'Callsign, kendaraan, dan kapan tiap unit dipakai.',
+  blurbEn:
+    'Callsigns, vehicles, and when each unit is used.',
   fleet: [
     {
       id: 'emergency',

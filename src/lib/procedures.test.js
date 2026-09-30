@@ -139,3 +139,87 @@ describe('resolveCategory', () => {
     expect(radioSection.steps[0].reused).toBe(true)
   })
 })
+
+describe('terjemahan Inggris', () => {
+  // Penerjemahan dikerjakan bertahap dan disengaja: yang tersering dipakai
+  // lebih dulu. Tes ini bukan untuk memaksa semuanya selesai, tapi untuk
+  // menjaga yang sudah selesai supaya tidak pelan-pelan bolong lagi.
+  const LENGKAP = ['field']
+
+  const copyable = (cat) =>
+    cat.sections.flatMap((s) => s.steps).filter((st) => isCopyable(st) && st.kind !== 'command' && st.kind !== 'anim')
+
+  it('setiap kategori, kelompok, dan simpul alur punya nama Inggris', () => {
+    // Ini rangka situs, bukan isi RP: ia harus lengkap walau penerjemahan
+    // barisnya masih bertahap, supaya sidebar tidak setengah Inggris.
+    for (const cat of CATEGORIES) {
+      expect(cat.nameEn, `${cat.id}.nameEn`).toBeTruthy()
+      expect(cat.blurbEn, `${cat.id}.blurbEn`).toBeTruthy()
+    }
+    for (const group of GROUPS) {
+      expect(group.nameEn, `kelompok ${group.id}`).toBeTruthy()
+      for (const sub of group.subgroups ?? []) {
+        expect(sub.nameEn, `subgroup ${group.id}/${sub.id}`).toBeTruthy()
+      }
+    }
+    for (const node of FLOW) expect(node.labelEn, `alur ${node.label}`).toBeTruthy()
+  })
+
+  it('kategori yang sudah selesai tetap utuh terjemahannya', () => {
+    for (const id of LENGKAP) {
+      const cat = resolveCategory(PROCEDURES.find((c) => c.id === id))
+      const bolong = copyable(cat).filter((st) => !st.en)
+      expect(bolong.map((st) => st.text), `${id} punya baris tanpa terjemahan`).toEqual([])
+    }
+  })
+
+  it('kategori yang sudah selesai menerjemahkan nama bagian dan blurb-nya', () => {
+    for (const id of LENGKAP) {
+      const cat = PROCEDURES.find((c) => c.id === id)
+      expect(cat.nameEn, `${id}.nameEn`).toBeTruthy()
+      expect(cat.blurbEn, `${id}.blurbEn`).toBeTruthy()
+      for (const section of cat.sections) {
+        expect(section.nameEn, `${id}#${section.id}.nameEn`).toBeTruthy()
+      }
+    }
+  })
+
+  it('terjemahan tidak sama persis dengan aslinya', () => {
+    for (const id of LENGKAP) {
+      const cat = resolveCategory(PROCEDURES.find((c) => c.id === id))
+      for (const st of copyable(cat)) {
+        if (st.en) expect(st.en, `${id}: "${st.text}"`).not.toBe(st.text)
+      }
+    }
+  })
+
+  it('setiap label percabangan yang diterjemahkan tetap menunjuk tujuan yang sama', () => {
+    for (const cat of PROCEDURES) {
+      for (const section of cat.sections) {
+        for (const step of section.steps) {
+          for (const branch of step.branches ?? []) {
+            if (branch.labelEn) expect(branch.to, `${cat.id}: ${branch.labelEn}`).toBeTruthy()
+          }
+        }
+      }
+    }
+  })
+
+  // Laporan cakupan, supaya sisa pekerjaannya kelihatan tanpa menghitung manual.
+  it('melaporkan cakupan terjemahan per kategori', () => {
+    const baris = []
+    let total = 0
+    let jadi = 0
+    for (const cat of PROCEDURES) {
+      const steps = copyable(resolveCategory(cat))
+      const n = steps.filter((st) => st.en).length
+      total += steps.length
+      jadi += n
+      baris.push(`${cat.id}: ${n}/${steps.length}`)
+    }
+    // Bukan assertion ketat — cuma menjaga hitungannya waras dan terbaca.
+    expect(total).toBeGreaterThan(400)
+    expect(jadi).toBeGreaterThan(0)
+    console.log(`Terjemahan: ${jadi}/${total} baris — ${baris.join(', ')}`)
+  })
+})

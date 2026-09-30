@@ -5,7 +5,10 @@ export default {
   id: 'deat',
   group: 'tkp',
   name: 'DEAT / Pendarahan',
+  nameEn: 'DEAT / Bleeding',
   blurb: 'Direct pressure → elevation → arterial pressure → tourniquet. Naik tingkat kalau darah belum berhenti.',
+  blurbEn:
+    'Direct pressure → elevation → arterial pressure → tourniquet. Step up if the bleeding has not stopped.',
   sections: [
     {
       id: 'direct-pressure',

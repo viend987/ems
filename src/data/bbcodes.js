@@ -10,8 +10,11 @@ export default {
   group: 'laporan',
   subgroup: 'general',
   name: 'BBCode Tags',
+  nameEn: 'BBCode Tags',
   blurb:
     'Seluruh tag BBCode yang dipakai forum LSFD, beserta fungsinya. Klik barisnya untuk menyalin tagnya — atau pakai tombolnya langsung di BBCode Builder.',
+  blurbEn:
+    'Every BBCode tag the LSFD forum uses, and what each one does. Click a row to copy the tag — or use the buttons in BBCode Builder instead.',
   tables: [
     {
       id: 'bbcode-text',

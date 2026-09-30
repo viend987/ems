@@ -4,7 +4,10 @@ export default {
   id: 'fracture',
   group: 'tkp',
   name: 'Patah Tulang',
+  nameEn: 'Fractures',
   blurb: 'Bidai sesuai letak dan jenis patahnya: triangular bandage, C-collar, vacuum splint, traction splint.',
+  blurbEn:
+    'Splinting to match where and what kind the break is: triangular bandage, C-collar, vacuum splint, traction splint.',
   sections: [
     {
       id: 'triangular',

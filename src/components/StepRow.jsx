@@ -1,5 +1,7 @@
 import { Component } from 'preact'
 import { copyText, isCopyable, prefixOf } from '../lib/copy.js'
+import { pick, stepText } from '../lib/lang.js'
+import { strings } from '../lib/strings.js'
 
 /**
  * Satu baris = satu teks siap salin. Nomor di kiri adalah penanda mata untuk
@@ -28,16 +30,18 @@ const TONE = {
   note: { edge: 'border-l-line', prefix: 'text-muted' },
 }
 
-function Note({ step, onGo }) {
+function Note({ step, onGo, lang }) {
   return (
     <div className="border-l-2 border-l-line bg-ink px-3 py-2.5 sm:px-4">
-      <p className="text-[11px] leading-relaxed text-muted sm:text-xs">{step.text}</p>
-      {step.branches && <Branches branches={step.branches} onGo={onGo} />}
+      <p className="text-[11px] leading-relaxed text-muted sm:text-xs">
+        {stepText(step, lang)}
+      </p>
+      {step.branches && <Branches branches={step.branches} onGo={onGo} lang={lang} />}
     </div>
   )
 }
 
-function Branches({ branches, onGo }) {
+function Branches({ branches, onGo, lang }) {
   return (
     <div className="mt-2 flex flex-wrap gap-1.5">
       {branches.map((branch) => (
@@ -47,28 +51,29 @@ function Branches({ branches, onGo }) {
           onClick={() => onGo(branch.to)}
           className="rounded-sm border border-line bg-panel px-2.5 py-1.5 text-[11px] text-dim hover:border-signal hover:text-signal"
         >
-          {branch.label}
+          {pick(branch, 'label', lang)}
         </button>
       ))}
     </div>
   )
 }
 
-function StepRowView({ step, rowKey, status, onCopy, onGo }) {
-  if (!isCopyable(step)) return <Note step={step} onGo={onGo} />
+function StepRowView({ step, rowKey, status, onCopy, onGo, lang }) {
+  const s = strings(lang)
+  if (!isCopyable(step)) return <Note step={step} onGo={onGo} lang={lang} />
 
   const tone = TONE[step.kind] ?? TONE.say
-  const text = copyText(step)
+  const text = copyText(step, lang)
   const prefix = prefixOf(step)
   const copied = status?.key === rowKey
-  const marker = copied ? (status.ok ? 'tersalin' : 'gagal') : (step.n ?? '·')
+  const marker = copied ? (status.ok ? s.copied : s.copyFailedShort) : (step.n ?? '·')
 
   return (
     <div className={`border-l-2 bg-panel ${tone.edge}`}>
       <button
         type="button"
         onClick={() => onCopy(rowKey, text)}
-        title="Klik untuk menyalin"
+        title={s.copyHint}
         className="flex w-full items-start gap-2.5 px-3 py-2.5 text-left hover:bg-raise sm:gap-4 sm:px-4"
       >
         <span
@@ -81,10 +86,14 @@ function StepRowView({ step, rowKey, status, onCopy, onGo }) {
 
         <span className="min-w-0 flex-1 text-[13.5px] leading-relaxed break-words sm:text-[13px]">
           {prefix && <span className={`${tone.prefix} mr-1.5`}>{prefix}</span>}
-          <span className="text-bone">{step.text}</span>
-          {step.label && <span className="ml-2 text-[11px] text-muted">({step.label})</span>}
-          {step.reused && <span className="ml-2 text-[11px] text-muted">ulang</span>}
-          {step.note && <span className="ml-2 text-[11px] text-muted">— {step.note}</span>}
+          <span className="text-bone">{stepText(step, lang)}</span>
+          {step.label && (
+            <span className="ml-2 text-[11px] text-muted">({pick(step, 'label', lang)})</span>
+          )}
+          {step.reused && <span className="ml-2 text-[11px] text-muted">{s.reused}</span>}
+          {step.note && (
+            <span className="ml-2 text-[11px] text-muted">— {pick(step, 'note', lang)}</span>
+          )}
         </span>
 
         {/* Di HP ikon ini tidak memberi tahu apa-apa — tidak ada hover di sana dan
@@ -96,7 +105,7 @@ function StepRowView({ step, rowKey, status, onCopy, onGo }) {
 
       {step.branches && (
         <div className="px-3 pb-2.5 pl-[3.125rem] sm:px-4 sm:pl-24">
-          <Branches branches={step.branches} onGo={onGo} />
+          <Branches branches={step.branches} onGo={onGo} lang={lang} />
         </div>
       )}
     </div>
@@ -117,6 +126,9 @@ export default class StepRow extends Component {
     if (
       prev.step !== next.step ||
       prev.rowKey !== next.rowKey ||
+      // Ganti bahasa mengubah teks barisnya, jadi wajib ikut dibandingkan —
+      // tanpa ini seluruh papan tetap berbahasa lama setelah tombol ditekan.
+      prev.lang !== next.lang ||
       prev.onCopy !== next.onCopy ||
       prev.onGo !== next.onGo
     ) {

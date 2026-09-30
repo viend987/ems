@@ -9,7 +9,10 @@ export default {
   id: 'hydrant',
   group: 'pemadam',
   name: 'Inspeksi Hydrant',
+  nameEn: 'Hydrant Inspection',
   blurb: 'Pemeriksaan rutin hydrant pillar: cap, aliran air, pelumasan, dan cat.',
+  blurbEn:
+    'Routine pillar-hydrant checks: caps, water flow, lubrication, and paint.',
   sections: [
     {
       id: 'alat-engine',

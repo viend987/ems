@@ -12,6 +12,9 @@ import SectionNav from './components/SectionNav.jsx'
 import UnitGallery from './components/UnitGallery.jsx'
 import { CATEGORIES, PROCEDURES } from './data/index.js'
 import { useCopy, useRoute, useTheme } from './hooks.js'
+import { useLang } from './hooks.js'
+import { pick } from './lib/lang.js'
+import { strings } from './lib/strings.js'
 import { isCopyable } from './lib/copy.js'
 import { allSteps, resolveCategory } from './lib/procedures.js'
 import { searchAll } from './lib/search.js'
@@ -26,11 +29,13 @@ export default function App() {
   const [route, go] = useRoute()
   const [status, copy] = useCopy()
   const [theme, toggleTheme] = useTheme()
+  const [lang, toggleLang] = useLang()
   const [query, setQuery] = useState('')
   const searchRef = useRef(null)
 
   const category = RESOLVED.get(route.category) ?? CATEGORIES.find((c) => c.id === route.category)
-  const hits = useMemo(() => searchAll(query), [query])
+  const hits = useMemo(() => searchAll(query, lang), [query, lang])
+  const s = strings(lang)
 
   // "/" memfokuskan pencarian, buat yang tangannya sudah hafal.
   useEffect(() => {
@@ -62,7 +67,7 @@ export default function App() {
     [go],
   )
 
-  const board = { active: route.category, onGo: goAndClear, query, onQuery: setQuery, searchRef }
+  const board = { active: route.category, onGo: goAndClear, query, onQuery: setQuery, searchRef, lang }
 
   // Di desktop papan kategori berdiri sendiri di kiri, setinggi layar sejak
   // puncak halaman, sementara pita alur dan kepala halaman ikut kolom kanan.
@@ -72,24 +77,39 @@ export default function App() {
       <Board variant="rail" {...board} />
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <FlowBar onGo={goAndClear} />
-        <Header stepCount={STEP_COUNT} theme={theme} onTheme={toggleTheme} />
+        <FlowBar onGo={goAndClear} lang={lang} />
+        <Header
+          stepCount={STEP_COUNT}
+          theme={theme}
+          onTheme={toggleTheme}
+          lang={lang}
+          onLang={toggleLang}
+        />
         <Board variant="grid" {...board} />
 
         <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">
           {query.trim() ? (
-            <SearchResults query={query} hits={hits} onGo={goAndClear} onClear={() => setQuery('')} />
+            <SearchResults
+              query={query}
+              hits={hits}
+              onGo={goAndClear}
+              onClear={() => setQuery('')}
+              lang={lang}
+            />
           ) : (
             <>
               <div className="mb-4">
-                <h2 className="slab text-2xl text-bone sm:text-3xl">{category.name}</h2>
-                <p className="mt-1 max-w-prose text-xs leading-relaxed text-dim">{category.blurb}</p>
+                <h2 className="slab text-2xl text-bone sm:text-3xl">{pick(category, 'name', lang)}</h2>
+                <p className="mt-1 max-w-prose text-xs leading-relaxed text-dim">
+                  {pick(category, 'blurb', lang)}
+                </p>
               </div>
 
               <SectionNav
                 categoryId={category.id}
                 sections={category.sections ?? category.tables ?? category.groups ?? category.fleet ?? []}
                 onGo={goAndClear}
+                lang={lang}
               />
 
               <div className="flex flex-col gap-8">
@@ -101,6 +121,7 @@ export default function App() {
                     status={status}
                     onCopy={copy}
                     onGo={goAndClear}
+                    lang={lang}
                   />
                 ))}
                 {category.tables?.map((table) => (
@@ -110,28 +131,29 @@ export default function App() {
                     table={table}
                     status={status}
                     onCopy={copy}
+                    lang={lang}
                   />
                 ))}
                 {category.groups?.map((group) => (
-                  <LinkList key={group.id} group={group} />
+                  <LinkList key={group.id} group={group} lang={lang} />
                 ))}
                 {category.fleet?.map((group) => (
-                  <UnitGallery key={group.id} categoryId={category.id} group={group} />
+                  <UnitGallery key={group.id} categoryId={category.id} group={group} lang={lang} />
                 ))}
-                {category.form === 'patrol' && <PatrolLog />}
-                {category.form === 'builder' && <BBCodeBuilder />}
+                {category.form === 'patrol' && <PatrolLog lang={lang} />}
+                {category.form === 'builder' && <BBCodeBuilder lang={lang} />}
               </div>
             </>
           )}
         </main>
 
         <footer className="border-t border-line px-4 py-6 text-center text-[11px] text-muted sm:px-6">
-          Fan-made tool by JGVRP Player. Based on LSFD Handbook Procedure + Some Adjustments· JGVRP
+          {s.footer}
         </footer>
       </div>
 
       <div aria-live="polite" className="sr-only">
-        {status ? (status.ok ? 'Teks tersalin ke clipboard.' : 'Gagal menyalin. Salin manual dari baris.') : ''}
+        {status ? (status.ok ? s.liveCopied : s.liveFailed) : ''}
       </div>
     </div>
   )

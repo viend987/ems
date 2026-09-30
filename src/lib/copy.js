@@ -3,7 +3,13 @@
  *
  * Aturannya satu: yang tersalin hanyalah teks yang benar-benar diketik ke game.
  * Nomor shortcut, label, dan catatan tampilan tidak pernah ikut.
+ *
+ * `lang` menentukan versi mana yang diambil. Ini satu-satunya tempat yang
+ * memutuskannya, jadi yang tampil di layar dan yang masuk clipboard tidak bisa
+ * berbeda bahasa.
  */
+
+import { stepText } from './lang.js'
 
 /**
  * Awalan chat per jenis langkah. Kosong berarti teksnya sudah lengkap sendiri.
@@ -36,14 +42,18 @@ export function prefixOf(step) {
   return PREFIXES[step.kind] ?? ''
 }
 
-export function copyText(step) {
+export function copyText(step, lang) {
   if (!isCopyable(step)) return ''
+  const text = stepText(step, lang)
   const prefix = prefixOf(step)
-  return prefix ? `${prefix} ${step.text}` : step.text
+  return prefix ? `${prefix} ${text}` : text
 }
 
-export function copySection(section) {
-  return section.steps.filter(isCopyable).map(copyText).join('\n')
+export function copySection(section, lang) {
+  return section.steps
+    .filter(isCopyable)
+    .map((step) => copyText(step, lang))
+    .join('\n')
 }
 
 /**

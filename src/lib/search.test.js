@@ -40,6 +40,26 @@ describe('searchAll', () => {
   })
 
   it('membatasi jumlah hasil', () => {
-    expect(searchAll('a', 5).length).toBeLessThanOrEqual(5)
+    expect(searchAll('a', 'id', 5).length).toBeLessThanOrEqual(5)
+  })
+})
+
+describe('pencarian per bahasa', () => {
+  it('mencari di teks Inggris saat bahasanya en', () => {
+    // "checks" cuma ada di versi Inggris; kalau indeksnya tidak ikut bahasa,
+    // hasilnya kosong.
+    const hits = searchAll('pinches the victim', 'en')
+    expect(hits.length).toBeGreaterThan(0)
+    for (const hit of hits) expect(hit.text.toLowerCase()).toContain('pinches the victim')
+  })
+
+  it('indeks tiap bahasa berdiri sendiri', () => {
+    // Batas hasil dinaikkan, kalau tidak dua-duanya kena plafon dan
+    // perbandingannya jadi tidak berarti.
+    const id = searchAll('mengambil', 'id', 500)
+    const en = searchAll('mengambil', 'en', 500)
+    expect(id.length).toBeGreaterThan(0)
+    // Baris yang sudah diterjemahkan tidak lagi memuat kata Indonesianya.
+    expect(en.length).toBeLessThan(id.length)
   })
 })

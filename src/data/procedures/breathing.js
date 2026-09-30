@@ -4,7 +4,10 @@ export default {
   id: 'breathing',
   group: 'tkp',
   name: 'Breathing',
+  nameEn: 'Breathing',
   blurb: 'Pemeriksaan laju pernapasan dan terapi oksigen. Setiap tindakan diikuti pemeriksaan ulang sebelum lanjut.',
+  blurbEn:
+    'Checking respiratory rate and giving oxygen therapy. Every action is followed by a re-check before moving on.',
   sections: [
     {
       id: 'breathing-ecg',

@@ -6,7 +6,10 @@ export default {
   id: 'mva',
   group: 'pemadam',
   name: 'MVA & Mobil Terbakar',
+  nameEn: 'MVA & Car Fires',
   blurb: 'Kecelakaan kendaraan: padamkan api, stabilkan mobil, matikan mesin, keluarkan korban.',
+  blurbEn:
+    'Vehicle collisions: put out the fire, stabilise the car, kill the engine, get the victim out.',
   sections: [
     {
       id: 'vehicle-identify',

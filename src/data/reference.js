@@ -5,7 +5,9 @@ export const ANIMS = {
   id: 'anims',
   group: 'referensi',
   name: 'Stok Anim',
+  nameEn: 'Animations',
   blurb: 'Animasi yang kepakai di sepanjang prosedur.',
+  blurbEn: 'The animations used throughout the procedures.',
   tables: [
     {
       id: 'anim-medis',
@@ -53,7 +55,9 @@ export const COMMANDS = {
   id: 'commands',
   group: 'referensi',
   name: 'Command Game',
+  nameEn: 'Game Commands',
   blurb: 'Command mekanik server, bukan narasi RP.',
+  blurbEn: 'Server commands, not RP narration.',
   tables: [
     {
       id: 'cmd-korban',
@@ -116,7 +120,10 @@ export const CODES = {
   id: 'codes',
   group: 'referensi',
   name: 'Kamus Kode',
+  nameEn: 'Code Dictionary',
   blurb: 'Arti 10-code, code, status, kategori, dan triage. Dari Field Academy Handbook.',
+  blurbEn:
+    'What the 10-codes, codes, statuses, categories and triage levels mean. From the Field Academy Handbook.',
   tables: [
     {
       id: 'ten-codes',

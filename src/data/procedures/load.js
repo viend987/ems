@@ -4,7 +4,10 @@ export default {
   id: 'load',
   group: 'transport',
   name: 'Patient Load',
+  nameEn: 'Patient Load',
   blurb: 'Memindahkan korban ke gurney dan memuatnya ke unit, lalu lapor radio.',
+  blurbEn:
+    'Moving the victim onto the gurney and into the unit, then the radio report.',
   sections: [
     {
       id: 'load',

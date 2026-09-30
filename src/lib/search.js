@@ -2,6 +2,7 @@ import { PROCEDURES } from '../data/index.js'
 import { REFERENCE } from '../data/reference.js'
 import UNITS from '../data/units.js'
 import { copyText } from './copy.js'
+import { pick, stepText } from './lang.js'
 import { resolveCategory } from './procedures.js'
 
 /**
@@ -10,7 +11,7 @@ import { resolveCategory } from './procedures.js'
  * datar yang dibangun sekali saat modul dimuat.
  */
 
-function buildIndex() {
+function buildIndex(lang) {
   const entries = []
 
   for (const category of PROCEDURES.map((c) => resolveCategory(c))) {
@@ -20,10 +21,10 @@ function buildIndex() {
           kind: step.kind,
           n: step.n,
           label: step.label,
-          text: copyText(step) || step.text,
+          text: copyText(step, lang) || stepText(step, lang),
           categoryId: category.id,
-          categoryName: category.name,
-          sectionName: section.name,
+          categoryName: pick(category, 'name', lang),
+          sectionName: pick(section, 'name', lang),
           to: `${category.id}#${section.id}`,
         })
       }
@@ -35,11 +36,11 @@ function buildIndex() {
       for (const row of table.rows) {
         entries.push({
           kind: 'reference',
-          text: `${row.code} — ${row.desc}`,
+          text: `${row.code} — ${pick(row, 'desc', lang)}`,
           code: row.code,
           categoryId: category.id,
-          categoryName: category.name,
-          sectionName: table.name,
+          categoryName: pick(category, 'name', lang),
+          sectionName: pick(table, 'name', lang),
           to: `${category.id}#${table.id}`,
         })
       }
@@ -50,10 +51,10 @@ function buildIndex() {
     for (const unit of group.units) {
       entries.push({
         kind: 'reference',
-        text: `${unit.callsign} (${unit.vehicle}) — ${unit.desc}`,
+        text: `${unit.callsign} (${unit.vehicle}) — ${pick(unit, 'desc', lang)}`,
         categoryId: UNITS.id,
-        categoryName: UNITS.name,
-        sectionName: group.name,
+        categoryName: pick(UNITS, 'name', lang),
+        sectionName: pick(group, 'name', lang),
         to: `${UNITS.id}#${group.id}`,
       })
     }
@@ -73,20 +74,23 @@ function buildIndex() {
 
 // Dibangun saat pertama kali ada yang mencari, bukan saat halaman dibuka —
 // kebanyakan kunjungan tidak pernah menyentuh kolom cari sama sekali.
-let INDEX = null
+// Tiap bahasa punya indeksnya sendiri, dan yang dibangun hanya yang benar-benar
+// dipakai: yang tidak pernah berganti bahasa cuma bayar satu.
+const INDEX = { id: null, en: null }
 
-export function searchAll(query, limit = 40) {
+export function searchAll(query, lang = 'id', limit = 40) {
   const q = query.trim().toLowerCase()
   if (!q) return []
 
-  INDEX ??= buildIndex()
+  const key = lang === 'en' ? 'en' : 'id'
+  INDEX[key] ??= buildIndex(key)
 
   // "/71" dan "71" sama-sama berarti cari langkah bernomor 71.
   const asNumber = Number(q.replace(/^\//, ''))
   const numeric = Number.isInteger(asNumber) && q.replace(/^\//, '') !== ''
 
   const hits = []
-  for (const entry of INDEX) {
+  for (const entry of INDEX[key]) {
     if ((numeric && entry.n === asNumber) || entry.haystack.includes(q)) hits.push(entry)
     if (hits.length >= limit) break
   }
