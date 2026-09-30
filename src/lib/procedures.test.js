@@ -160,6 +160,8 @@ describe('terjemahan Inggris', () => {
     'coroner',
     'mva',
     'vertical',
+    'hydrant',
+    'blood',
   ]
 
   // Yang butuh versi Inggris: baris yang diketik sebagai narasi atau ucapan.
