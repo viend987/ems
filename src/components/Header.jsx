@@ -1,7 +1,10 @@
+import Icon from './Icon.jsx'
 import logoAvif from '../assets/lsfd.avif'
 import logoWebp from '../assets/lsfd.webp'
 
-export default function Header({ stepCount }) {
+export default function Header({ stepCount, theme, onTheme }) {
+  const gelap = theme === 'dark'
+
   return (
     <header className="border-b border-line">
       <div className="mx-auto flex max-w-[100rem] items-center gap-4 px-4 py-5 sm:gap-6 sm:px-6 lg:px-8">
@@ -24,8 +27,24 @@ export default function Header({ stepCount }) {
             Panduan RP ketik LSFD di JGVRP. Klik barisnya, teksnya masuk clipboard.
           </p>
         </div>
-        <div className="hidden shrink-0 text-right text-[11px] leading-relaxed text-muted lg:block">
-          <div className="text-signal">{stepCount} baris siap salin</div>
+        {/* Tombol tema duduk di pojok kanan atas: sudah di atas seperti yang
+            diminta, dan tidak menambah elemen melayang. Di layar kecil hanya
+            tombolnya yang tampil, hitungan langkahnya yang disembunyikan. */}
+        <div className="flex shrink-0 items-center gap-3">
+          <div className="hidden text-right text-[11px] leading-relaxed text-muted lg:block">
+            <div className="text-signal">{stepCount} baris siap salin</div>
+          </div>
+
+          <button
+            type="button"
+            onClick={onTheme}
+            title={gelap ? 'Ganti ke tema terang' : 'Ganti ke tema gelap'}
+            aria-label={gelap ? 'Ganti ke tema terang' : 'Ganti ke tema gelap'}
+            aria-pressed={gelap}
+            className="flex size-9 items-center justify-center rounded-sm border border-line bg-panel text-dim hover:border-alarm hover:text-bone"
+          >
+            <Icon name={gelap ? 'sun' : 'moon'} className="size-[18px]" />
+          </button>
         </div>
       </div>
     </header>

@@ -11,7 +11,7 @@ import SearchResults from './components/SearchResults.jsx'
 import SectionNav from './components/SectionNav.jsx'
 import UnitGallery from './components/UnitGallery.jsx'
 import { CATEGORIES, PROCEDURES } from './data/index.js'
-import { useCopy, useRoute } from './hooks.js'
+import { useCopy, useRoute, useTheme } from './hooks.js'
 import { isCopyable } from './lib/copy.js'
 import { allSteps, resolveCategory } from './lib/procedures.js'
 import { searchAll } from './lib/search.js'
@@ -25,6 +25,7 @@ const STEP_COUNT = [...allSteps([...RESOLVED.values()])].filter(isCopyable).leng
 export default function App() {
   const [route, go] = useRoute()
   const [status, copy] = useCopy()
+  const [theme, toggleTheme] = useTheme()
   const [query, setQuery] = useState('')
   const searchRef = useRef(null)
 
@@ -72,7 +73,7 @@ export default function App() {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <FlowBar onGo={goAndClear} />
-        <Header stepCount={STEP_COUNT} />
+        <Header stepCount={STEP_COUNT} theme={theme} onTheme={toggleTheme} />
         <Board variant="grid" {...board} />
 
         <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">

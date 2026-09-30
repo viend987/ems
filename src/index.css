@@ -149,6 +149,49 @@
    dan font sistem sudah punya huruf tebal sendiri, sedangkan subset font situs
    ini hanya membawa ketebalan 400. Baris baru dipertahankan apa adanya karena
    di forum pun setiap enter jadi baris baru. */
+/* Tema gelap. Hanya token yang didefinisikan ulang — tidak ada satu pun
+   komponen yang perlu tahu tema apa yang aktif.
+
+   Aksen di sini BUKAN nilai tema terang: merah muda, ungu, biru, oranye, dan
+   kuning versi pekat itu dipilih supaya lolos kontras di atas putih, dan di
+   atas hitam jadi kusam. Jadi tiap kanal chat punya nilai terangnya sendiri. */
+:root {
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --color-ink: #0a0a0b;
+  --color-panel: #121215;
+  --color-raise: #16161a;
+  --color-line: #26262c;
+  --color-muted: #87878f; /* diterangkan sampai lolos AA di atas --color-panel */
+  --color-dim: #a6a6ae;
+  --color-bone: #ededef;
+
+  --color-alarm: #ff3b30;
+  --color-signal: #ffb800;
+
+  --color-chat-me: #ff7aa8; /* /me — merah muda */
+  --color-chat-do: #c79bff; /* /do — ungu */
+  --color-chat-radio: #8fb8ff; /* /r — biru */
+  --color-chat-dept: #ffa357; /* /d — oranye */
+  --color-chat-shout: #ffd24d; /* /s — kuning */
+  --color-chat-cmd: #5fd3a0; /* command mekanik — hijau */
+  --color-chat-wt: #b9d94a; /* /wt walkie-talkie — hijau zaitun */
+  --color-chat-anim: #5ce0e0; /* nama anim — toska */
+
+  --color-calm: #8fb8ff;
+  --color-mech: #5fd3a0;
+  --color-anim: #c79bff;
+
+  --color-highlight: #ffd24d;
+
+  --color-scroll: #2e2e36;
+  --color-scroll-hover: #55555f;
+}
+
 .bbcode {
   font-family: ui-sans-serif, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   white-space: pre-wrap;
@@ -156,6 +199,9 @@
   font-size: 12.5px;
   line-height: 1.5;
   color: #111;
+  /* Latarnya selalu putih, juga saat tema gelap: yang ditiru adalah halaman
+     forum. Tanpa ini, teks #111 akan jatuh di atas permukaan gelap. */
+  background: #ffffff;
 }
 
 .bbcode table {

@@ -279,11 +279,27 @@ what is broadcast, `signal` yellow marks what the character does, and `calm`/`me
 `/do` questions, server commands, and animation names. `.slab` is the Saira Condensed heading
 treatment; reuse it instead of restyling headings inline.
 
-The theme is light. Token *names* are surface-neutral (`ink` is the page, `panel` is a card) so a
-theme change stays in `@theme` — components never name a literal color. The accent values are the
-darkened variants: the bright yellow/green/purple that read well on black fail contrast on white, so
-if you reintroduce a dark surface anywhere, those accents need their own values rather than reuse.
-`highlight` is the one bright yellow, and it is fill-only — never use it as text color.
+There are **two themes, and light is the default** — deliberately not following
+`prefers-color-scheme`, because the ask was for light by default, so an OS setting must not change it
+quietly. `src/lib/theme.js` owns the logic (`readTheme`, `applyTheme`, `nextTheme`), `useTheme()` in
+`hooks.js` wires it, and the button lives in `Header.jsx` at the top right. The theme is a
+`data-theme` attribute on `<html>`; the dark palette **only redefines `--color-*` tokens** in
+`index.css`, so no component knows which theme is on and adding a theme touches no component.
+
+Token *names* are surface-neutral (`ink` is the page, `panel` is a card) so a theme change stays in
+CSS — components never name a literal color. **The dark accents are their own values, not the light
+ones reused**: the pink/purple/blue/orange that pass contrast on white go muddy on black. Every
+channel colour and `muted` was measured against `--color-panel` in a real browser; all land between
+5.25 and 12.98, above AA. `muted` needed lightening to `#87878f` to clear 4.5. `highlight` is the one
+bright yellow, and it is fill-only — never use it as text color.
+
+Two details that are easy to undo by accident:
+- **`.bbcode` sets an explicit white background.** Its text is fixed at `#111` because it imitates a
+  forum page, so on the dark theme it would otherwise be dark-on-dark. The preview stays a white
+  sheet in both themes on purpose — that is what the forum looks like.
+- **`index.html` carries a tiny inline script** that sets `data-theme` before the bundle runs, so a
+  dark-theme user gets no white flash. It also updates `<meta name="theme-color">`, which is why
+  `applyTheme()` does the same thing.
 
 Fonts are self-hosted and **subset to the glyphs actually used** by `npm run fonts`
 (`scripts/fonts.mjs`, via `subset-font`), committed to `src/assets/fonts/` as woff2 only, and declared

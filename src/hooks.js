@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
 import { CATEGORIES, DEFAULT_CATEGORY } from './data/index.js'
 import { writeClipboard } from './lib/copy.js'
+import { applyTheme, nextTheme, readTheme, writeTheme } from './lib/theme.js'
 
 const VALID = new Set(CATEGORIES.map((c) => c.id))
 const STORE_KEY = 'lsfd:last-category'
@@ -86,4 +87,22 @@ export function useCopy(holdMs = 1100) {
   )
 
   return [status, copy]
+}
+
+/**
+ * Tema terang/gelap. Nilainya dipasang sebagai `data-theme` di `<html>`, jadi
+ * yang berubah cuma token warna di CSS — tidak ada komponen yang menerima prop
+ * tema selain tombolnya sendiri.
+ */
+export function useTheme() {
+  const [theme, setTheme] = useState(readTheme)
+
+  useEffect(() => {
+    applyTheme(theme)
+    writeTheme(theme)
+  }, [theme])
+
+  const toggle = useCallback(() => setTheme((t) => nextTheme(t)), [])
+
+  return [theme, toggle]
 }
