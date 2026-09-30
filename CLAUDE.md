@@ -90,6 +90,64 @@ In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobr
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
 `/do` step.
 
+### Two languages
+
+The site is bilingual, ID/EN, default Indonesian. The point is not localisation for
+its own sake: RP partners on JGVRP sometimes speak English, and answering an English
+scene with Indonesian lines reads wrong. `src/lib/lang.js` owns the state, the button
+sits beside the theme button in the header, and the value goes on `<html lang>`.
+
+**Every English line is written by hand. Do not reach for a translation package.**
+API-backed ones need a server this site does not have; dictionary ones outweigh the
+whole bundle. More to the point, machine output is wrong exactly where it matters —
+RA Unit, Engine, RPLY, Code 3, the 10-codes, and `/me` lines that must read as
+third-person narration. **So a new RP line is not finished until its English twin is
+written.**
+
+Style rules for the English:
+- `/me` is **third person singular, no subject**: in game it lands behind the
+  character name, so "reaches for the ILS Bag", never "I reach for the ILS Bag".
+- `/do` stays a question, and the parenthetical hints keep their shape:
+  `(12 - 20 is normal)`.
+- Server nouns are never translated: RA Unit, Engine, ILS Bag, PBH, DFS, OCD, N-Gloves,
+  CRoC, NRB. "korban" becomes "the victim"; "unit kendaraan" becomes "the unit".
+- British spelling, to match the forum's register: centre, colour, stabilise, authorisation.
+
+Where the English lives:
+- **Step text uses `en`** — that one field is written 500-odd times, so it stays short,
+  and `stepText()` reads it.
+- Everything else follows `<field>En` through `pick()`: `nameEn`, `blurbEn`, `noteEn`,
+  `labelEn`, `descEn`.
+- A missing translation falls back to Indonesian, so the page stays whole while the
+  work proceeds in batches. Nothing renders as `undefined`.
+- **Radio channels carry no `en`.** On this server `/r`, `/d`, `/wt`, `/ro` and `/od`
+  traffic is already written in English, so those kinds are out of the coverage
+  denominator. The eleven that *are* Indonesian (the `/wt` chat in `structure.js`, the
+  Vertical Rescue exchange, one `/ro`) are guarded by their own test, which fails if
+  that number grows.
+- **UI strings are in `src/lib/strings.js`**, two flat objects with identical keys.
+  `strings.test.js` fails on a key missing from one language, on a key whose shape
+  differs (string on one side, function on the other), and if too many keys are
+  identical in both.
+
+`copyText()` is the only place that decides which language is copied, so the screen and
+the clipboard cannot disagree. The search index is built per language, and only for the
+language actually used. **`StepRow` compares `lang` in `shouldComponentUpdate`** — leave
+it out and the board keeps the old language after the button is pressed.
+
+**Translation is staged on purpose, most-used first.** `procedures.test.js` prints a
+coverage report per category and fails if a category listed in its `LENGKAP` array loses
+a line. Batch 1 is done: `field`, `deat`, `airway`, `breathing`, `circulation`, `load`
+— 161/509 lines. When you finish a category, add its id to `LENGKAP`.
+
+A step reached by `ref` is translated **at its definition site**, so a category can show
+less than 100% until the file that defines its shared steps is translated too — that is
+why `load` sat at 2/6 before `radio.js`.
+
+**The Laporan group is excluded from all of this.** Its labels follow the language, but
+the BBCode it produces — the Patrol Log template and every tag name — is never
+translated.
+
 ### BBCode Builder
 
 `#/builder` (subgroup `general` in Laporan) is a free-form BBCode editor: a toolbar that inserts

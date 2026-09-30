@@ -144,10 +144,39 @@ describe('terjemahan Inggris', () => {
   // Penerjemahan dikerjakan bertahap dan disengaja: yang tersering dipakai
   // lebih dulu. Tes ini bukan untuk memaksa semuanya selesai, tapi untuk
   // menjaga yang sudah selesai supaya tidak pelan-pelan bolong lagi.
-  const LENGKAP = ['field']
+  const LENGKAP = ['field', 'deat', 'airway', 'breathing', 'circulation', 'load']
+
+  // Yang butuh versi Inggris: baris yang diketik sebagai narasi atau ucapan.
+  // Dikecualikan:
+  // - `command` dan `anim` — sintaks game, bukan bahasa.
+  // - kanal radio — di server ini lalu lintas radio memang ditulis Inggris sejak
+  //   awal ("~ to OCD. Requesting 10-70 ILS Unit at 10-20 Legion."), jadi tidak
+  //   ada yang perlu diterjemahkan. Yang Indonesia di antaranya dijaga tes
+  //   terpisah di bawah.
+  const RADIO = new Set(['radio', 'deptradio', 'wt', 'ooc', 'deptooc'])
+  const SKIP = new Set(['command', 'anim', ...RADIO])
 
   const copyable = (cat) =>
-    cat.sections.flatMap((s) => s.steps).filter((st) => isCopyable(st) && st.kind !== 'command' && st.kind !== 'anim')
+    cat.sections.flatMap((s) => s.steps).filter((st) => isCopyable(st) && !SKIP.has(st.kind))
+
+  it('baris radio yang masih berbahasa Indonesia punya versi Inggris', () => {
+    // Heuristik, dan memang boleh: kalau ia salah menuduh, yang terjadi cuma
+    // diminta menulis terjemahan untuk baris yang sudah Inggris.
+    const indonesia =
+      /(dan|yang|untuk|dengan|korban|sudah|tidak|saya|kami|menuju|lokasi|mohon|segera|siap|udah|nunggu|nemu|lagi|bersiap|silahkan)/i
+    const bolong = []
+    for (const cat of PROCEDURES) {
+      for (const sec of cat.sections) {
+        for (const st of sec.steps) {
+          if (!RADIO.has(st.kind) || st.en) continue
+          if (indonesia.test(st.text)) bolong.push(`${cat.id}#${sec.id}: ${st.text.slice(0, 50)}`)
+        }
+      }
+    }
+    // Sisa yang belum dikerjakan masih boleh ada selama penerjemahan bertahap,
+    // tapi jumlahnya tidak boleh bertambah.
+    expect(bolong.length, bolong.join(' | ')).toBeLessThanOrEqual(11)
+  })
 
   it('setiap kategori, kelompok, dan simpul alur punya nama Inggris', () => {
     // Ini rangka situs, bukan isi RP: ia harus lengkap walau penerjemahan
