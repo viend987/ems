@@ -29,10 +29,8 @@ export default {
       name: 'Pager',
       nameEn: 'Pager',
       steps: [
-        { kind: 'say', label: 'Positif',
-        labelEn: 'Positive', text: '*PAGER* Positive from Fire Alrik.', alreadyEn: true },
-        { kind: 'say', label: 'Negatif',
-        labelEn: 'Negative', text: '*PAGER* Negative from Fire Alrik.', alreadyEn: true },
+        { kind: 'say', label: 'Positif', labelEn: 'Positive', text: '*PAGER* Positive from Fire Alrik.', alreadyEn: true },
+        { kind: 'say', label: 'Negatif', labelEn: 'Negative', text: '*PAGER* Negative from Fire Alrik.', alreadyEn: true },
         {
           kind: 'ooc',
           label: 'Alasan negatif',
@@ -47,10 +45,8 @@ export default {
       name: 'Default Radio',
       nameEn: 'Default Radio',
       steps: [
-        { n: 21, kind: 'radio', label: 'On Duty',
-        labelEn: 'On Duty', text: 'Fire Alrik reporting Status-2 on 10-20 DFS.' },
-        { n: 22, kind: 'radio', label: 'Off Duty',
-        labelEn: 'Off Duty', text: 'Fire Alrik take Status-1 on 10-20 DFS.' },
+        { n: 21, kind: 'radio', label: 'On Duty', labelEn: 'On Duty', text: 'Fire Alrik reporting Status-2 on 10-20 DFS.' },
+        { n: 22, kind: 'radio', label: 'Off Duty', labelEn: 'Off Duty', text: 'Fire Alrik take Status-1 on 10-20 DFS.' },
         {
           n: 23,
           kind: 'radio',
@@ -87,10 +83,8 @@ export default {
       nameEn: 'Called by OCD',
       steps: [
         { kind: 'note', text: 'OCD memanggil: "MAIN to Field unit, 10-21 please."', en: 'OCD calls: "MAIN to Field unit, 10-21 please."' },
-        { kind: 'radio', label: 'Sedang patroli',
-        labelEn: 'On patrol', text: '~ is on Status-4 10-20 Legion.' },
-        { kind: 'radio', label: 'Sedang break',
-        labelEn: 'On break', text: '~ is on Status-3 10-20 Legion.' },
+        { kind: 'radio', label: 'Sedang patroli', labelEn: 'On patrol', text: '~ is on Status-4 10-20 Legion.' },
+        { kind: 'radio', label: 'Sedang break', labelEn: 'On break', text: '~ is on Status-3 10-20 Legion.' },
         {
           kind: 'radio',
           label: 'Ambil panggilan',
@@ -104,8 +98,7 @@ export default {
       name: 'Di TKP',
       nameEn: 'On scene',
       steps: [
-        { id: 'on-location', kind: 'radio', label: 'Sampai lokasi',
-        labelEn: 'On scene', text: '~ Status-6 on 10-20 Legion.' },
+        { id: 'on-location', kind: 'radio', label: 'Sampai lokasi', labelEn: 'On scene', text: '~ Status-6 on 10-20 Legion.' },
         {
           id: 'loaded-victim-fracture',
           n: 31,
@@ -138,8 +131,7 @@ export default {
           labelEn: 'Suspect loaded — fracture',
           text: '~ Status-7e, bring one suspect down with Fracture, please prepare ER. Now heading to 10-20 PBH with ETA 4 Minutes.',
         },
-        { id: 'on-hospital', n: 35, kind: 'radio', label: 'Sampai rumah sakit',
-        labelEn: 'At the hospital', text: '~ Status-8 10-20 PBH.' },
+        { id: 'on-hospital', n: 35, kind: 'radio', label: 'Sampai rumah sakit', labelEn: 'At the hospital', text: '~ Status-8 10-20 PBH.' },
         {
           id: 'rtb-from-scene',
           n: 36,
@@ -169,8 +161,7 @@ export default {
       name: 'Jarang dipakai',
       nameEn: 'Rarely used',
       steps: [
-        { kind: 'deptradio', label: 'Radio ke departemen lain (1)',
-        labelEn: 'Radio to another department (1)', text: 'Fire @ to LSPD/LSSD.' },
+        { kind: 'deptradio', label: 'Radio ke departemen lain (1)', labelEn: 'Radio to another department (1)', text: 'Fire @ to LSPD/LSSD.' },
         {
           kind: 'deptradio',
           label: 'Radio ke departemen lain (2)',

@@ -158,6 +158,8 @@ describe('terjemahan Inggris', () => {
     'radio',
     'ocd',
     'coroner',
+    'mva',
+    'vertical',
   ]
 
   // Yang butuh versi Inggris: baris yang diketik sebagai narasi atau ucapan.
