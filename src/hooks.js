@@ -35,18 +35,36 @@ function parseHash() {
 /**
  * Kategori aktif disimpan di hash URL supaya tautan bisa dibagikan dan tombol
  * back peramban bekerja. Tanpa pustaka router — cukup hashchange.
+ *
+ * `nonce` naik satu di setiap perpindahan, dan itu bukan hiasan: melompat ke
+ * sebuah bagian adalah *kejadian*, bukan keadaan. Delapan puluh percabangan di
+ * situs ini menunjuk ke bagian di kategorinya sendiri, jadi tanpa penanda yang
+ * selalu berubah, menekan tombol yang menuju bagian yang sedang aktif — atau
+ * menekan tombol yang sama dua kali — tidak mengubah satu nilai pun, dan
+ * halaman diam. Di produksi itu terbaca sebagai tombol yang tidak bisa diklik.
  */
 export function useRoute() {
   const [route, setRoute] = useState(() => {
     const fromHash = parseHash()
-    if (fromHash.category) return fromHash
-    return { category: readStore() ?? DEFAULT_CATEGORY, section: null }
+    const base = fromHash.category ? fromHash : { category: readStore() ?? DEFAULT_CATEGORY, section: null }
+    return { ...base, nonce: 0 }
   })
+
+  // Hash yang kita tulis sendiri lewat `go`. Menulisnya memicu `hashchange`
+  // juga, dan tanpa penjaga ini satu klik akan melompat dua kali: sekali dari
+  // `go`, sekali dari gemanya. Yang disaring hanya gema itu — tombol back dan
+  // forward peramban membawa hash lain, jadi tetap lolos.
+  const own = useRef(null)
 
   useEffect(() => {
     const onChange = () => {
+      if (own.current === location.hash) {
+        own.current = null
+        return
+      }
+      own.current = null
       const next = parseHash()
-      if (next.category) setRoute(next)
+      if (next.category) setRoute((prev) => ({ ...next, nonce: prev.nonce + 1 }))
     }
     addEventListener('hashchange', onChange)
     return () => removeEventListener('hashchange', onChange)
@@ -59,8 +77,10 @@ export function useRoute() {
   const go = useCallback((to) => {
     const [category, section] = String(to).split('#')
     if (!VALID.has(category)) return
-    location.hash = section ? `#/${category}#${section}` : `#/${category}`
-    setRoute({ category, section: section || null })
+    const hash = section ? `#/${category}#${section}` : `#/${category}`
+    own.current = hash
+    location.hash = hash
+    setRoute((prev) => ({ category, section: section || null, nonce: prev.nonce + 1 }))
   }, [])
 
   return [route, go]

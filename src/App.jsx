@@ -51,12 +51,28 @@ export default function App() {
     return () => removeEventListener('keydown', onKey)
   }, [])
 
-  // Loncat ke bagian yang dituju percabangan atau pita alur.
+  // Loncat ke bagian yang dituju percabangan atau pita alur. `route.nonce` ikut
+  // jadi kebergantungan supaya perpindahan ke bagian yang sedang aktif pun tetap
+  // melompat — lihat catatan di useRoute.
+  //
+  // Perpindahan tanpa bagian tujuan — papan kategori — melompat ke puncak isi.
+  // Tanpa itu, membuka kategori lain saat halaman tergeser jauh ke bawah menaruh
+  // judulnya di atas layar dan yang terlihat justru tengah-tengah kategori baru.
+  // Yang dituju puncak `main`, bukan puncak dokumen, karena di bawah `lg` papan
+  // kategori adalah grid setinggi layar di atas isi: mendarat di dokumen paling
+  // atas berarti mendarat di menu yang baru saja diketuk. Di `lg` ke atas papan
+  // itu jadi kolom sendiri dan scroll-margin `main` cukup besar untuk menjepit
+  // lompatan ke angka nol, jadi kepala halaman dan pita alur tetap terlihat.
+  // Pada muat pertama (`nonce` 0) posisinya tidak diusik, supaya pemulihan gulir
+  // peramban setelah reload tetap bekerja.
   useEffect(() => {
-    if (!route.section) return
-    const el = document.getElementById(`${route.category}-${route.section}`)
-    el?.scrollIntoView({ block: 'start' })
-  }, [route.category, route.section])
+    if (route.section) {
+      const el = document.getElementById(`${route.category}-${route.section}`)
+      el?.scrollIntoView({ block: 'start' })
+    } else if (route.nonce > 0) {
+      document.getElementById('isi')?.scrollIntoView({ block: 'start' })
+    }
+  }, [route.category, route.section, route.nonce])
 
   // Stabil antar-render: StepRow melewatkan render ulang hanya kalau propnya sama.
   const goAndClear = useCallback(
@@ -87,7 +103,7 @@ export default function App() {
         />
         <Board variant="grid" {...board} />
 
-        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6 lg:px-8">
+        <main id="isi" className="min-w-0 flex-1 scroll-mt-4 px-4 py-6 sm:px-6 lg:scroll-mt-96 lg:px-8">
           {query.trim() ? (
             <SearchResults
               query={query}

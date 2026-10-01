@@ -314,6 +314,17 @@ in a real browser to land exactly on every section, including cross-category flo
 section) — no router library. The last category is mirrored to `localStorage` as the landing target;
 every storage access is wrapped in `try/catch` and the page renders correctly without it.
 
+**`route` carries a `nonce` that rises on every navigation, and the jump effect in `App.jsx` depends
+on it.** Jumping to a section is an *event*, not a state: 80 of the 149 branches point at a section
+inside their own category, so without a value that always changes, pressing a branch that targets the
+section already in `route` — or pressing the same branch twice — changes nothing and the page sits
+still. That was a production bug; `route.test.jsx` pins it. For the same reason `go()` records the
+hash it wrote and the `hashchange` listener skips its own echo, otherwise one click jumps twice.
+A navigation with **no** section jumps to the top of `main` (`id="isi"`), not the top of the document:
+below `lg` the category board is a full-height grid above the content, so landing at document top
+lands on the menu that was just tapped. `main`'s `lg:scroll-mt-96` is larger than its offset (150px),
+which clamps the desktop jump to zero and keeps the header and flow bar in view.
+
 ### Layout
 
 The page shell is `max-w-[100rem]` (1600px), widened from 1280px because the gutters ate too much
