@@ -162,6 +162,8 @@ describe('terjemahan Inggris', () => {
     'vertical',
     'hydrant',
     'blood',
+    'structure',
+    'animals',
   ]
 
   // Yang butuh versi Inggris: baris yang diketik sebagai narasi atau ucapan.
@@ -191,9 +193,10 @@ describe('terjemahan Inggris', () => {
         }
       }
     }
-    // Sisa yang belum dikerjakan masih boleh ada selama penerjemahan bertahap,
-    // tapi jumlahnya tidak boleh bertambah.
-    expect(bolong.length, bolong.join(' | ')).toBeLessThanOrEqual(11)
+    // Penerjemahan sudah tuntas, jadi yang tersisa cuma enam obrolan /wt di
+    // structure.js yang memang dibiarkan Indonesia. Batasnya dikencangkan ke
+    // angka itu supaya baris Indonesia baru di kanal radio tidak lolos diam-diam.
+    expect(bolong.length, bolong.join(' | ')).toBeLessThanOrEqual(6)
   })
 
   it('setiap kategori, kelompok, dan simpul alur punya nama Inggris', () => {

@@ -120,11 +120,14 @@ Where the English lives:
   `labelEn`, `descEn`.
 - A missing translation falls back to Indonesian, so the page stays whole while the
   work proceeds in batches. Nothing renders as `undefined`.
-- **Radio channels carry no `en`.** On this server `/r`, `/d`, `/wt`, `/ro` and `/od`
-  traffic is already written in English, so those kinds are out of the coverage
-  denominator. The eleven that *are* Indonesian (the `/wt` chat in `structure.js`, the
-  Vertical Rescue exchange, one `/ro`) are guarded by their own test, which fails if
-  that number grows.
+- **Radio channels are out of the coverage denominator.** On this server `/r`, `/d`,
+  `/wt`, `/ro` and `/od` traffic is already written in English, so there is normally
+  nothing to translate. The exceptions were handled two different ways: the Vertical
+  Rescue exchange and one `/ro` in `radio.js` were written half in Indonesian, so they
+  *did* get an `en`; the six `/wt` lines in `structure.js` stay Indonesian, because
+  that casual on-scene chatter is the register the user asked for. A test counts the
+  Indonesian radio lines left without an `en` and fails above six, so a new one cannot
+  slip in.
 - **UI strings are in `src/lib/strings.js`**, two flat objects with identical keys.
   `strings.test.js` fails on a key missing from one language, on a key whose shape
   differs (string on one side, function on the other), and if too many keys are
@@ -135,10 +138,13 @@ the clipboard cannot disagree. The search index is built per language, and only 
 language actually used. **`StepRow` compares `lang` in `shouldComponentUpdate`** — leave
 it out and the board keeps the old language after the button is pressed.
 
-**Translation is staged on purpose, most-used first.** `procedures.test.js` prints a
-coverage report per category and fails if a category listed in its `LENGKAP` array loses
-a line. Batch 1 is done: `field`, `deat`, `airway`, `breathing`, `circulation`, `load`
-— 161/509 lines. When you finish a category, add its id to `LENGKAP`.
+**Translation is complete: 509/509 lines, every category in `LENGKAP`.**
+`procedures.test.js` prints a coverage report per category and fails if a category listed
+in `LENGKAP` loses a line, so the work cannot regress. A new category still has to add
+its id to `LENGKAP` once its lines are written. A step whose Indonesian text is already
+English — the `/s` "Fire Department! If anyone is inside…" in `structure.js` — is marked
+`alreadyEn: true` rather than given a twin `en`, because a test rejects an `en` identical
+to its `text`.
 
 A step reached by `ref` is translated **at its definition site**, so a category can show
 less than 100% until the file that defines its shared steps is translated too — that is

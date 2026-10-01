@@ -108,7 +108,7 @@ export default {
       name: 'Cek Ulang (nadi 60–100, atau kembali normal)',
       nameEn: 'Re-check (pulse 60–100, or back to normal)',
       steps: [
-        { kind: 'note', text: 'A, B, dan C sudah beres.' },
+        { kind: 'note', text: 'A, B, dan C sudah beres.', en: 'A, B and C are done.' },
         {
           kind: 'note',
           text: 'Kalau kasus ini patah tulang — close maupun open fracture, sudah ketahuan sejak awal di Penanganan Korban — bidainya wajib dipasang sekarang. Bukan pilihan, dan bukan sesuatu yang "ditemukan" di cek ulang ini.',
@@ -243,7 +243,11 @@ export default {
             { label: 'Belum boleh ILS', labelEn: 'Not cleared for ILS', to: 'circulation#tanpa-ils' },
           ],
         },
-        { kind: 'note', text: 'Jangan beri korban makan atau minum apa pun.' },
+        {
+          kind: 'note',
+          text: 'Jangan beri korban makan atau minum apa pun.',
+          en: 'Do not give the victim anything to eat or drink.',
+        },
       ],
     },
     {
