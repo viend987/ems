@@ -54,7 +54,12 @@ export default {
         { code: '[quote][/quote]', desc: 'Kutipan.' },
         { code: '[code][/code]', desc: 'Blok kode, huruf monospace dan spasi dipertahankan.' },
         { code: '[spoiler][/spoiler]', desc: 'Isi yang disembunyikan sampai diklik.' },
+        { code: '[altspoiler=Judul][/altspoiler]', desc: 'Spoiler dengan judul kustom.' },
         { code: '[secspoiler][/secspoiler]', desc: 'Spoiler yang baru terbuka setelah pembacanya membalas.' },
+        {
+          code: '[block=warna,garis,border,pad...][/block]',
+          desc: 'Kotak kontainer berbingkai dengan warna dan padding kustom.',
+        },
         { code: '[hr][/hr]', desc: 'Garis pemisah mendatar.' },
         { code: '[space][/space]', desc: 'Jeda kosong setinggi satu baris.' },
       ],
