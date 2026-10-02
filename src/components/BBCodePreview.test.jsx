@@ -64,3 +64,60 @@ describe('alamat di pratinjau', () => {
     expect(root.textContent).toContain('klik ini')
   })
 })
+
+describe('tampilan daftar dan blok', () => {
+  it('menampilkan [list=1] sebagai daftar bernomor', () => {
+    const root = draw('[list=1][*]Satu[*]Dua[/list]')
+    expect(root.querySelector('ol')).not.toBeNull()
+    expect(root.querySelectorAll('li').length).toBe(2)
+  })
+
+  it('menampilkan [list] sebagai daftar berpoin', () => {
+    const root = draw('[list][*]A[*]B[/list]')
+    const ul = root.querySelector('ul')
+    expect(ul).not.toBeNull()
+    expect(ul.className).toContain('list-disc')
+  })
+
+  it('menampilkan [code] sebagai teks mentah', () => {
+    const root = draw('[code][b]raw[/b][/code]')
+    const pre = root.querySelector('pre')
+    expect(pre).not.toBeNull()
+    expect(pre.textContent).toBe('[b]raw[/b]')
+  })
+
+  it('menampilkan [block] sebagai kotak berpinggiran', () => {
+    const root = draw('[block=transparent,1,black]isi[/block]')
+    expect(root.textContent).toContain('isi')
+  })
+
+  it('menampilkan [altspoiler] dengan judul kustom', () => {
+    const root = draw('[altspoiler=ID Card]tersembunyi[/altspoiler]')
+    const summary = root.querySelector('summary')
+    expect(summary?.textContent).toBe('ID Card')
+  })
+
+  it('menampilkan [list=1] bernomor walau item pertama tanpa [*]', () => {
+    const root = draw('[list=1][b]Pertama[/b] deskripsi[*][b]Kedua[/b][/list]')
+    const ol = root.querySelector('ol')
+    expect(ol).not.toBeNull()
+    const items = ol?.querySelectorAll('li')
+    expect(items?.length).toBe(2)
+    expect(items?.[0].textContent).toContain('Pertama')
+    expect(items?.[0].textContent).toContain('deskripsi')
+    expect(items?.[1].textContent).toContain('Kedua')
+  })
+
+  it('menampilkan tombol Select all pada blok [code]', () => {
+    const root = draw('[code]konten mentah[/code]')
+    const btn = root.querySelector('button')
+    expect(btn?.textContent).toBe('Select all')
+  })
+
+  it('menampilkan [aligntable=left] mengapung ke kiri', () => {
+    const root = draw('[aligntable=left,0,12,28,0,0,transparent]logo[/aligntable]')
+    const el = root.querySelector('div[style*="float"]')
+    expect(el).not.toBeNull()
+    expect(el?.getAttribute('style')).toContain('float: left')
+  })
+})

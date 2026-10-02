@@ -52,6 +52,40 @@ describe('parseBBCode', () => {
     const root = parseBBCode('[quote]\n  isi  \n[/quote]')
     expect(textOf(root.children[0])).toBe('isi')
   })
+
+  it('mengurai [list=1] sebagai daftar bernomor', () => {
+    const root = parseBBCode('[list=1][*]satu[*]dua[/list]')
+    const list = root.children[0]
+    expect(list.tag).toBe('list')
+    expect(list.value).toBe('1')
+    expect(tags(list)).toEqual(['*', '*'])
+  })
+
+  it('tidak mengurai tag di dalam [code]', () => {
+    const root = parseBBCode('[code][b]tebal[/b][/code]')
+    const code = root.children[0]
+    expect(code.tag).toBe('code')
+    expect(code.children[0]).toBe('[b]tebal[/b]')
+  })
+
+  it('mengurai [block] dan [altspoiler]', () => {
+    const root = parseBBCode('[block=transparent,1,black][b]isi[/b][/block]')
+    expect(root.children[0].tag).toBe('block')
+    expect(root.children[0].value).toBe('transparent,1,black')
+    
+    const root2 = parseBBCode('[altspoiler=ID Card]isi[/altspoiler]')
+    expect(root2.children[0].tag).toBe('altspoiler')
+    expect(root2.children[0].value).toBe('ID Card')
+  })
+
+  it('membungkus otomatis konten sebelum [*] pertama ke dalam item', () => {
+    const root = parseBBCode('[list=1][b]Satu[/b] deskripsi[*][b]Dua[/b][/list]')
+    const list = root.children[0]
+    expect(tags(list)).toEqual(['*', '*'])
+    expect(textOf(list.children[0])).toContain('Satu')
+    expect(textOf(list.children[0])).toContain('deskripsi')
+    expect(textOf(list.children[1])).toContain('Dua')
+  })
 })
 
 describe('BBCode Patrol Log', () => {

@@ -117,17 +117,31 @@ function render(node, key) {
       )
 
     case 'hr':
-      return <hr key={key} className="my-1.5 border-t border-[#c9c9c9]" />
+      return <hr key={key} className="my-1.5 border-t border-[#c9c9c9] clear-both" />
 
     // list=0 di forum berarti daftar tanpa bullet.
     case 'list':
+      if (value === '1') {
+        return (
+          <ol key={key} className="my-1 list-decimal pl-6">
+            {kids}
+          </ol>
+        )
+      }
+      if (value === '0') {
+        return (
+          <ul key={key} className="my-1 list-none pl-0">
+            {kids}
+          </ul>
+        )
+      }
       return (
-        <ul key={key} className="my-1 list-none pl-0">
+        <ul key={key} className="my-1 list-disc pl-6">
           {kids}
         </ul>
       )
     case '*':
-      return <li key={key}>{kids}</li>
+      return <li key={key} className="mb-0.5">{kids}</li>
 
     case 'table':
       return (
@@ -169,12 +183,28 @@ function render(node, key) {
 
     case 'code':
       return (
-        <pre
-          key={key}
-          className="scroll-thin my-1.5 overflow-x-auto border border-[#c9c9c9] bg-black/5 p-2 font-mono text-[11.5px]"
-        >
-          {kids}
-        </pre>
+        <div key={key} className="my-1.5 border border-[#c9c9c9] bg-black/5 text-[11.5px]">
+          <div className="flex items-center justify-between border-b border-[#c9c9c9] px-2 py-1 text-[11px] text-[#555]">
+            <span className="font-semibold">Code:</span>
+            <button
+              type="button"
+              onClick={(e) => {
+                const pre = e.currentTarget.parentElement?.nextElementSibling
+                if (pre) {
+                  const range = document.createRange()
+                  range.selectNodeContents(pre)
+                  const sel = window.getSelection()
+                  sel?.removeAllRanges()
+                  sel?.addRange(range)
+                }
+              }}
+              className="cursor-pointer text-[#0b57a4] hover:underline"
+            >
+              Select all
+            </button>
+          </div>
+          <pre className="scroll-thin overflow-x-auto p-2 font-mono">{kids}</pre>
+        </div>
       )
 
     // Kotak pesan forum. Warnanya ditulis tetap di sini, bukan lewat token
@@ -220,22 +250,86 @@ function render(node, key) {
       )
     }
 
-    // Pemisah setinggi satu baris; di forum dipakai untuk memberi jeda.
+    // Pemisah setinggi satu baris atau spasi indentasi paragraf.
     case 'space':
-      return <div key={key} aria-hidden="true" className="h-4" />
+      return <span key={key} aria-hidden="true" className="inline-block w-6" />
 
-    case 'aligntable':
+    case 'aligntable': {
+      const parts = (value || '').split(',')
+      const align = parts[0]?.trim().toLowerCase()
+      if (align === 'left') {
+        const mr = Number(parts[3]) || 12
+        const mb = Number(parts[4]) || 8
+        return (
+          <div
+            key={key}
+            style={{ float: 'left', marginRight: `${mr}px`, marginBottom: `${mb}px` }}
+            className="my-1"
+          >
+            <div className="min-w-0">{kids}</div>
+          </div>
+        )
+      }
+      if (align === 'right') {
+        const ml = Number(parts[5]) || 12
+        const mb = Number(parts[4]) || 8
+        return (
+          <div
+            key={key}
+            style={{ float: 'right', marginLeft: `${ml}px`, marginBottom: `${mb}px` }}
+            className="my-1"
+          >
+            <div className="min-w-0">{kids}</div>
+          </div>
+        )
+      }
       return (
         <div key={key} className="my-1.5 flex justify-center">
           <div className="min-w-0">{kids}</div>
         </div>
       )
+    }
+
+    case 'block': {
+      // [block=bgcolor,borderWidth,borderColor,padTop,padRight,padBottom,padLeft]
+      const parts = (value || '').split(',')
+      const bg = SAFE_COLOR.test(parts[0]?.trim() || '') ? parts[0].trim() : 'transparent'
+      const bw = Math.min(Number(parts[1]) || 1, 10)
+      const bc = SAFE_COLOR.test(parts[2]?.trim() || '') ? parts[2].trim() : '#c9c9c9'
+      const padTop = Number(parts[3]) || 10
+      const padRight = Number(parts[4]) || padTop
+      const padBottom = Number(parts[5]) || padTop
+      const padLeft = Number(parts[6]) || padRight
+      return (
+        <div
+          key={key}
+          style={{
+            background: bg,
+            border: `${bw}px solid ${bc}`,
+            padding: `${padTop}px ${padRight}px ${padBottom}px ${padLeft}px`,
+          }}
+          className="my-1.5"
+        >
+          {kids}
+        </div>
+      )
+    }
 
     case 'secspoiler':
       return (
         <details key={key} className="my-1.5 border border-[#c9c9c9] bg-black/5">
           <summary className="cursor-pointer px-2 py-1 text-[11px] tracking-wide text-[#555] select-none">
             Secure spoiler
+          </summary>
+          <div className="px-2 pb-2">{kids}</div>
+        </details>
+      )
+
+    case 'altspoiler':
+      return (
+        <details key={key} className="my-1.5 border border-[#c9c9c9] bg-black/5">
+          <summary className="cursor-pointer px-2 py-1 text-[11px] tracking-wide text-[#555] select-none">
+            {value || 'Spoiler'}
           </summary>
           <div className="px-2 pb-2">{kids}</div>
         </details>

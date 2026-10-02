@@ -66,7 +66,7 @@ export default function BBCodeBuilder({ lang }) {
     pending.current = null
     const el = area.current
     if (!el) return
-    el.focus()
+    el.focus({ preventScroll: true })
     el.setSelectionRange(start, end)
   })
 

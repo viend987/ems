@@ -47,6 +47,8 @@ const KNOWN = new Set([
   'aligntable',
   'secspoiler',
   'space',
+  'block',
+  'altspoiler',
 ])
 
 /** Tag yang berperilaku seperti blok: ujung spasinya dirapikan saat mengurai. */
@@ -72,6 +74,8 @@ const BLOCK = new Set([
   'warn',
   'error',
   'aligntable',
+  'block',
+  'altspoiler',
 ])
 
 const TAG = /\[(\/?)([a-z0-9*-]+)(?:=([^\]\n]*))?\]/gi
@@ -110,8 +114,20 @@ export function parseBBCode(input) {
   const root = { tag: 'root', value: '', children: [] }
   const stack = [root]
   const top = () => stack[stack.length - 1]
+  const ensureListItem = () => {
+    if (top().tag === 'list') {
+      const item = { tag: '*', value: '', children: [] }
+      top().children.push(item)
+      stack.push(item)
+    }
+  }
   const pushText = (text) => {
-    if (text) top().children.push(text)
+    if (!text) return
+    if (top().tag === 'list') {
+      if (text.trim() === '') return
+      ensureListItem()
+    }
+    top().children.push(text)
   }
 
   let last = 0
@@ -141,9 +157,32 @@ export function parseBBCode(input) {
     // [*] tidak punya penutup: item berikutnya yang menutup item sebelumnya.
     if (name === '*' && top().tag === '*') stack.pop()
 
+    // Kalau tag selain [*] dibuka langsung di dalam [list], bungkus otomatis ke item [*].
+    if (top().tag === 'list' && name !== '*') ensureListItem()
+
     const node = { tag: name, value: match[3] ?? '', children: [] }
     top().children.push(node)
     if (!VOID.has(name)) stack.push(node)
+
+    // [code] menampilkan isi mentah: tag di dalamnya tidak diurai.
+    if (name === 'code') {
+      const closePattern = /\[\/code\]/gi
+      closePattern.lastIndex = TAG.lastIndex
+      const closeMatch = closePattern.exec(input)
+      if (closeMatch) {
+        const raw = input.slice(TAG.lastIndex, closeMatch.index)
+        if (raw) node.children.push(raw)
+        stack.pop() // close [code]
+        last = closeMatch.index + closeMatch[0].length
+        TAG.lastIndex = last
+      } else {
+        const raw = input.slice(TAG.lastIndex)
+        if (raw) node.children.push(raw)
+        stack.pop()
+        last = input.length
+        TAG.lastIndex = last
+      }
+    }
   }
 
   pushText(input.slice(last))
