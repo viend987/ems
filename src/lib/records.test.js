@@ -1,10 +1,22 @@
 import { describe, expect, it } from 'vitest'
-import { buildCriminalRecord, SAMPLE_RECORD } from './records.js'
+import { buildCriminalRecord } from './records.js'
 import { parseBBCode, textOf } from './bbcode.js'
+
+const testRecord = {
+  fullName: 'Aurelia Ravenscroft',
+  sex: 'Female',
+  race: 'Caucasian',
+  dob: '25/06/2003',
+  address: 'Los Santos',
+  phone: '685-8993',
+  idCard: 'https://i.imgur.com/example-id.png',
+  driverLicense: 'https://i.imgur.com/example-dl.png',
+  signatureImage: 'https://i.imgur.com/example-sig.png',
+}
 
 describe('buildCriminalRecord', () => {
   it('menghasilkan BBCode Criminal Record Form sesuai spesifikasi', () => {
-    const bbcode = buildCriminalRecord(SAMPLE_RECORD)
+    const bbcode = buildCriminalRecord(testRecord)
 
     expect(bbcode).toContain('[block=transparent,1,black,10,10,10]')
     expect(bbcode).toContain('CRIMINAL RECORD INFORMATION ─ REQUEST FORM')
@@ -20,7 +32,7 @@ describe('buildCriminalRecord', () => {
   })
 
   it('dapat diurai oleh parser BBCode', () => {
-    const bbcode = buildCriminalRecord(SAMPLE_RECORD)
+    const bbcode = buildCriminalRecord(testRecord)
     const text = textOf(parseBBCode(bbcode))
     expect(text).toContain('CRIMINAL RECORD INFORMATION')
     expect(text).toContain('Aurelia Ravenscroft')

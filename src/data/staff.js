@@ -13,5 +13,6 @@ export default [
     district: 'Davis Fire Station',
     callsign: 'RA-105',
     signature: 'https://i.imgur.com/OyltXL7.png',
+    patrolTopic: 'https://fire.los-santos.net/viewtopic.php?t=1652',
   },
 ]

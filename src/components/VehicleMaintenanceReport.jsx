@@ -8,7 +8,7 @@ import {
   buildMaintenanceReport,
   calculateTotals,
   DEFAULT_MAINTENANCE_UNITS,
-  SAMPLE_MAINTENANCE,
+  FORUM_MAINTENANCE_URL,
 } from '../lib/maintenance.js'
 import { strings } from '../lib/strings.js'
 
@@ -75,12 +75,8 @@ export default function VehicleMaintenanceReport({ lang }) {
     }
   }
 
-  const loadSample = () => {
-    setDraft({ ...SAMPLE_MAINTENANCE, staffId: staff?.id ?? 'tobrian-alrik' })
-  }
-
   const resetDefaultUnits = () => {
-    set('units')(DEFAULT_MAINTENANCE_UNITS.map((u) => ({ ...u })))
+    set('units')(DEFAULT_MAINTENANCE_UNITS.map((u) => ({ ...u, repair: '', refuel: '', additional: '' })))
   }
 
   const updateUnit = (index, field, value) => {
@@ -91,7 +87,7 @@ export default function VehicleMaintenanceReport({ lang }) {
 
   const addUnit = () => {
     const units = [...(draft.units ?? [])]
-    units.push({ name: `Unit-${units.length + 1}`, repair: 0, refuel: 0, additional: 0 })
+    units.push({ name: `Unit-${units.length + 1}`, repair: '', refuel: '', additional: '' })
     set('units')(units)
   }
 
@@ -127,21 +123,26 @@ export default function VehicleMaintenanceReport({ lang }) {
             >
               {s.reportNew}
             </button>
+          </div>
+          <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={loadSample}
+              onClick={resetDefaultUnits}
               className="rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-muted hover:border-alarm hover:text-bone"
             >
-              {s.reportLoadSample}
+              Reset 22 Unit Bawaan
             </button>
+            <a
+              href={FORUM_MAINTENANCE_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center gap-1 rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-dim hover:border-alarm hover:text-bone"
+              title="Buka subforum Vehicle & Equipment Maintenance di tab baru"
+            >
+              <span>Forum Pengajuan</span>
+              <span aria-hidden="true" className="text-muted">↗</span>
+            </a>
           </div>
-          <button
-            type="button"
-            onClick={resetDefaultUnits}
-            className="rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-muted hover:border-alarm hover:text-bone"
-          >
-            Reset 22 Unit Bawaan
-          </button>
         </div>
 
         {/* HEADER INFORMATION */}
@@ -223,33 +224,54 @@ export default function VehicleMaintenanceReport({ lang }) {
                 <div className="grid grid-cols-3 gap-1.5 sm:w-64">
                   <div>
                     <label className="text-[10px] text-muted">Repair</label>
-                    <input
-                      type="text"
-                      value={u.repair}
-                      onInput={(e) => updateUnit(idx, 'repair', e.currentTarget.value)}
-                      placeholder="$0"
-                      className={inputClass}
-                    />
+                    <div className="relative flex items-center">
+                      <span className="pointer-events-none absolute left-2 text-xs text-muted">$</span>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={u.repair === 0 ? '' : (u.repair ?? '')}
+                        onInput={(e) => {
+                          const val = e.currentTarget.value.replace(/[^0-9.]/g, '')
+                          updateUnit(idx, 'repair', val)
+                        }}
+                        placeholder="0"
+                        className={`${inputClass} pl-5`}
+                      />
+                    </div>
                   </div>
                   <div>
                     <label className="text-[10px] text-muted">Refuel</label>
-                    <input
-                      type="text"
-                      value={u.refuel}
-                      onInput={(e) => updateUnit(idx, 'refuel', e.currentTarget.value)}
-                      placeholder="$0"
-                      className={inputClass}
-                    />
+                    <div className="relative flex items-center">
+                      <span className="pointer-events-none absolute left-2 text-xs text-muted">$</span>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={u.refuel === 0 ? '' : (u.refuel ?? '')}
+                        onInput={(e) => {
+                          const val = e.currentTarget.value.replace(/[^0-9.]/g, '')
+                          updateUnit(idx, 'refuel', val)
+                        }}
+                        placeholder="0"
+                        className={`${inputClass} pl-5`}
+                      />
+                    </div>
                   </div>
                   <div>
                     <label className="text-[10px] text-muted">Add.</label>
-                    <input
-                      type="text"
-                      value={u.additional}
-                      onInput={(e) => updateUnit(idx, 'additional', e.currentTarget.value)}
-                      placeholder="$0"
-                      className={inputClass}
-                    />
+                    <div className="relative flex items-center">
+                      <span className="pointer-events-none absolute left-2 text-xs text-muted">$</span>
+                      <input
+                        type="text"
+                        inputMode="decimal"
+                        value={u.additional === 0 ? '' : (u.additional ?? '')}
+                        onInput={(e) => {
+                          const val = e.currentTarget.value.replace(/[^0-9.]/g, '')
+                          updateUnit(idx, 'additional', val)
+                        }}
+                        placeholder="0"
+                        className={`${inputClass} pl-5`}
+                      />
+                    </div>
                   </div>
                 </div>
                 <button

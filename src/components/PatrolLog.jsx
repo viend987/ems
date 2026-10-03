@@ -168,6 +168,36 @@ export default function PatrolLog({ lang }) {
   return (
     <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
       <form className="flex flex-col gap-5" onSubmit={(e) => e.preventDefault()}>
+        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line pb-3">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                if (confirm(s.plNewConfirm)) {
+                  setDraft(blank(draft.staffId))
+                }
+              }}
+              className="rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-muted hover:border-alarm hover:text-bone"
+            >
+              {s.plNewReport}
+            </button>
+          </div>
+          {staff?.patrolTopic && (
+            <div className="flex items-center gap-2">
+              <a
+                href={staff.patrolTopic}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="flex items-center gap-1 rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-dim hover:border-alarm hover:text-bone"
+                title="Buka topik patroli di forum LSFD di tab baru"
+              >
+                <span>Forum Pengajuan</span>
+                <span aria-hidden="true" className="text-muted">↗</span>
+              </a>
+            </div>
+          )}
+        </div>
+
         <fieldset className="flex flex-col gap-3 rounded-sm border border-line bg-panel p-3 sm:p-4">
           <legend className="slab px-1 text-sm text-bone">Personal Details</legend>
           <Field label={s.plMember}>
@@ -192,6 +222,19 @@ export default function PatrolLog({ lang }) {
               <dt className="text-muted">District</dt>
               <dd className="text-bone">{staff.district}</dd>
             </dl>
+          )}
+          {staff?.patrolTopic && (
+            <div className="pt-1">
+              <a
+                href={staff.patrolTopic}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="inline-flex items-center gap-1 text-xs text-alarm hover:underline"
+              >
+                <span>Buka Topik Patroli ({staff.name})</span>
+                <span aria-hidden="true">↗</span>
+              </a>
+            </div>
           )}
         </fieldset>
 
@@ -252,17 +295,6 @@ export default function PatrolLog({ lang }) {
           </Field>
         </fieldset>
 
-        <button
-          type="button"
-          onClick={() => {
-            if (confirm(s.plNewConfirm)) {
-              setDraft(blank(draft.staffId))
-            }
-          }}
-          className="self-start rounded-sm border border-line bg-panel px-3 py-2 text-[11px] text-dim hover:border-alarm hover:text-alarm"
-        >
-          {s.plNewReport}
-        </button>
       </form>
 
       <section aria-label={s.plResult} className="flex flex-col gap-3 xl:sticky xl:top-6">

@@ -8,8 +8,8 @@ import {
   buildPatientCareReport,
   CONDITION_OPTIONS,
   DISPATCH_OPTIONS,
+  FORUM_PCR_URL,
   LOC_OPTIONS,
-  SAMPLE_PCR,
   TRIAGE_OPTIONS,
 } from '../lib/pcr.js'
 import { strings } from '../lib/strings.js'
@@ -124,10 +124,6 @@ export default function PatientCareReport({ lang }) {
     }
   }
 
-  const loadSample = () => {
-    setDraft({ ...SAMPLE_PCR, staffId: staff?.id ?? 'tobrian-alrik' })
-  }
-
   const updateScreenshot = (index, value) => {
     const list = [...(draft.screenshots ?? [])]
     list[index] = value
@@ -155,13 +151,18 @@ export default function PatientCareReport({ lang }) {
             >
               {s.reportNew}
             </button>
-            <button
-              type="button"
-              onClick={loadSample}
-              className="rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-muted hover:border-alarm hover:text-bone"
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href={FORUM_PCR_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center gap-1 rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-dim hover:border-alarm hover:text-bone"
+              title="Buka subforum Patient Care Report di tab baru"
             >
-              {s.reportLoadSample}
-            </button>
+              <span>Forum Pengajuan</span>
+              <span aria-hidden="true" className="text-muted">↗</span>
+            </a>
           </div>
         </div>
 

@@ -1,35 +1,40 @@
 import STAFF from '../data/staff.js'
 import { isImageUrl, normalizeImageUrl } from './patrol.js'
 
+export const FORUM_MAINTENANCE_URL = 'https://fire.los-santos.net/viewforum.php?f=270'
+
 export const DEFAULT_MAINTENANCE_UNITS = [
-  { name: 'RA-111', repair: 4, refuel: 0.9, additional: 0 },
-  { name: 'RA-112', repair: 57, refuel: 20.7, additional: 0 },
-  { name: 'RA-113', repair: 56, refuel: 36.53, additional: 50 },
-  { name: 'RA-114', repair: 46, refuel: 42.23, additional: 50 },
-  { name: 'RA-115', repair: 552, refuel: 75.83, additional: 50 },
-  { name: 'Engine-111', repair: 42, refuel: 25.65, additional: 50 },
-  { name: 'Engine-112', repair: 0, refuel: 0, additional: 0 },
-  { name: 'Engine-113', repair: 0, refuel: 0, additional: 0 },
-  { name: 'Engine-114', repair: 0, refuel: 0, additional: 0 },
-  { name: 'Brush-111', repair: 175, refuel: 25.8, additional: 50 },
-  { name: 'Brush-112', repair: 0, refuel: 0, additional: 0 },
-  { name: 'Squad', repair: 0, refuel: 0, additional: 0 },
-  { name: 'USAR-1', repair: 0, refuel: 0, additional: 0 },
-  { name: 'OSAR-1', repair: 116, refuel: 9.53, additional: 0 },
-  { name: 'Hazmat', repair: 124, refuel: 0, additional: 0 },
-  { name: 'OC-111', repair: 77, refuel: 20.18, additional: 0 },
-  { name: 'OC-112', repair: 0, refuel: 0, additional: 0 },
-  { name: 'OC-113', repair: 0, refuel: 27.38, additional: 0 },
-  { name: 'OC-114', repair: 0, refuel: 0, additional: 0 },
-  { name: 'OC-115', repair: 0, refuel: 0, additional: 0 },
-  { name: 'CORONER-2', repair: 137, refuel: 0, additional: 0 },
-  { name: 'ETU', repair: 0, refuel: 0, additional: 0 },
+  { name: 'RA-111', repair: '', refuel: '', additional: '' },
+  { name: 'RA-112', repair: '', refuel: '', additional: '' },
+  { name: 'RA-113', repair: '', refuel: '', additional: '' },
+  { name: 'RA-114', repair: '', refuel: '', additional: '' },
+  { name: 'RA-115', repair: '', refuel: '', additional: '' },
+  { name: 'Engine-111', repair: '', refuel: '', additional: '' },
+  { name: 'Engine-112', repair: '', refuel: '', additional: '' },
+  { name: 'Engine-113', repair: '', refuel: '', additional: '' },
+  { name: 'Engine-114', repair: '', refuel: '', additional: '' },
+  { name: 'Brush-111', repair: '', refuel: '', additional: '' },
+  { name: 'Brush-112', repair: '', refuel: '', additional: '' },
+  { name: 'Squad', repair: '', refuel: '', additional: '' },
+  { name: 'USAR-1', repair: '', refuel: '', additional: '' },
+  { name: 'OSAR-1', repair: '', refuel: '', additional: '' },
+  { name: 'Hazmat', repair: '', refuel: '', additional: '' },
+  { name: 'OC-111', repair: '', refuel: '', additional: '' },
+  { name: 'OC-112', repair: '', refuel: '', additional: '' },
+  { name: 'OC-113', repair: '', refuel: '', additional: '' },
+  { name: 'OC-114', repair: '', refuel: '', additional: '' },
+  { name: 'OC-115', repair: '', refuel: '', additional: '' },
+  { name: 'CORONER-1', repair: '', refuel: '', additional: '' },
+  { name: 'ETU', repair: '', refuel: '', additional: '' },
 ]
 
 export function formatCost(value) {
   if (value === null || value === undefined || value === '') return '$0'
   const str = String(value).trim()
-  if (str.startsWith('$')) return str
+  if (str.startsWith('$')) {
+    const inner = str.slice(1).trim()
+    return inner === '' ? '$0' : `$${inner}`
+  }
   const num = Number(str)
   if (isNaN(num)) return `$${str}`
   return `$${num}`
@@ -58,20 +63,12 @@ export function calculateTotals(units = []) {
 }
 
 export const blankMaintenance = (staffId = STAFF[0]?.id ?? '') => ({
-  week: '3',
+  week: '',
   date: '',
   staffId,
   evidenceImages: [''],
-  units: DEFAULT_MAINTENANCE_UNITS.map((u) => ({ ...u, repair: 0, refuel: 0, additional: 0 })),
-})
-
-export const SAMPLE_MAINTENANCE = {
-  week: '3',
-  date: 'Saturday, 21 February 2026',
-  staffId: 'tobrian-alrik',
-  evidenceImages: [],
   units: DEFAULT_MAINTENANCE_UNITS.map((u) => ({ ...u })),
-}
+})
 
 export function buildMaintenanceReport(form) {
   const staff = form.staff ?? {}

@@ -75,7 +75,7 @@ Hal ini menyebabkan tombol tersebut memanjang secara horizontal (~44px) dibandin
   - _Summary of Action:_ Textarea narasi panjang yang mendukung tag warna BBCode (mis. `[color=#FFFFFF]`).
   - _Screenshots:_ Manajemen daftar URL gambar bukti dinamis dengan preview langsung dan tombol tambah/hapus.
 - **Tindakan Cepat:**
-  - Tombol **Muat contoh** memuat narasi penanganan korban patah tulang di Legion Square oleh Tobrian Alrik.
+  - Bilah aksi atas memuat tombol **Laporan baru** dan tautan langsung **Forum Pengajuan ↗** (tombol *Muat contoh* ditiadakan di seluruh template agar alur kerja bersih dan cepat).
   - Tab **Pratinjau** dan **Kode BBCode** dengan tombol **Salin BBCode**.
 
 ---
@@ -89,35 +89,18 @@ Hal ini menyebabkan tombol tersebut memanjang secara horizontal (~44px) dibandin
 ### Fitur & Kalkulasi Otomatis:
 
 - **Tabel 22 Unit Bawaan:**
-  Diinisialisasi dengan 22 unit dinas LSFD:
-  1. `RA-111` ($4, $0.9, $0)
-  2. `RA-112` ($57, $20.7, $0)
-  3. `RA-113` ($56, $36.53, $50)
-  4. `RA-114` ($46, $42.23, $50)
-  5. `RA-115` ($552, $75.83, $50)
-  6. `Engine-111` ($42, $25.65, $50)
-  7. `Engine-112` ($0, $0, $0)
-  8. `Engine-113` ($0, $0, $0)
-  9. `Engine-114` ($0, $0, $0)
-  10. `Brush-111` ($175, $25.8, $50)
-  11. `Brush-112` ($0, $0, $0)
-  12. `Squad` ($0, $0, $0)
-  13. `USAR-1` ($0, $0, $0)
-  14. `OSAR-1` ($116, $9.53, $0)
-  15. `Hazmat` ($124, $0, $0)
-  16. `OC-111` ($77, $20.18, $0)
-  17. `OC-112` ($0, $0, $0)
-  18. `OC-113` ($0, $27.38, $0)
-  19. `OC-114` ($0, $0, $0)
-  20. `OC-115` ($0, $0, $0)
-  21. `CORONER-2` ($137, $0, $0)
-  22. `ETU` ($0, $0, $0)
+  Daftar kendaraan resmi Davis Fire Station (`RA-111` s/d `ETU`) diinisialisasi bersih dengan nominal kosong (`''`), tanpa data contoh/sampel hardcode yang mengotori memori atau form.
+  Daftar unit: `RA-111`, `RA-112`, `RA-113`, `RA-114`, `RA-115`, `Engine-111`, `Engine-112`, `Engine-113`, `Engine-114`, `Brush-111`, `Brush-112`, `Squad`, `USAR-1`, `OSAR-1`, `Hazmat`, `OC-111`, `OC-112`, `OC-113`, `OC-114`, `OC-115`, `CORONER-1`, `ETU`.
+- **UX Input Nominal "Salary Breakdown Units":**
+  - **Placeholder `$0`:** Setiap input nominal (`Repair`, `Refuel`, `Add.`) memiliki prefix visual `$` permanen dan placeholder `0`.
+  - **Pencegahan Bug `$050`:** Nilai nominal tidak lagi diinisialisasi dengan angka `0` mentah melainkan string kosong `''`. Pengguna yang mengetik angka (misal `50`) langsung menghasilkan nominal `50` bersih tanpa harus menghapus angka `0` terlebih dahulu.
+  - **Evaluasi Aman:** Kolom yang dibiarkan kosong otomatis dievaluasi sebagai `$0` dalam BBCode dan bernilai `0` dalam perhitungan total, sehingga pengguna tidak diwajibkan mengisi angka `0` manual untuk unit yang tidak memiliki biaya.
 - **Kalkulasi Real-Time:**
-  Fungsi murni `calculateTotals(units)` menghitung penjumlahan `repair + refuel + additional` di seluruh baris secara otomatis, menghasilkan format uang standar ribuan (contoh data sampel menghasilkan persis `$1,920.73`).
+  Fungsi murni `calculateTotals(units)` menghitung penjumlahan `repair + refuel + additional` di seluruh baris secara otomatis dan menghasilkan format mata uang standar ribuan.
 - **Keluwesan Baris:**
   - Pengguna dapat menghapus baris tertentu dengan tombol `×`.
   - Pengguna dapat menambahkan unit baru dengan tombol `+ Tambah Unit`.
-  - Terdapat tombol `Reset 22 Unit Bawaan` untuk mengembalikan susunan unit asli jika sewaktu-waktu dibutuhkan.
+  - Terdapat tombol `Reset 22 Unit Bawaan` untuk mengembalikan susunan unit asli dalam keadaan bersih siap isi.
 - **Lampiran Gambar:**
   Dokumentasi foto kegiatan ditempatkan di dalam tag `[secspoiler=Photo evidence of activities.]` dengan jumlah link gambar fleksibel.
 
@@ -144,13 +127,30 @@ Hal ini menyebabkan tombol tersebut memanjang secara horizontal (~44px) dibandin
   - Preview gambar langsung saat link diinputkan.
 - **Tanda Tangan:**
   - Opsional gambar tanda tangan (`[img]url[/img]`) disertai nama pemohon, atau nama saja jika gambar tidak diisi.
-- **Tombol Cepat:**
+- **Tombol Aksi Cepat:**
   - Tombol **Gunakan Data Tobrian Alrik** untuk pengisian kilat data personel LSFD.
-  - Tombol **Muat contoh** memuat data sampel Aurelia Ravenscroft.
+  - Tombol "Muat contoh" dihapus atas permintaan pengguna agar tampilan form lebih bersih dan fokus.
 
 ---
 
-## 6. Penyempurnaan Engine BBCode & Preview
+## 6. Integrasi Tautan Forum Pengajuan (New Tab)
+
+Setiap template laporan kini memiliki rujukan tombol langsung **"Forum Pengajuan ↗"** yang membuka tab baru (`target="_blank" rel="noreferrer noopener"`) ke subforum/topik pengajuan yang relevan:
+
+1. **Patrol Log (`#/patrol`):**
+   - Menghubungkan ke topik privat mingguan masing-masing anggota.
+   - Disimpan di data staf (`src/data/staff.js`), misalnya untuk Tobrian Alrik: `https://fire.los-santos.net/viewtopic.php?t=1652`.
+   - Tautan ditampilkan pada bilah atas formulir serta di dalam kotak profil *Personal Details*.
+2. **Patient Care Report (`#/pcr`):**
+   - Menghubungkan ke subforum umum PCR LSFD: `https://fire.los-santos.net/viewforum.php?f=129`.
+3. **Vehicle Maintenance Report (`#/maintenance`):**
+   - Menghubungkan ke subforum pemeliharaan kendaraan LSFD: `https://fire.los-santos.net/viewforum.php?f=270`.
+4. **Request Criminal Record (`#/criminal-record`):**
+   - Menghubungkan ke subforum permohonan catatan kriminal LSPD: `https://police.los-santos.net/viewforum.php?f=298`.
+
+---
+
+## 7. Penyempurnaan Engine BBCode & Preview
 
 1. **Tag `td1`:**
    - Ditambahkan ke `KNOWN` dan `BLOCK` pada `src/lib/bbcode.js`.
@@ -162,11 +162,11 @@ Hal ini menyebabkan tombol tersebut memanjang secara horizontal (~44px) dibandin
 
 ---
 
-## 7. Hasil Pengujian & Ukuran Bundle
+## 8. Hasil Pengujian & Ukuran Bundle
 
 - **Vitest Suite:** 16 berkas tes, 148 pengujian berhasil (100% pass).
 - **Oxlint:** 0 warning, 0 error pada 86 berkas.
 - **Ukuran Produksi:**
-  - JS: 285.88 kB (85.92 kB gzip — aman di bawah batas anggaran 90 kB).
-  - CSS: 26.85 kB (6.62 kB gzip).
+  - JS: 288.71 kB (86.63 kB gzip — aman di bawah batas anggaran 90 kB).
+  - CSS: 26.98 kB (6.64 kB gzip).
   - Dependensi baru: **0** (sepenuhnya statis dan mandiri).

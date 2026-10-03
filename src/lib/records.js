@@ -2,6 +2,8 @@ import { isImageUrl, normalizeImageUrl } from './patrol.js'
 
 export const BANNER_IMAGE = 'https://imgur.com/6y2LhQO.png'
 
+export const FORUM_RECORDS_URL = 'https://police.los-santos.net/viewforum.php?f=298'
+
 export const SEX_OPTIONS = ['Male', 'Female']
 
 export const RACE_OPTIONS = [
@@ -23,18 +25,6 @@ export const blankRecord = () => ({
   driverLicense: '',
   signatureImage: '',
 })
-
-export const SAMPLE_RECORD = {
-  fullName: 'Aurelia Ravenscroft',
-  sex: 'Female',
-  race: 'Caucasian',
-  dob: '25/06/2003',
-  address: 'Los Santos',
-  phone: '685-8993',
-  idCard: 'https://i.imgur.com/example-id.png',
-  driverLicense: 'https://i.imgur.com/example-dl.png',
-  signatureImage: 'https://i.imgur.com/example-sig.png',
-}
 
 export function buildCriminalRecord(form) {
   const name = form.fullName?.trim() || 'Firstname Lastname'

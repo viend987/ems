@@ -77,21 +77,25 @@ extract the chat lines and leave the prose in the source document.
 The one group of exceptions is **Laporan forms**, which generate forum BBCode directly from interactive
 inputs without a backend:
 - **Patrol Log** (`#/patrol`, Field Unit): Weekly Patrol Log for LSFD (min. 3 reports, min. 60 mins each).
-  Pinned byte-for-byte by `patrol.test.js`. Proof images accept any http(s) link with live preview.
+  Pinned byte-for-byte by `patrol.test.js`. Proof images accept any http(s) link with live preview. Includes
+  direct link to the staff member's private forum patrol topic (`staff.patrolTopic`, e.g. topic #1652 for Tobrian Alrik).
 - **Patient Care Report** (`#/pcr`, Field Unit): Detailed on-scene PCR with Personal Details (auto-filled
   from `staff.js`, default callsign RA-105 for Tobrian Alrik), Duty Info, LoC selector (Alert, Verbal,
-  Pain Stimuli, Unresponsive), optional Triage selector, vitals, summary with color formatting support, and
-  screenshot evidence.
+  Pain Stimuli, Unresponsive), optional Triage selector, vitals, summary with color formatting support, screenshot
+  evidence, and a new-tab link to the PCR forum (`https://fire.los-santos.net/viewforum.php?f=129`).
 - **Vehicle Maintenance** (`#/maintenance`, Field Unit): Hospital Financial Statement for Davis Fire Station
-  units. Includes an interactive cost table initialized with 22 default units (RA-111 through ETU),
-  auto-calculated total salary proposed ($1,920.73 on default sample), dynamic unit row add/delete, reset
-  button, and photo evidence inside `secspoiler`.
+  units. Includes an interactive cost table initialized with 22 default units (RA-111 through ETU) with clean `$0`
+  placeholder input UX (no leading `0` concatenation bugs like `$050`, fixed visual `$` indicator, empty fields evaluate
+  as `$0`), auto-calculated total salary proposed, dynamic unit row add/delete, reset
+  button, photo evidence inside `secspoiler`, and direct link to the maintenance forum (`https://fire.los-santos.net/viewforum.php?f=270`).
 - **Request Criminal Record** (`#/criminal-record`, LSPD): LSPD Criminal Record Information Request Form
   inside a transparent bordered block. Captures applicant demographics, ID card and driver's license attachments
-  with live previews, and signature image/name. Includes a "Gunakan data Tobrian Alrik" quick-fill button.
+  with live previews, and signature image/name. Includes a "Gunakan data Tobrian Alrik" quick-fill button, direct
+  link to the LSPD records forum (`https://police.los-santos.net/viewforum.php?f=298`).
 
-All report generators feature dual Pratinjau / BBCode tabs, copy button, "Laporan baru" reset, "Muat contoh"
-sample loaders, and persist drafts in `localStorage`. Member details and signatures come from `src/data/staff.js`.
+All report generators feature dual Pratinjau / BBCode tabs, copy button, "Laporan baru" reset, new-tab forum submission links,
+and persist drafts in `localStorage`. All dead sample constants and "Muat contoh" buttons have been completely purged from the codebase.
+Member details, forum patrol topics, and signatures come from `src/data/staff.js`.
 
 In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a

@@ -1,14 +1,33 @@
 import { describe, expect, it } from 'vitest'
 import STAFF from '../data/staff.js'
-import { buildPatientCareReport, SAMPLE_PCR } from './pcr.js'
+import { buildPatientCareReport } from './pcr.js'
 import { parseBBCode, textOf } from './bbcode.js'
+
+const testPCR = {
+  staffId: 'tobrian-alrik',
+  callsign: 'RA-105',
+  dutyPartner: 'N/A',
+  date: '2025-11-20',
+  time: '22:43 PM',
+  location: 'Legion Square',
+  dispatch: 'Department Request',
+  dispatchOther: '',
+  triage: 'N/A',
+  loc: 'Alert',
+  breath: '20 LPM',
+  pulse: '75 BPM',
+  condition: 'Bone Fracture',
+  conditionOther: '',
+  summary: 'Penanganan pasien patah tulang di Legion Square.',
+  screenshots: [],
+}
 
 describe('buildPatientCareReport', () => {
   const tobrian = STAFF.find((s) => s.id === 'tobrian-alrik')
 
   it('menghasilkan BBCode PCR sesuai struktur resmi', () => {
     const bbcode = buildPatientCareReport({
-      ...SAMPLE_PCR,
+      ...testPCR,
       staff: tobrian,
       screenshots: ['https://i.imgur.com/example1.png'],
     })
@@ -33,7 +52,7 @@ describe('buildPatientCareReport', () => {
 
   it('dapat diurai oleh parser BBCode tanpa meninggalkan tag mentah', () => {
     const bbcode = buildPatientCareReport({
-      ...SAMPLE_PCR,
+      ...testPCR,
       staff: tobrian,
     })
     const text = textOf(parseBBCode(bbcode))

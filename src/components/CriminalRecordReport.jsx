@@ -6,8 +6,8 @@ import { isImageUrl, normalizeImageUrl } from '../lib/patrol.js'
 import {
   blankRecord,
   buildCriminalRecord,
+  FORUM_RECORDS_URL,
   RACE_OPTIONS,
-  SAMPLE_RECORD,
   SEX_OPTIONS,
 } from '../lib/records.js'
 import { strings } from '../lib/strings.js'
@@ -100,10 +100,6 @@ export default function CriminalRecordReport({ lang }) {
     }
   }
 
-  const loadSample = () => {
-    setDraft({ ...SAMPLE_RECORD })
-  }
-
   const useTobrianAlrik = () => {
     const tobrian = STAFF.find((st) => st.id === 'tobrian-alrik') ?? STAFF[0]
     setDraft((d) => ({
@@ -127,19 +123,24 @@ export default function CriminalRecordReport({ lang }) {
             </button>
             <button
               type="button"
-              onClick={loadSample}
+              onClick={useTobrianAlrik}
               className="rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-muted hover:border-alarm hover:text-bone"
             >
-              {s.reportLoadSample}
+              Gunakan Data Tobrian Alrik
             </button>
           </div>
-          <button
-            type="button"
-            onClick={useTobrianAlrik}
-            className="rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-muted hover:border-alarm hover:text-bone"
-          >
-            Gunakan Data Tobrian Alrik
-          </button>
+          <div className="flex items-center gap-2">
+            <a
+              href={FORUM_RECORDS_URL}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex items-center gap-1 rounded-sm border border-line bg-panel px-2.5 py-1 text-xs text-dim hover:border-alarm hover:text-bone"
+              title="Buka subforum Request Criminal Record LSPD di tab baru"
+            >
+              <span>Forum Pengajuan</span>
+              <span aria-hidden="true" className="text-muted">↗</span>
+            </a>
+          </div>
         </div>
 
         {/* APPLICANT DETAILS */}
