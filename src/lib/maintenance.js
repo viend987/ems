@@ -24,7 +24,7 @@ export const DEFAULT_MAINTENANCE_UNITS = [
   { name: 'OC-113', repair: '', refuel: '', additional: '' },
   { name: 'OC-114', repair: '', refuel: '', additional: '' },
   { name: 'OC-115', repair: '', refuel: '', additional: '' },
-  { name: 'CORONER-1', repair: '', refuel: '', additional: '' },
+  { name: 'CORONER-2', repair: '', refuel: '', additional: '' },
   { name: 'ETU', repair: '', refuel: '', additional: '' },
 ]
 

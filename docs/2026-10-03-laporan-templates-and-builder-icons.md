@@ -75,7 +75,7 @@ Hal ini menyebabkan tombol tersebut memanjang secara horizontal (~44px) dibandin
   - _Summary of Action:_ Textarea narasi panjang yang mendukung tag warna BBCode (mis. `[color=#FFFFFF]`).
   - _Screenshots:_ Manajemen daftar URL gambar bukti dinamis dengan preview langsung dan tombol tambah/hapus.
 - **Tindakan Cepat:**
-  - Bilah aksi atas memuat tombol **Laporan baru** dan tautan langsung **Forum Pengajuan ↗** (tombol *Muat contoh* ditiadakan di seluruh template agar alur kerja bersih dan cepat).
+  - Bilah aksi atas memuat tombol **Laporan baru** dan tautan langsung **Forum Pengajuan ↗** (tombol _Muat contoh_ ditiadakan di seluruh template agar alur kerja bersih dan cepat).
   - Tab **Pratinjau** dan **Kode BBCode** dengan tombol **Salin BBCode**.
 
 ---
@@ -90,7 +90,7 @@ Hal ini menyebabkan tombol tersebut memanjang secara horizontal (~44px) dibandin
 
 - **Tabel 22 Unit Bawaan:**
   Daftar kendaraan resmi Davis Fire Station (`RA-111` s/d `ETU`) diinisialisasi bersih dengan nominal kosong (`''`), tanpa data contoh/sampel hardcode yang mengotori memori atau form.
-  Daftar unit: `RA-111`, `RA-112`, `RA-113`, `RA-114`, `RA-115`, `Engine-111`, `Engine-112`, `Engine-113`, `Engine-114`, `Brush-111`, `Brush-112`, `Squad`, `USAR-1`, `OSAR-1`, `Hazmat`, `OC-111`, `OC-112`, `OC-113`, `OC-114`, `OC-115`, `CORONER-1`, `ETU`.
+  Daftar unit: `RA-111`, `RA-112`, `RA-113`, `RA-114`, `RA-115`, `Engine-111`, `Engine-112`, `Engine-113`, `Engine-114`, `Brush-111`, `Brush-112`, `Squad`, `USAR-1`, `OSAR-1`, `Hazmat`, `OC-111`, `OC-112`, `OC-113`, `OC-114`, `OC-115`, `CORONER-2`, `ETU`.
 - **UX Input Nominal "Salary Breakdown Units":**
   - **Placeholder `$0`:** Setiap input nominal (`Repair`, `Refuel`, `Add.`) memiliki prefix visual `$` permanen dan placeholder `0`.
   - **Pencegahan Bug `$050`:** Nilai nominal tidak lagi diinisialisasi dengan angka `0` mentah melainkan string kosong `''`. Pengguna yang mengetik angka (misal `50`) langsung menghasilkan nominal `50` bersih tanpa harus menghapus angka `0` terlebih dahulu.
@@ -140,7 +140,7 @@ Setiap template laporan kini memiliki rujukan tombol langsung **"Forum Pengajuan
 1. **Patrol Log (`#/patrol`):**
    - Menghubungkan ke topik privat mingguan masing-masing anggota.
    - Disimpan di data staf (`src/data/staff.js`), misalnya untuk Tobrian Alrik: `https://fire.los-santos.net/viewtopic.php?t=1652`.
-   - Tautan ditampilkan pada bilah atas formulir serta di dalam kotak profil *Personal Details*.
+   - Tautan ditampilkan pada bilah atas formulir serta di dalam kotak profil _Personal Details_.
 2. **Patient Care Report (`#/pcr`):**
    - Menghubungkan ke subforum umum PCR LSFD: `https://fire.los-santos.net/viewforum.php?f=129`.
 3. **Vehicle Maintenance Report (`#/maintenance`):**
