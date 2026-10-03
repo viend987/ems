@@ -24,6 +24,7 @@ import MAINTENANCE from './maintenance.js'
 import PATROL from './patrol.js'
 import PCR from './pcr.js'
 import RECORDS from './records.js'
+import SURGERY from './surgery.js'
 import UNITS from './units.js'
 import { REFERENCE } from './reference.js'
 
@@ -57,6 +58,7 @@ export const CATEGORIES = [
   PATROL,
   PCR,
   MAINTENANCE,
+  SURGERY,
   RECORDS,
   ...REFERENCE,
   UNITS,

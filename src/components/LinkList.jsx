@@ -8,7 +8,7 @@ export default function LinkList({ group, lang }) {
   return (
     <section id={`links-${group.id}`} className="lazy-section scroll-mt-28 lg:scroll-mt-6">
       <h2 className="slab mb-2 flex items-center gap-2.5 text-lg text-bone sm:text-xl">
-        <span aria-hidden="true" className="h-4 w-1 bg-alarm sm:h-5" />
+        <span aria-hidden="true" className={`h-4 w-1 sm:h-5 ${group.color || 'bg-alarm'}`} />
         {pick(group, 'name', lang)}
       </h2>
 

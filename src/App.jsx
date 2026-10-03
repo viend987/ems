@@ -8,6 +8,7 @@ import Header from './components/Header.jsx'
 import LinkList from './components/LinkList.jsx'
 import PatientCareReport from './components/PatientCareReport.jsx'
 import PatrolLog from './components/PatrolLog.jsx'
+import PlasticSurgeryReport from './components/PlasticSurgeryReport.jsx'
 import Section from './components/Section.jsx'
 import SearchResults from './components/SearchResults.jsx'
 import SectionNav from './components/SectionNav.jsx'
@@ -163,6 +164,7 @@ export default function App() {
                 {category.form === 'builder' && <BBCodeBuilder lang={lang} />}
                 {category.form === 'pcr' && <PatientCareReport lang={lang} />}
                 {category.form === 'maintenance' && <VehicleMaintenanceReport lang={lang} />}
+                {category.form === 'plastic-surgery' && <PlasticSurgeryReport lang={lang} />}
                 {category.form === 'criminal-record' && <CriminalRecordReport lang={lang} />}
               </div>
             </>

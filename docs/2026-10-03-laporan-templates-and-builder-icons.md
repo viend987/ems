@@ -1,7 +1,7 @@
 # Dokumentasi Pembaruan: Template Laporan Baru & Perapihan Icon Toolbar BBCode Builder
 
 **Tanggal:** 2026-10-03  
-**Status:** Selesai & Teruji (`148 tests passed`, `lint clean`, `build 85.92 kB gzip`)
+**Status:** Selesai & Teruji (`156 tests passed`, `lint clean`, `build 88.94 kB gzip`)
 
 ---
 
@@ -147,10 +147,69 @@ Setiap template laporan kini memiliki rujukan tombol langsung **"Forum Pengajuan
    - Menghubungkan ke subforum pemeliharaan kendaraan LSFD: `https://fire.los-santos.net/viewforum.php?f=270`.
 4. **Request Criminal Record (`#/criminal-record`):**
    - Menghubungkan ke subforum permohonan catatan kriminal LSPD: `https://police.los-santos.net/viewforum.php?f=298`.
+5. **Plastic Surgery (`#/plastic-surgery`):**
+   - Menghubungkan ke subforum operasi plastik Pillbox: `https://fire.los-santos.net/viewforum.php?f=153`.
 
 ---
 
-## 7. Penyempurnaan Engine BBCode & Preview
+## 7. Template 4: Plastic Surgery (Hospital Unit)
+
+- **Rute:** `#/plastic-surgery`
+- **Kelompok:** `Laporan` › `Hospital Unit` (`subgroup: 'hospital'`)
+- **Tujuan:** Formulir pengajuan operasi plastik di Pillbox Hill Medical Center.
+
+### Fitur Formulir:
+
+- **Data Pasien:**
+  - Nama lengkap, jenis kelamin, ras, tanggal lahir (dengan format switcher DD/MM/YYYY dsb.), alamat, nomor telepon.
+  - Tombol **Gunakan Data Tobrian Alrik** untuk pengisian kilat.
+- **Informasi Medis:**
+  - Diagnosis, rincian tindakan bedah, foto sebelum-sesudah dengan live preview.
+- **BBCode Generator:**
+  - Menggunakan tag `[divbox=beige]`, `[aligntable=...]`, `[td1=...]` yang sudah didukung di BBCode preview engine.
+- **Daftar File:**
+  - `src/data/surgery.js` — metadata kategori.
+  - `src/lib/plastic-surgery.js` — generator BBCode, opsi form, blank state.
+  - `src/lib/plastic-surgery.test.js` — 4 pengujian unit.
+  - `src/components/PlasticSurgeryReport.jsx` — komponen interaktif lengkap.
+
+---
+
+## 8. Data Pribadi Staff & Utilitas Tanggal
+
+### `src/data/staff.js` — Tobrian Alrik:
+- `dob: '1999-09-19'`, `address: 'West Mirror Drive'`, `phone: '356-6302'`
+- `bankAccount: '9282905341'`, `birthPlace: 'Stockholm, Sweden'`
+- `gender: 'Male'`, `race: 'Caucasian'`
+
+### `src/lib/dates.js` — Format Tanggal Fleksibel:
+- `formatDatePattern(isoDate, pattern, locale)` — mendukung:
+  - `DD/MM/YYYY`, `MM/DD/YYYY`, `DD MMM YYYY`, `DD MMMM YYYY`
+  - Locale `id` (Indonesia) dan `en` (English).
+- Dipakai di Criminal Record (DoB), Plastic Surgery (DoB), dan template lain.
+- 3 unit test di `src/lib/dates.test.js`.
+
+---
+
+## 9. Warna Aksen Kategori Link Referensi
+
+Setiap kategori di halaman **Link Referensi** (`#/links`) kini memiliki garis aksen warna berbeda pada header:
+
+| Kategori | Properti `color` | Warna |
+|---|---|---|
+| General | `bg-slate-400` | Abu-abu |
+| Davis Fire Station | `bg-alarm` | Merah |
+| Pillbox Hospital | `bg-emerald-500` | Hijau |
+| Los Santos Police Department | `bg-blue-600` | Biru |
+
+Implementasi di `LinkList.jsx`:
+```jsx
+<span aria-hidden="true" className={`h-4 w-1 sm:h-5 ${group.color || 'bg-alarm'}`} />
+```
+
+---
+
+## 10. Penyempurnaan Engine BBCode & Preview
 
 1. **Tag `td1`:**
    - Ditambahkan ke `KNOWN` dan `BLOCK` pada `src/lib/bbcode.js`.
@@ -159,14 +218,18 @@ Setiap template laporan kini memiliki rujukan tombol langsung **"Forum Pengajuan
    - Mendukung `divbox=maroon` (bar merah tua), `divbox=beige` (latar krem `#f8f5ee` bergaris `#d8d2be`), dan `divbox=black` (baris pembatas gelap).
 3. **Judul `secspoiler`:**
    - Mendukung parameter judul (misal `[secspoiler=Photo evidence of activities.]`) yang ditampilkan di elemen `<summary>`.
+4. **Tag Baru:**
+   - `[list=none]` / `[list=0]` — list tanpa bullet/nomor.
+   - `[aligntable=...]` — tabel alignment dengan margin.
 
 ---
 
-## 8. Hasil Pengujian & Ukuran Bundle
+## 11. Hasil Pengujian & Ukuran Bundle
 
-- **Vitest Suite:** 16 berkas tes, 148 pengujian berhasil (100% pass).
-- **Oxlint:** 0 warning, 0 error pada 86 berkas.
+- **Vitest Suite:** 18 berkas tes, 156 pengujian berhasil (100% pass).
+- **Oxlint:** 0 warning, 0 error pada 92 berkas.
 - **Ukuran Produksi:**
-  - JS: 288.71 kB (86.63 kB gzip — aman di bawah batas anggaran 90 kB).
-  - CSS: 26.98 kB (6.64 kB gzip).
+  - JS: 301.79 kB (88.94 kB gzip).
+  - CSS: 27.52 kB (6.77 kB gzip).
   - Dependensi baru: **0** (sepenuhnya statis dan mandiri).
+

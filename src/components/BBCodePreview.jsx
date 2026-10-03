@@ -157,7 +157,7 @@ function render(node, key) {
           </ol>
         )
       }
-      if (value === '0') {
+      if (value === '0' || value === 'none') {
         return (
           <ul key={key} className="my-1 list-none pl-0">
             {kids}
@@ -294,8 +294,8 @@ function render(node, key) {
       const parts = (value || '').split(',')
       const align = parts[0]?.trim().toLowerCase()
       if (align === 'left') {
-        const mr = Number(parts[3]) || 12
-        const mb = Number(parts[4]) || 8
+        const mr = parts[3]?.trim() !== '' && !isNaN(Number(parts[3])) ? Number(parts[3]) : 12
+        const mb = parts[4]?.trim() !== '' && !isNaN(Number(parts[4])) ? Number(parts[4]) : 8
         return (
           <div
             key={key}
@@ -307,8 +307,8 @@ function render(node, key) {
         )
       }
       if (align === 'right') {
-        const ml = Number(parts[5]) || 12
-        const mb = Number(parts[4]) || 8
+        const ml = parts[5]?.trim() !== '' && !isNaN(Number(parts[5])) ? Number(parts[5]) : 12
+        const mb = parts[4]?.trim() !== '' && !isNaN(Number(parts[4])) ? Number(parts[4]) : 8
         return (
           <div
             key={key}

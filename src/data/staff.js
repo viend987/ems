@@ -14,5 +14,12 @@ export default [
     callsign: 'RA-105',
     signature: 'https://i.imgur.com/OyltXL7.png',
     patrolTopic: 'https://fire.los-santos.net/viewtopic.php?t=1652',
+    dob: '1999-09-19',
+    address: 'West Mirror Drive',
+    phone: '356-6302',
+    bankAccount: '9282905341',
+    birthPlace: 'Stockholm, Sweden',
+    gender: 'Male',
+    race: 'Caucasian',
   },
 ]

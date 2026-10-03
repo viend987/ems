@@ -3,6 +3,7 @@ import STAFF from '../data/staff.js'
 import BBCodePreview from './BBCodePreview.jsx'
 import { writeClipboard } from '../lib/copy.js'
 import { isImageUrl, normalizeImageUrl } from '../lib/patrol.js'
+import { formatDatePattern } from '../lib/dates.js'
 import {
   blankRecord,
   buildCriminalRecord,
@@ -105,6 +106,11 @@ export default function CriminalRecordReport({ lang }) {
     setDraft((d) => ({
       ...d,
       fullName: tobrian.name,
+      sex: tobrian.gender || d.sex,
+      race: tobrian.race || d.race,
+      dob: formatDatePattern(tobrian.dob, 'DD/MM/YYYY') || d.dob,
+      address: tobrian.address || d.address,
+      phone: tobrian.phone || d.phone,
       signatureImage: tobrian.signature || '',
     }))
   }

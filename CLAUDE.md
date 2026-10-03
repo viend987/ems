@@ -92,10 +92,22 @@ inputs without a backend:
   inside a transparent bordered block. Captures applicant demographics, ID card and driver's license attachments
   with live previews, and signature image/name. Includes a "Gunakan data Tobrian Alrik" quick-fill button, direct
   link to the LSPD records forum (`https://police.los-santos.net/viewforum.php?f=298`).
+- **Plastic Surgery** (`#/plastic-surgery`, Hospital Unit): Pillbox Hill Medical Center plastic surgery
+  application form with patient demographics, diagnosis, surgical procedure details, before/after photo evidence
+  with live image previews, DoB format switcher (DD/MM/YYYY etc. via `src/lib/dates.js`), Tobrian Alrik autofill,
+  and direct link to the plastic surgery forum (`https://fire.los-santos.net/viewforum.php?f=153`).
 
 All report generators feature dual Pratinjau / BBCode tabs, copy button, "Laporan baru" reset, new-tab forum submission links,
 and persist drafts in `localStorage`. All dead sample constants and "Muat contoh" buttons have been completely purged from the codebase.
-Member details, forum patrol topics, and signatures come from `src/data/staff.js`.
+Member details, forum patrol topics, and signatures come from `src/data/staff.js`. Staff entries may include
+`dob`, `address`, `phone`, `bankAccount`, `birthPlace`, `gender`, and `race` for auto-fill across templates.
+The flexible date formatting utility in `src/lib/dates.js` supports `DD/MM/YYYY`, `MM/DD/YYYY`, `DD MMM YYYY`,
+`DD MMMM YYYY` in both Indonesian and English locales.
+
+**Link Referensi** (`#/links`) groups use distinct accent bar colors for each category header:
+General = `bg-slate-400` (grey), Davis Fire Station = `bg-alarm` (red), Pillbox Hospital = `bg-emerald-500`
+(green), LSPD = `bg-blue-600` (blue). The color is stored in `group.color` in `src/data/links.js` and
+rendered by the `<span>` accent bar in `LinkList.jsx`.
 
 In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
