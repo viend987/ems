@@ -11,6 +11,7 @@ export default [
     badge: '211205',
     rank: 'FireFighter III',
     district: 'Davis Fire Station',
+    callsign: 'RA-105',
     signature: 'https://i.imgur.com/OyltXL7.png',
   },
 ]

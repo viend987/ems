@@ -38,7 +38,7 @@ function readDraft() {
 }
 
 const buttonClass =
-  'flex min-h-8 min-w-8 items-center justify-center gap-0.5 rounded-sm border border-line bg-ink px-1.5 py-1 text-dim hover:border-alarm hover:text-bone'
+  'flex size-8 items-center justify-center rounded-sm border border-line bg-ink text-dim transition-colors hover:border-alarm hover:text-bone focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-signal'
 
 export default function BBCodeBuilder({ lang }) {
   const s = strings(lang)
@@ -122,12 +122,13 @@ export default function BBCodeBuilder({ lang }) {
                   aria-label={spec.name}
                   className={buttonClass}
                 >
-                  {spec.icon && <Icon name={spec.icon} />}
-                  {spec.label && (
+                  {spec.icon ? (
+                    <Icon name={spec.icon} />
+                  ) : (
                     <span
-                      className={`text-[11px] leading-none ${
-                        spec.icon ? 'text-[9px] text-muted' : ''
-                      } ${spec.id === 'b' ? 'font-bold' : ''} ${spec.id === 'i' ? 'italic' : ''} ${
+                      className={`text-[12px] leading-none ${
+                        spec.id === 'b' ? 'font-bold' : ''
+                      } ${spec.id === 'i' ? 'italic' : ''} ${
                         spec.id === 'u' ? 'underline' : ''
                       }`}
                     >

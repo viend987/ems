@@ -121,8 +121,7 @@ export const TAG_GROUPS = [
       },
       {
         id: 'list-plain',
-        icon: 'list',
-        label: '0',
+        icon: 'listPlain',
         name: 'Plain list, no bullets — what the forum templates use',
         before: '[list=0]\n[*]',
         after: '\n[/list]',
@@ -141,8 +140,7 @@ export const TAG_GROUPS = [
       },
       {
         id: 'altspoiler',
-        icon: 'spoiler',
-        label: 'alt',
+        icon: 'altspoiler',
         name: 'Titled spoiler — the title is selected first',
         before: '[altspoiler=Title]',
         after: '[/altspoiler]',
@@ -159,8 +157,7 @@ export const TAG_GROUPS = [
       },
       {
         id: 'block',
-        icon: 'box',
-        label: 'pad',
+        icon: 'block',
         name: 'Bordered block container — parameters are selected first',
         before: '[block=transparent,1,black,10,10,10]',
         after: '[/block]',
@@ -204,8 +201,7 @@ export const TAG_GROUPS = [
       },
       {
         id: 'img-resize',
-        icon: 'image',
-        label: 'px',
+        icon: 'imgResize',
         name: 'Image at a set width — the width is selected first',
         before: '[img-resize=200]',
         after: '[/img-resize]',
@@ -236,6 +232,16 @@ export const TAG_GROUPS = [
         before: '[table]\n[tr][th]',
         after: '[/th][th][/th][/tr]\n[tr][td][/td][td][/td][/tr]\n[/table]',
         body: 'Heading',
+        block: true,
+      },
+      {
+        id: 'td1',
+        icon: 'td1',
+        name: 'Colored table cell — color is selected first',
+        before: '[td1=red]',
+        after: '[/td1]',
+        body: 'Cell',
+        pick: 'red',
         block: true,
       },
       {

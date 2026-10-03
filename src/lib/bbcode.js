@@ -49,6 +49,7 @@ const KNOWN = new Set([
   'space',
   'block',
   'altspoiler',
+  'td1',
 ])
 
 /** Tag yang berperilaku seperti blok: ujung spasinya dirapikan saat mengurai. */
@@ -67,6 +68,7 @@ const BLOCK = new Set([
   'tr',
   'th',
   'td',
+  'td1',
   'code',
   'left',
   'info',

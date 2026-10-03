@@ -2,14 +2,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import BBCodeBuilder from './components/BBCodeBuilder.jsx'
 import Board from './components/Board.jsx'
 import CodeTable from './components/CodeTable.jsx'
+import CriminalRecordReport from './components/CriminalRecordReport.jsx'
 import FlowBar from './components/FlowBar.jsx'
 import Header from './components/Header.jsx'
 import LinkList from './components/LinkList.jsx'
+import PatientCareReport from './components/PatientCareReport.jsx'
 import PatrolLog from './components/PatrolLog.jsx'
 import Section from './components/Section.jsx'
 import SearchResults from './components/SearchResults.jsx'
 import SectionNav from './components/SectionNav.jsx'
 import UnitGallery from './components/UnitGallery.jsx'
+import VehicleMaintenanceReport from './components/VehicleMaintenanceReport.jsx'
 import { CATEGORIES, PROCEDURES } from './data/index.js'
 import { useCopy, useRoute, useTheme } from './hooks.js'
 import { useLang } from './hooks.js'
@@ -158,6 +161,9 @@ export default function App() {
                 ))}
                 {category.form === 'patrol' && <PatrolLog lang={lang} />}
                 {category.form === 'builder' && <BBCodeBuilder lang={lang} />}
+                {category.form === 'pcr' && <PatientCareReport lang={lang} />}
+                {category.form === 'maintenance' && <VehicleMaintenanceReport lang={lang} />}
+                {category.form === 'criminal-record' && <CriminalRecordReport lang={lang} />}
               </div>
             </>
           )}

@@ -50,17 +50,46 @@ function render(node, key) {
     case 'root':
       return <Fragment key={key}>{kids}</Fragment>
 
-    case 'divbox':
-      // Batang maroon adalah judul bagian; divbox putih adalah badan postingan.
-      return value.toLowerCase() === 'maroon' ? (
-        <div key={key} className="my-1.5 bg-[#7b0d12] px-2 py-1 text-white">
-          {kids}
-        </div>
-      ) : (
-        <div key={key} className="border border-[#c9c9c9] bg-white p-2.5 sm:p-3">
+    case 'divbox': {
+      const val = (value || '').toLowerCase().trim()
+      if (val === 'maroon') {
+        return (
+          <div key={key} className="my-1.5 bg-[#7b0d12] px-2 py-1 text-white">
+            {kids}
+          </div>
+        )
+      }
+      if (val === 'black') {
+        const isEmpty = !kids || (Array.isArray(kids) && kids.length === 0)
+        return (
+          <div
+            key={key}
+            className={`my-1.5 bg-black text-white ${isEmpty ? 'h-1.5 sm:h-2' : 'p-2.5 sm:p-3'}`}
+          >
+            {kids}
+          </div>
+        )
+      }
+      if (val === 'beige') {
+        return (
+          <div key={key} className="my-1.5 border border-[#d8d2be] bg-[#f8f5ee] p-2.5 text-[#222] sm:p-3">
+            {kids}
+          </div>
+        )
+      }
+      if (val && SAFE_COLOR.test(val)) {
+        return (
+          <div key={key} style={{ backgroundColor: val }} className="my-1.5 border border-[#c9c9c9] p-2.5 sm:p-3">
+            {kids}
+          </div>
+        )
+      }
+      return (
+        <div key={key} className="my-1.5 border border-[#c9c9c9] bg-white p-2.5 sm:p-3">
           {kids}
         </div>
       )
+    }
 
     case 'center':
       return (
@@ -158,11 +187,18 @@ function render(node, key) {
         </th>
       )
     case 'td':
+    case 'td1': {
+      const bg = value && SAFE_COLOR.test(value) ? value : undefined
       return (
-        <td key={key} className="border border-[#c9c9c9] px-2 py-1 align-top">
+        <td
+          key={key}
+          style={bg ? { backgroundColor: bg } : undefined}
+          className="border border-[#c9c9c9] px-2 py-1 align-top"
+        >
           {kids}
         </td>
       )
+    }
 
     case 'quote':
       return (
@@ -319,7 +355,7 @@ function render(node, key) {
       return (
         <details key={key} className="my-1.5 border border-[#c9c9c9] bg-black/5">
           <summary className="cursor-pointer px-2 py-1 text-[11px] tracking-wide text-[#555] select-none">
-            Secure spoiler
+            {value || 'Secure spoiler'}
           </summary>
           <div className="px-2 pb-2">{kids}</div>
         </details>

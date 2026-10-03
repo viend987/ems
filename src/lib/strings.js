@@ -80,6 +80,17 @@ const id = {
     'Gambar dari link ini tidak bisa dimuat. Pastikan link-nya mengarah langsung ke gambar.',
   plImageLoading: 'Memuat pratinjau…',
   plImageOk: 'Gambar termuat.',
+
+  // Formulir laporan umum
+  reportPreviewTab: 'Pratinjau',
+  reportBbcodeTab: 'Kode BBCode',
+  reportCopyBbcode: 'Salin BBCode',
+  reportCopied: 'Tersalin',
+  reportCopyFailed: 'Gagal menyalin',
+  reportLoadSample: 'Muat contoh',
+  reportNew: 'Laporan baru',
+  reportAddImage: 'Tambah link gambar',
+  reportRemove: 'Hapus',
 }
 
 const en = {
@@ -149,6 +160,17 @@ const en = {
   plImageBroken: 'The image at this link will not load. Make sure it points straight at the image.',
   plImageLoading: 'Loading preview…',
   plImageOk: 'Image loaded.',
+
+  // Common report form
+  reportPreviewTab: 'Preview',
+  reportBbcodeTab: 'BBCode',
+  reportCopyBbcode: 'Copy BBCode',
+  reportCopied: 'Copied',
+  reportCopyFailed: 'Copy failed',
+  reportLoadSample: 'Load example',
+  reportNew: 'New report',
+  reportAddImage: 'Add image link',
+  reportRemove: 'Remove',
 }
 
 const DICT = { id, en }

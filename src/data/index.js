@@ -20,7 +20,10 @@ import wounds from './procedures/wounds.js'
 import BBCODES from './bbcodes.js'
 import BUILDER from './builder.js'
 import LINKS from './links.js'
+import MAINTENANCE from './maintenance.js'
 import PATROL from './patrol.js'
+import PCR from './pcr.js'
+import RECORDS from './records.js'
 import UNITS from './units.js'
 import { REFERENCE } from './reference.js'
 
@@ -47,7 +50,18 @@ export const PROCEDURES = [
   blood,
 ]
 
-export const CATEGORIES = [...PROCEDURES, BUILDER, BBCODES, PATROL, ...REFERENCE, UNITS, LINKS]
+export const CATEGORIES = [
+  ...PROCEDURES,
+  BUILDER,
+  BBCODES,
+  PATROL,
+  PCR,
+  MAINTENANCE,
+  RECORDS,
+  ...REFERENCE,
+  UNITS,
+  LINKS,
+]
 
 export { LINKS, UNITS }
 
@@ -74,6 +88,7 @@ export const GROUPS = [
       { id: 'general', name: 'General', nameEn: 'General' },
       { id: 'field', name: 'Field Unit', nameEn: 'Field Unit' },
       { id: 'hospital', name: 'Hospital Unit', nameEn: 'Hospital Unit' },
+      { id: 'lspd', name: 'LSPD', nameEn: 'LSPD' },
     ],
   },
   { id: 'referensi', name: 'Referensi', nameEn: 'Reference' },

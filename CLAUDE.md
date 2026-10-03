@@ -74,17 +74,24 @@ role descriptions, equipment lists, the fire-extinguisher class table, risk clas
 skunk-deodorizer recipe, bat-guano cleanup — and none of it belongs here. When new content arrives,
 extract the chat lines and leave the prose in the source document.
 
-The one exception is **Patrol Log** (`#/patrol`), a form the user asked for that generates the
-BBCode of the forum's Weekly Patrol Log (min. 3 reports a week, min. 60 minutes of duty each). The
-template lives in `buildPatrolLog()` in `src/lib/patrol.js`, and `patrol.test.js` pins it
-byte-for-byte to a real finished report — change both together. The result panel has two tabs,
-**Pratinjau** (default) and **BBCode**; the copy button stays visible in both. Member details and signature
-links come from the master list in `src/data/staff.js`; adding a member is one object there. A
-duty under 60 minutes (end before start counts as crossing midnight) disables the copy button on
-purpose. The draft is kept in `localStorage` (`lsfd:patrol-draft`). Proof images are plain link
-fields — the user uploads elsewhere and pastes the link. They accept any http(s) host (not locked
-to imgur), reject plain text, and show a live preview; an Imgur upload proxy was built once and
-removed at the user's request, so the site stays fully static.
+The one group of exceptions is **Laporan forms**, which generate forum BBCode directly from interactive
+inputs without a backend:
+- **Patrol Log** (`#/patrol`, Field Unit): Weekly Patrol Log for LSFD (min. 3 reports, min. 60 mins each).
+  Pinned byte-for-byte by `patrol.test.js`. Proof images accept any http(s) link with live preview.
+- **Patient Care Report** (`#/pcr`, Field Unit): Detailed on-scene PCR with Personal Details (auto-filled
+  from `staff.js`, default callsign RA-105 for Tobrian Alrik), Duty Info, LoC selector (Alert, Verbal,
+  Pain Stimuli, Unresponsive), optional Triage selector, vitals, summary with color formatting support, and
+  screenshot evidence.
+- **Vehicle Maintenance** (`#/maintenance`, Field Unit): Hospital Financial Statement for Davis Fire Station
+  units. Includes an interactive cost table initialized with 22 default units (RA-111 through ETU),
+  auto-calculated total salary proposed ($1,920.73 on default sample), dynamic unit row add/delete, reset
+  button, and photo evidence inside `secspoiler`.
+- **Request Criminal Record** (`#/criminal-record`, LSPD): LSPD Criminal Record Information Request Form
+  inside a transparent bordered block. Captures applicant demographics, ID card and driver's license attachments
+  with live previews, and signature image/name. Includes a "Gunakan data Tobrian Alrik" quick-fill button.
+
+All report generators feature dual Pratinjau / BBCode tabs, copy button, "Laporan baru" reset, "Muat contoh"
+sample loaders, and persist drafts in `localStorage`. Member details and signatures come from `src/data/staff.js`.
 
 In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
@@ -171,7 +178,9 @@ avoid) or a parser with no UI, and a second parser could disagree with this one.
   regardless of the language toggle, because the names are really the tags' names.
 - Icons are inline SVG in `src/components/Icon.jsx`, one 16×16 `currentColor` path each — no icon
   package, since any of them outweighs the two dozen shapes actually used. `bbcode-tags.test.js`
-  fails on a tag pointing at an icon that does not exist. B/I/U stay letters, by convention.
+  fails on a tag pointing at an icon that does not exist. B/I/U stay letters, by convention. All icon buttons
+  are strictly `size-8` (32×32px) without awkward hybrid text badges, using dedicated icons (`imgResize`,
+  `altspoiler`, `block`, `listPlain`, `td1`).
 - The five font sizes are a **dropdown**, not five buttons: Tiny 50, Small 85, Normal 100, Large 150,
   Huge 200. `sizeSpec(value)` builds the spec, so the dropdown goes through the same `applyTag` path.
 - `insert()` reads the **live textarea value**, not the `code` from render. With the render value, two
@@ -190,10 +199,12 @@ avoid) or a parser with no UI, and a second parser could disagree with this one.
   Without that, a lone `[hr]` became a parent and every later line ended up as its children — which
   the preview drops, since it renders `hr` childless. The forum writes `[hr][/hr]`, so both spellings
   have to work.
-- Supported tags beyond the Patrol Log set: `table`/`tr`/`th`/`td`, `code`, `left`, `font`, `info`,
-  `success`, `warn`, `error`, `progress`, `imageleft`, `aligntable`, `secspoiler`, `space`. The notice
-  boxes carry **fixed forum colours**, not site theme tokens: what they imitate is the forum, not this
-  page. `space` joins `hr` in `VOID`. `font` values are filtered by `SAFE_FONT` the way colours are by
+- Supported tags beyond the Patrol Log set: `table`/`tr`/`th`/`td`/`td1`, `code`, `left`, `font`, `info`,
+  `success`, `warn`, `error`, `progress`, `imageleft`, `aligntable`, `secspoiler`, `space`, `block`, `altspoiler`.
+  The notice boxes carry **fixed forum colours**, not site theme tokens: what they imitate is the forum, not this
+  page. `td1` supports custom cell background colors (e.g. `[td1=Red]` or `[td1=white]`). `divbox` supports
+  color values including `maroon`, `beige`, and `black`. `secspoiler` supports an optional title parameter.
+  `space` joins `hr` in `VOID`. `font` values are filtered by `SAFE_FONT` the way colours are by
   `SAFE_COLOR`. `src/lib/bbcode-example.js` holds the
   forum's real Patient Care Report, used both by the editor's "Muat contoh" button and as a parser
   fixture — it covers uppercase `[/LIST]`, paired `[hr][/hr]`, and a `[list]` left open until the
@@ -298,9 +309,10 @@ A group may declare `subgroups: [{ id, name }]`, and a category picks one with `
 rail and the mobile grid. Two rules keep it from becoming a maintenance trap: a category **without**
 `subgroup` still sits directly under its group heading, so existing groups needed no change, and an
 **empty subgroup is not drawn at all** — it appears by itself once something lands in it. `Laporan`
-declares `general` (BBCode Builder), `field` (Field Unit, Patrol Log) and `hospital` (Hospital Unit);
-Hospital Unit does not render today, because no report has landed in it yet. `procedures.test.js` fails on a `subgroup` that its group
-does not declare, and on duplicate subgroup ids.
+declares `general` (BBCode Builder), `field` (Field Unit: Patrol Log, PCR, Vehicle Maintenance), `hospital`
+(Hospital Unit), and `lspd` (LSPD: Request Criminal Record); Hospital Unit does not render today, because no
+report has landed in it yet. `procedures.test.js` fails on a `subgroup` that its group does not declare,
+and on duplicate subgroup ids.
 
 ### Motion budget
 
