@@ -73,4 +73,13 @@ describe('mode switcher & guide mode', () => {
     expect(location.hash).toBe('#/field')
     expect(el.textContent).toContain('Danger (kondisional)')
   })
+
+  it('dapat membuka modul panduan Terminologi Anatomi & Cedera (#/guide-anatomy)', async () => {
+    const el = await mount('#/guide-anatomy')
+    expect(el.textContent).toContain('Terminologi Anatomi & Klasifikasi Cedera Medis')
+    expect(el.textContent).toContain('Generator Doctor Report & Radio Dispatch')
+    expect(el.textContent).toContain('Upper Extremity')
+    expect(el.textContent).toContain('Lower Extremity')
+    expect(el.textContent).toContain('Combat Ready Clamp (CRoC)')
+  })
 })

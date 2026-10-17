@@ -6,6 +6,7 @@ import CriminalRecordReport from './components/CriminalRecordReport.jsx'
 import FlowBar from './components/FlowBar.jsx'
 import GuideBoard from './components/GuideBoard.jsx'
 import GuidePK from './components/GuidePK.jsx'
+import GuideAnatomy from './components/GuideAnatomy.jsx'
 import Header from './components/Header.jsx'
 import LinkList from './components/LinkList.jsx'
 import PatientCareReport from './components/PatientCareReport.jsx'
@@ -188,7 +189,11 @@ export default function App() {
               lang={lang}
             />
           ) : isGuide ? (
-            route.category === 'guide-pk' && <GuidePK lang={lang} />
+            route.category === 'guide-pk' ? (
+              <GuidePK lang={lang} />
+            ) : route.category === 'guide-anatomy' ? (
+              <GuideAnatomy lang={lang} />
+            ) : null
           ) : (
             <>
               <div className="mb-4">

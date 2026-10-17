@@ -39,6 +39,39 @@ export const GUIDES = [
       },
     ],
   },
+  {
+    id: 'guide-anatomy',
+    title: 'Terminologi Anatomi & Cedera',
+    titleEn: 'Anatomy & Injury Terminology',
+    badge: 'Anatomi & Medis',
+    badgeEn: 'Anatomy & Medical',
+    readTime: '5 min baca',
+    readTimeEn: '5 min read',
+    blurb:
+      'Rujukan komprehensif istilah anatomi tubuh (Upper/Lower Extremity, Torso, Cranial, Cervical), jenis luka medis, titik perabaan pembuluh darah arteri, klasifikasi fraktur tulang, serta generator Doctor Report & radio emergency LSFD.',
+    blurbEn:
+      'Comprehensive reference for anatomical body regions (Upper/Lower Extremity, Torso, Cranial, Cervical), wound classifications, arterial pulse sites, bone fractures, and an interactive Doctor Report & radio dispatch generator.',
+    sections: [
+      { id: 'builder', name: 'Generator Doctor Report & Radio', nameEn: 'Doctor Report & Radio Generator' },
+      { id: 'regions', name: 'Regio Anatomi Tubuh', nameEn: 'Anatomical Body Regions' },
+      { id: 'wounds', name: 'Klasifikasi Jenis Luka', nameEn: 'Wound Classifications' },
+      { id: 'arteries', name: 'Titik Arteri & Pendarahan', nameEn: 'Arterial Pressure Points' },
+      { id: 'bones', name: 'Fraktur & Rujukan Tulang', nameEn: 'Fractures & Bone Reference' },
+      { id: 'field-tips', name: 'Prosedur Klinis Lapangan', nameEn: 'Field Clinical Procedures' },
+    ],
+    sources: [
+      {
+        title: 'LSFD Field Academy Handbook — BLS & ILS Protocol',
+        author: 'Los Santos Fire Department Recruitment & Academy',
+        ref: 'Bab Trauma Management, DR-XABC, DEAT, Fracture Splinting',
+      },
+      {
+        title: 'LSFD Hospital Division — Medical Terminology Guidelines',
+        author: 'ASGH / CGH / PBH Trauma & Emergency Department',
+        ref: 'Doctor Report Standardization & Emergency Radio Codes',
+      },
+    ],
+  },
 ]
 
 export const DEFAULT_GUIDE = 'guide-pk'
