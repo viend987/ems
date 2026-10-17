@@ -60,7 +60,7 @@ export default function Header({
                   : 'text-dim hover:text-bone'
               }`}
             >
-              <span aria-hidden="true" className="text-[11px]">⚡</span>
+              <Icon name="bolt" className="size-3.5 shrink-0" />
               <span className="slab uppercase tracking-wide">{s.modeOps}</span>
             </button>
             <button
@@ -75,7 +75,7 @@ export default function Header({
                   : 'text-dim hover:text-bone'
               }`}
             >
-              <span aria-hidden="true" className="text-[11px]">📖</span>
+              <Icon name="book" className="size-3.5 shrink-0" />
               <span className="slab uppercase tracking-wide">{s.modeGuide}</span>
             </button>
           </div>

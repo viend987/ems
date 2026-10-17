@@ -1,4 +1,5 @@
 import { useState } from 'preact/hooks'
+import Icon from './Icon.jsx'
 import {
   evaluatePk,
   GSW_LOCATIONS,
@@ -83,26 +84,33 @@ export default function GuidePK({ lang }) {
 
         {/* Quick jump navigation */}
         <nav aria-label="Daftar Isi" className="mt-6 flex flex-wrap gap-1.5 text-[11px]">
-          <a href="#calc" className="rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
-            {isEn ? '🧮 Interactive Calculator' : '🧮 Kalkulator Interaktif'}
+          <a href="#calc" className="flex items-center gap-1.5 rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
+            <Icon name="calculator" className="size-3 text-alarm" />
+            <span>{isEn ? 'Interactive Calculator' : 'Kalkulator Interaktif'}</span>
           </a>
-          <a href="#concepts" className="rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
-            {isEn ? '📌 PK vs CK vs NLR' : '📌 PK vs CK vs NLR'}
+          <a href="#concepts" className="flex items-center gap-1.5 rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
+            <Icon name="pin" className="size-3 text-alarm" />
+            <span>{isEn ? 'PK vs CK vs NLR' : 'PK vs CK vs NLR'}</span>
           </a>
-          <a href="#matrix" className="rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
-            {isEn ? '📊 Criteria Matrix' : '📊 Matriks Kriteria PK'}
+          <a href="#matrix" className="flex items-center gap-1.5 rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
+            <Icon name="chart" className="size-3 text-alarm" />
+            <span>{isEn ? 'Criteria Matrix' : 'Matriks Kriteria PK'}</span>
           </a>
-          <a href="#scheme" className="rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
-            {isEn ? '🩺 Life Support Scheme' : '🩺 Skema Prosedur LSFD'}
+          <a href="#scheme" className="flex items-center gap-1.5 rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
+            <Icon name="pulse" className="size-3 text-alarm" />
+            <span>{isEn ? 'Life Support Scheme' : 'Skema Prosedur LSFD'}</span>
           </a>
-          <a href="#authority" className="rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
-            {isEn ? '⚖️ Faction Authority' : '⚖️ Wewenang Faksi'}
+          <a href="#authority" className="flex items-center gap-1.5 rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
+            <Icon name="scale" className="size-3 text-alarm" />
+            <span>{isEn ? 'Faction Authority' : 'Wewenang Faksi'}</span>
           </a>
-          <a href="#rules" className="rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
-            {isEn ? '⚠️ Prohibitions & Penalties' : '⚠️ Larangan & Sanksi'}
+          <a href="#rules" className="flex items-center gap-1.5 rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
+            <Icon name="warn" className="size-3 text-alarm" />
+            <span>{isEn ? 'Prohibitions & Penalties' : 'Larangan & Sanksi'}</span>
           </a>
-          <a href="#qna" className="rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
-            {isEn ? '❓ Field Q&A' : '❓ Tanya Jawab Kasus'}
+          <a href="#qna" className="flex items-center gap-1.5 rounded-sm border border-line bg-panel px-2.5 py-1 text-dim hover:border-alarm hover:text-bone">
+            <Icon name="question" className="size-3 text-alarm" />
+            <span>{isEn ? 'Field Q&A' : 'Tanya Jawab Kasus'}</span>
           </a>
         </nav>
       </header>
@@ -341,9 +349,10 @@ export default function GuidePK({ lang }) {
                   <button
                     type="button"
                     onClick={handleRoll}
-                    className="rounded bg-alarm px-3 py-1 text-xs font-bold text-white hover:opacity-90"
+                    className="flex items-center gap-1.5 rounded bg-alarm px-3 py-1 text-xs font-bold text-white hover:opacity-90"
                   >
-                    {isEn ? 'Roll /chance (1x)' : 'Roll /chance (1x)'}
+                    <Icon name="dice" className="size-3.5 shrink-0" />
+                    <span>{isEn ? 'Roll /chance (1x)' : 'Roll /chance (1x)'}</span>
                   </button>
                 </div>
 
@@ -462,7 +471,10 @@ export default function GuidePK({ lang }) {
                 <td className="p-3 font-medium text-bone">Fleshwound</td>
                 <td className="p-3 font-mono">&gt; 50%</td>
                 <td className="p-3 text-center">
-                  <span className="rounded bg-emerald-500/10 px-2 py-0.5 font-bold text-emerald-600 dark:text-emerald-400">✗ Tidak PK</span>
+                  <span className="inline-flex items-center gap-1 rounded bg-emerald-500/10 px-2 py-0.5 font-bold text-emerald-600 dark:text-emerald-400">
+                    <Icon name="cross" className="size-2.5 shrink-0" />
+                    <span>{isEn ? 'No PK' : 'Tidak PK'}</span>
+                  </span>
                 </td>
                 <td className="p-3 text-dim">
                   {isEn
@@ -475,7 +487,10 @@ export default function GuidePK({ lang }) {
                 <td className="p-3 font-medium text-bone">Fleshwound</td>
                 <td className="p-3 font-mono">&le; 50%</td>
                 <td className="p-3 text-center">
-                  <span className="rounded bg-amber-500/10 px-2 py-0.5 font-bold text-amber-600 dark:text-amber-400">✓ Dapat PK</span>
+                  <span className="inline-flex items-center gap-1 rounded bg-amber-500/10 px-2 py-0.5 font-bold text-amber-600 dark:text-amber-400">
+                    <Icon name="check" className="size-2.5 shrink-0" />
+                    <span>{isEn ? 'Can PK' : 'Dapat PK'}</span>
+                  </span>
                 </td>
                 <td className="p-3 text-dim">
                   {isEn
@@ -488,7 +503,10 @@ export default function GuidePK({ lang }) {
                 <td className="p-3 font-bold text-alarm">Vital Wound</td>
                 <td className="p-3 font-mono font-bold text-alarm">&lt; 50%</td>
                 <td className="p-3 text-center">
-                  <span className="rounded bg-alarm text-white px-2 py-0.5 font-bold">✓ AUTO PK</span>
+                  <span className="inline-flex items-center gap-1 rounded bg-alarm text-white px-2 py-0.5 font-bold">
+                    <Icon name="check" className="size-2.5 shrink-0" />
+                    <span>AUTO PK</span>
+                  </span>
                 </td>
                 <td className="p-3 text-alarm font-medium">
                   {isEn
@@ -501,7 +519,10 @@ export default function GuidePK({ lang }) {
                 <td className="p-3 font-medium text-bone">Vital Wound</td>
                 <td className="p-3 font-mono">&ge; 50%</td>
                 <td className="p-3 text-center">
-                  <span className="rounded bg-amber-500/10 px-2 py-0.5 font-bold text-amber-600 dark:text-amber-400">✓ Dapat PK</span>
+                  <span className="inline-flex items-center gap-1 rounded bg-amber-500/10 px-2 py-0.5 font-bold text-amber-600 dark:text-amber-400">
+                    <Icon name="check" className="size-2.5 shrink-0" />
+                    <span>{isEn ? 'Can PK' : 'Dapat PK'}</span>
+                  </span>
                 </td>
                 <td className="p-3 text-dim">
                   {isEn
@@ -515,7 +536,10 @@ export default function GuidePK({ lang }) {
                   <td className="p-3 font-medium">{name}</td>
                   <td className="p-3 font-mono">&gt; / &lt; 50%</td>
                   <td className="p-3 text-center">
-                    <span className="rounded bg-line px-2 py-0.5 font-bold text-muted">✗ Dilarang</span>
+                    <span className="inline-flex items-center gap-1 rounded bg-line px-2 py-0.5 font-bold text-muted">
+                      <Icon name="cross" className="size-2.5 shrink-0" />
+                      <span>{isEn ? 'Forbidden' : 'Dilarang'}</span>
+                    </span>
                   </td>
                   <td className="p-3">
                     {isEn
@@ -610,8 +634,11 @@ export default function GuidePK({ lang }) {
               </p>
             </div>
           </div>
-          <div className="rounded border border-alarm/30 bg-alarm/5 p-2.5 text-[11px] text-alarm font-medium">
-            ⚠️ <strong>ATURAN MUTLAK:</strong> Atropine dan Epinephrine HANYA UNTUK SEKALI DIGUNAKAN. DILARANG KERAS mencampur atau memberikan kedua obat sekaligus pada satu pasien.
+          <div className="flex items-start gap-2 rounded border border-alarm/30 bg-alarm/5 p-2.5 text-[11px] text-alarm font-medium">
+            <Icon name="warn" className="size-4 shrink-0 mt-0.5" />
+            <div>
+              <strong>ATURAN MUTLAK:</strong> Atropine dan Epinephrine HANYA UNTUK SEKALI DIGUNAKAN. DILARANG KERAS mencampur atau memberikan kedua obat sekaligus pada satu pasien.
+            </div>
           </div>
         </div>
       </section>
