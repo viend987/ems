@@ -90,6 +90,17 @@ const id = {
   reportNew: 'Laporan baru',
   reportAddImage: 'Tambah link gambar',
   reportRemove: 'Hapus',
+
+  // Mode switcher & Guide
+  modeOps: 'Operasional',
+  modeGuide: 'Buku Panduan',
+  modeOpsDesc: 'Prosedur lapangan & salin baris RP cepat',
+  modeGuideDesc: 'Doktrin, rules server & kalkulator interaktif',
+  guideNavTitle: 'Daftar Panduan',
+  guideSectionsTitle: 'Daftar Isi Panduan',
+  guideUpcoming: 'Segera Hadir',
+  guideSource: 'Sumber Rujukan Resmi',
+  guideBackToOps: 'Kembali ke Operasional',
 }
 
 const en = {
@@ -169,6 +180,17 @@ const en = {
   reportNew: 'New report',
   reportAddImage: 'Add image link',
   reportRemove: 'Remove',
+
+  // Mode switcher & Guide
+  modeOps: 'Operations',
+  modeGuide: 'Field Guide',
+  modeOpsDesc: 'Field procedures & fast RP copy',
+  modeGuideDesc: 'Doctrines, server rules & interactive calculators',
+  guideNavTitle: 'Guide Index',
+  guideSectionsTitle: 'Table of Contents',
+  guideUpcoming: 'Coming Soon',
+  guideSource: 'Official References',
+  guideBackToOps: 'Back to Operations',
 }
 
 const DICT = { id, en }

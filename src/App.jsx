@@ -4,6 +4,8 @@ import Board from './components/Board.jsx'
 import CodeTable from './components/CodeTable.jsx'
 import CriminalRecordReport from './components/CriminalRecordReport.jsx'
 import FlowBar from './components/FlowBar.jsx'
+import GuideBoard from './components/GuideBoard.jsx'
+import GuidePK from './components/GuidePK.jsx'
 import Header from './components/Header.jsx'
 import LinkList from './components/LinkList.jsx'
 import PatientCareReport from './components/PatientCareReport.jsx'
@@ -14,7 +16,8 @@ import SearchResults from './components/SearchResults.jsx'
 import SectionNav from './components/SectionNav.jsx'
 import UnitGallery from './components/UnitGallery.jsx'
 import VehicleMaintenanceReport from './components/VehicleMaintenanceReport.jsx'
-import { CATEGORIES, PROCEDURES } from './data/index.js'
+import { DEFAULT_GUIDE, isGuideRoute } from './data/guides.js'
+import { CATEGORIES, DEFAULT_CATEGORY, PROCEDURES } from './data/index.js'
 import { useCopy, useRoute, useTheme } from './hooks.js'
 import { useLang } from './hooks.js'
 import { pick } from './lib/lang.js'
@@ -36,6 +39,61 @@ export default function App() {
   const [lang, toggleLang] = useLang()
   const [query, setQuery] = useState('')
   const searchRef = useRef(null)
+
+  const isGuide = isGuideRoute(route.category)
+  const mode = isGuide ? 'guide' : 'ops'
+
+  const [lastOps, setLastOps] = useState(() => {
+    try {
+      const stored = localStorage.getItem('lsfd:last-ops')
+      return stored && !isGuideRoute(stored) ? stored : DEFAULT_CATEGORY
+    } catch {
+      return DEFAULT_CATEGORY
+    }
+  })
+
+  const [lastGuide, setLastGuide] = useState(() => {
+    try {
+      const stored = localStorage.getItem('lsfd:last-guide')
+      return stored && isGuideRoute(stored) ? stored : DEFAULT_GUIDE
+    } catch {
+      return DEFAULT_GUIDE
+    }
+  })
+
+  useEffect(() => {
+    if (isGuideRoute(route.category)) {
+      setLastGuide(route.category)
+      try {
+        localStorage.setItem('lsfd:last-guide', route.category)
+      } catch {}
+    } else if (route.category) {
+      setLastOps(route.category)
+      try {
+        localStorage.setItem('lsfd:last-ops', route.category)
+      } catch {}
+    }
+  }, [route.category])
+
+  // Stabil antar-render: StepRow melewatkan render ulang hanya kalau propnya sama.
+  const goAndClear = useCallback(
+    (to) => {
+      setQuery('')
+      go(to)
+    },
+    [go],
+  )
+
+  const handleSwitchMode = useCallback(
+    (targetMode) => {
+      if (targetMode === 'guide') {
+        goAndClear(lastGuide || DEFAULT_GUIDE)
+      } else {
+        goAndClear(lastOps || DEFAULT_CATEGORY)
+      }
+    },
+    [goAndClear, lastGuide, lastOps],
+  )
 
   const category = RESOLVED.get(route.category) ?? CATEGORIES.find((c) => c.id === route.category)
   const hits = useMemo(() => searchAll(query, lang), [query, lang])
@@ -72,20 +130,11 @@ export default function App() {
   useEffect(() => {
     if (route.section) {
       const el = document.getElementById(`${route.category}-${route.section}`)
-      el?.scrollIntoView({ block: 'start' })
+      el?.scrollIntoView?.({ block: 'start' })
     } else if (route.nonce > 0) {
-      document.getElementById('isi')?.scrollIntoView({ block: 'start' })
+      document.getElementById('isi')?.scrollIntoView?.({ block: 'start' })
     }
   }, [route.category, route.section, route.nonce])
-
-  // Stabil antar-render: StepRow melewatkan render ulang hanya kalau propnya sama.
-  const goAndClear = useCallback(
-    (to) => {
-      setQuery('')
-      go(to)
-    },
-    [go],
-  )
 
   const board = { active: route.category, onGo: goAndClear, query, onQuery: setQuery, searchRef, lang }
 
@@ -94,18 +143,40 @@ export default function App() {
   // Dengan begitu papan selalu berakhir tepat di dasar layar.
   return (
     <div className="mx-auto flex min-h-dvh max-w-[100rem] border-line min-[1616px]:border-x">
-      <Board variant="rail" {...board} />
+      {isGuide ? (
+        <GuideBoard
+          variant="rail"
+          active={route.category}
+          onGo={goAndClear}
+          lang={lang}
+          onSwitchToOps={() => handleSwitchMode('ops')}
+        />
+      ) : (
+        <Board variant="rail" {...board} />
+      )}
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <FlowBar onGo={goAndClear} lang={lang} />
+        {!isGuide && <FlowBar onGo={goAndClear} lang={lang} />}
         <Header
           stepCount={STEP_COUNT}
           theme={theme}
           onTheme={toggleTheme}
           lang={lang}
           onLang={toggleLang}
+          mode={mode}
+          onMode={handleSwitchMode}
         />
-        <Board variant="grid" {...board} />
+        {isGuide ? (
+          <GuideBoard
+            variant="grid"
+            active={route.category}
+            onGo={goAndClear}
+            lang={lang}
+            onSwitchToOps={() => handleSwitchMode('ops')}
+          />
+        ) : (
+          <Board variant="grid" {...board} />
+        )}
 
         <main id="isi" className="min-w-0 flex-1 scroll-mt-4 px-4 py-6 sm:px-6 lg:scroll-mt-96 lg:px-8">
           {query.trim() ? (
@@ -116,6 +187,8 @@ export default function App() {
               onClear={() => setQuery('')}
               lang={lang}
             />
+          ) : isGuide ? (
+            route.category === 'guide-pk' && <GuidePK lang={lang} />
           ) : (
             <>
               <div className="mb-4">

@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
 import { CATEGORIES, DEFAULT_CATEGORY } from './data/index.js'
+import { GUIDES } from './data/guides.js'
 import { writeClipboard } from './lib/copy.js'
 import { applyLang, nextLang, readLang, writeLang } from './lib/lang.js'
 import { applyTheme, nextTheme, readTheme, writeTheme } from './lib/theme.js'
 
-const VALID = new Set(CATEGORIES.map((c) => c.id))
+const VALID = new Set([...CATEGORIES.map((c) => c.id), ...GUIDES.map((g) => g.id)])
 const STORE_KEY = 'lsfd:last-category'
 
 function readStore() {

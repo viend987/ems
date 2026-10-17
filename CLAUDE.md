@@ -109,6 +109,34 @@ General = `bg-slate-400` (grey), Davis Fire Station = `bg-alarm` (red), Pillbox 
 (green), LSPD = `bg-blue-600` (blue). The color is stored in `group.color` in `src/data/links.js` and
 rendered by the `<span>` accent bar in `LinkList.jsx`.
 
+## Mode Switcher: Operasional vs Buku Panduan
+
+The site features a top-level mode switcher in `Header.jsx`:
+- **Mode Operasional (`ops`)**: The default field-response interface with rapid copy steps, flowbar,
+  status board, BBCode builders, fleet gallery, and reference links.
+- **Mode Buku Panduan (`guide`)**: An editorial handbook layout dedicated to in-depth doctrines, server
+  rules synthesis, procedures, and interactive diagnostic simulators.
+- **State & Route Synchronization**: Stored in `localStorage` (`lsfd:last-ops`, `lsfd:last-guide`) and
+  synced with URL hash (`#/guide-pk` directly opens Guide mode; `#/field` opens Operasional mode).
+  Switching preserves each mode's last active page.
+
+### Guide: Ketentuan & Kalkulasi Player Kill (PK) (`#/guide-pk`)
+Synthesizes JGVRP Server Rules (Bab I, Pasal 4, 5, 8, 11, 21, 23) and LSFD Operational Guide #1239:
+- **Core Concepts Matrix**: Brutally Wounded (down/injured timer), Player Kill (PK), New Life Rule (NLR &
+  prohibition of Revenge Kill), and Character Kill (CK & CN).
+- **Interactive PK Calculator & Chance Simulator** (`src/lib/pk-calculator.js`):
+  - Wound analysis: Gunshot Wound (GSW) vs non-GSW (Graze, Bone Fracture, Dislocated, Cut Wound, Burns, Bruise).
+  - Vital wound criteria: Head (min. 1x GSW), Torso (min. 3x GSW). Limbs cannot PK (risk of amputation).
+  - Algorithmic verdict:
+    - Vital Wound with Survival Chance <50% = **AUTO PK** (/chance not needed).
+    - Vital Wound with Survival Chance >=50% = **Dapat PK via /chance 50** (fair roll).
+    - Fleshwound with Survival Chance <=50% = **Dapat PK via /chance [survival%]**.
+    - Fleshwound >50% or non-GSW = **Tidak Dapat PK** (/chance strictly forbidden).
+  - Live in-game `/chance` roll tester (1 attempt, 50:50 probability: PASS = survives, FAIL = PK).
+  - Special conditions: 15-minute bleeding rule (immediately voided if LSFD or responders arrive at scene),
+    pure explosions/drowning protocol, and prohibition of fabricated congenital illnesses (*RPly lemah jantung).
+  - Faction authority breakdown: LSFD jurisdiction, LSPD/LSSD NPC Mode conditions, FnG rights, Civil restrictions.
+
 In `draft.md` the long-form guides write `/me` lines out as rendered text ("Tobrian Alrik mengambil
 trap box…"). Those are `/me` steps; drop the character name. A question ending in `((Nama))` is a
 `/do` step.
