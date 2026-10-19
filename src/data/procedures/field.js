@@ -1,8 +1,7 @@
-// Penanganan Korban — dari "FIELD PROCEDURE" di draft.md
+// Penanganan Korban — Prosedur Penanganan Korban di TKP
 //
-// Versi Inggris (`en`, `nameEn`, `blurbEn`, `noteEn`, `labelEn`) ditulis tangan,
-// bukan hasil mesin. Aturan gayanya ada di CLAUDE.md; ringkasnya: `/me` selalu
-// orang ketiga tunggal tanpa subjek, karena di game ia menempel di belakang nama
+// Versi Inggris (`en`, `nameEn`, `blurbEn`, `noteEn`, `labelEn`) ditulis tangan.
+// `/me` selalu orang ketiga tunggal tanpa subjek, karena di game ia menempel di belakang nama
 // karakter — "reaches for the ILS Bag", bukan "I reach for the ILS Bag".
 
 export default {

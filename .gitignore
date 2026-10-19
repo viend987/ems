@@ -1,11 +1,24 @@
 node_modules/
 dist/
 .wrangler/
-.superpowers/
 .DS_Store
 *.local
 images-incoming/
-.playwright-mcp/
 
-# Salinan repo dari perkakas lain, bukan bagian dari proyek.
+# AI / Agentic tooling & configs
+CLAUDE.md
+draft.md
+.claude/
+.cursor/
+.cursorrules
+.agents/
+AGENTS.md
+GEMINI.md
+.gemini/
+.superpowers/
+.playwright-mcp/
+docs/
 .kilo/
+.windsurf/
+.roo/
+.cline/
