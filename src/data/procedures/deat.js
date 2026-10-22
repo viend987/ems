@@ -68,8 +68,8 @@ export default {
         {
           n: 77,
           kind: 'me',
-          text: 'memberi tekanan dengan menutup aliran darah di bagian pembuluh darah korban.',
-          en: 'applies pressure to the artery upstream of the wound to cut off the blood flow.',
+          text: 'menekan titik nadi arteri proksimal di atas area luka untuk membendung aliran pendarahan.',
+          en: 'applies pressure to the proximal arterial pulse point above the wound to stop blood flow.',
         },
         { ref: 'bleed-check' },
       ],

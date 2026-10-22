@@ -704,6 +704,39 @@ export default function GuidePK({ lang }) {
         <div className="space-y-2.5 text-xs leading-relaxed">
           <div className="rounded-sm border-l-3 border-alarm bg-panel p-3 space-y-1">
             <h4 className="text-xs font-bold text-bone">
+              {isEn ? 'Prohibition of Force PK on Non-GSW & Limbs (Gangster / FnG Anti-Dispute)' : 'Larangan Memaksa PK pada Luka Non-GSW & Ekstremitas (Sengketa FnG)'}
+            </h4>
+            <p className="text-dim text-[11px]">
+              {isEn
+                ? 'Forcing an opponent to PK for knife/blade wounds (Cut Wound), burns, fractures, or gunshot wounds to limbs (hands/legs) is strictly forbidden. Non-GSW injuries and limb wounds CANNOT use /chance and CANNOT trigger PK. Forcing PK on these wounds constitutes Powergaming / Force RP (Article 23).'
+                : 'Banyak perselisihan terjadi di mana pemain kriminal/gangster memaksa lawannya PK atas luka tebas pisau/samurai (Cut Wound), luka bakar, fraktur, atau luka tembak di tangan/kaki. Aturan resmi menegaskan: luka non-tembakan dan luka ekstremitas DILARANG KERAS menggunakan /chance dan TIDAK DAPAT PK. Memaksakan PK atas luka ini adalah pelanggaran Pasal 23 (Powergaming / Force RP).'}
+            </p>
+          </div>
+
+          <div className="rounded-sm border-l-3 border-alarm bg-panel p-3 space-y-1">
+            <h4 className="text-xs font-bold text-bone">
+              {isEn ? 'Prohibition of Weapon/Bullet Type Roleplay for PK' : 'Larangan Mengarang Jenis Senjata & Proyektil untuk Alasan PK'}
+            </h4>
+            <p className="text-dim text-[11px]">
+              {isEn
+                ? 'Players CANNOT roleplay custom bullet types (e.g. hollow-point, armor-piercing) or specific calibers to force a PK. Fair RP dictates that PK eligibility is strictly determined by in-game /health structure and realistic post-shooting bodily injury descriptions.'
+                : 'Pemain TIDAK DAPAT meroleplaykan jenis peluru (misalnya hollow-point, armor-piercing) atau kaliber senjata tertentu untuk memaksakan PK. Demi menjamin Fair RP, penentuan PK murni didasarkan pada pembacaan struktur /health in-game dan deskripsi luka tubuh yang tampak.'}
+            </p>
+          </div>
+
+          <div className="rounded-sm border-l-3 border-alarm bg-panel p-3 space-y-1">
+            <h4 className="text-xs font-bold text-bone">
+              {isEn ? 'Timing of /chance Execution (Early vs Late)' : 'Ketentuan Waktu Eksekusi /chance (Awal vs Akhir)'}
+            </h4>
+            <p className="text-dim text-[11px]">
+              {isEn
+                ? 'According to official protocol, /chance is ideally rolled early (after /inspect diagnosis) to clarify medical triage direction and prevent Force RP. However, the suspect retains the right to request /chance at the conclusion of treatment, provided they meet the PK Criteria Table.'
+                : 'Berdasarkan General Guide PK, /chance idealnya dilakukan di awal (setelah /inspect dan diagnosis) untuk memperjelas arah alur penanganan medis serta menghindari Force RP. Kendati demikian, suspect/korban memiliki hak untuk meminta roll /chance dilakukan di akhir tindakan medis di TKP asalkan memenuhi kriteria tabel PK.'}
+            </p>
+          </div>
+
+          <div className="rounded-sm border-l-3 border-alarm bg-panel p-3 space-y-1">
+            <h4 className="text-xs font-bold text-bone">
               {isEn ? 'Prohibition of Force RP Post-/chance' : 'Larangan Force RP Pasca-Roll /chance'}
             </h4>
             <p className="text-dim text-[11px]">

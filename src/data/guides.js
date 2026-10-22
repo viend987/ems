@@ -37,6 +37,11 @@ export const GUIDES = [
         author: 'Cavero Aliester (Bimo) & Caitlin Swenchjaeger (Bella)',
         ref: 'Topic #1239 LSFD Operational',
       },
+      {
+        title: 'LSFD Operational — General Guide PK (Community Reference)',
+        author: '188wolfblade (Credits: Caitlin Swenchjaeger, Cavero Aliester, Darek Szczepanski, Paul White, Bee Tokio)',
+        ref: 'Topic #339263 Jogjagamers Community',
+      },
     ],
   },
   {

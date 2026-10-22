@@ -15,12 +15,12 @@ export default {
       nameEn: 'Graze',
       steps: [
         { n: 211, kind: 'me', text: 'mengeluarkan satu botol kecil Saline Solution dari ILS Bag.', en: 'takes a small bottle of Saline Solution out of the ILS Bag.' },
-        { n: 212, kind: 'me', text: 'menuangkan Saline Solutionnya ke atas cotton pad.', en: 'pours the Saline Solution onto a cotton pad.' },
+        { n: 212, kind: 'me', text: 'menuangkan cairan Saline Solution ke atas kapas steril (cotton pad).', en: 'pours Saline Solution onto a sterile cotton pad.' },
         {
           n: 213,
           kind: 'me',
-          text: 'mengeluarkan gauze pad lalu meletakkannya di atas luka dan memerbannya perlahan.',
-          en: 'takes out a gauze pad, lays it over the wound, and bandages it gently.',
+          text: 'menutup luka menggunakan gauze pad lalu membalutnya dengan perban secara rapi.',
+          en: 'covers the wound with a gauze pad and wraps it neatly with a bandage.',
         },
       ],
     },
@@ -47,8 +47,8 @@ export default {
         },
         {
           kind: 'me',
-          text: 'mengambil ICP dari ILS Bag lalu menempelkannya pada area luka bakar selama 10 sampai 15 menit.',
-          en: 'takes an ICP from the ILS Bag and holds it against the burn for 10 to 15 minutes.',
+          text: 'mengambil ice cold pack (ICP) dan melapisinya dengan kain tipis sebelum menaruhnya di atas luka bakar.',
+          en: 'takes an ice cold pack (ICP) and wraps it in a thin cloth before placing it over the burn.',
         },
         { kind: 'do', text: '15 menit telah berlalu dan area luka bakar terasa lebih dingin.', en: 'Fifteen minutes have passed and the burn feels cooler.' },
         {
