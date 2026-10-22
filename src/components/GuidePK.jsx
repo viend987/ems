@@ -1,5 +1,6 @@
 import { useState } from 'preact/hooks'
 import Icon from './Icon.jsx'
+import { writeClipboard } from '../lib/copy.js'
 import {
   evaluatePk,
   GSW_LOCATIONS,
@@ -40,11 +41,13 @@ export default function GuidePK({ lang }) {
     setRollResult(sim)
   }
 
-  const handleCopyCmd = () => {
+  const handleCopyCmd = async () => {
     if (!evaluation.chanceCommand) return
-    navigator.clipboard?.writeText(evaluation.chanceCommand)
-    setCopiedCmd(true)
-    setTimeout(() => setCopiedCmd(false), 1500)
+    const ok = await writeClipboard(evaluation.chanceCommand)
+    if (ok) {
+      setCopiedCmd(true)
+      setTimeout(() => setCopiedCmd(false), 1500)
+    }
   }
 
   const statusColors = {

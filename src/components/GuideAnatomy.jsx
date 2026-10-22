@@ -1,5 +1,6 @@
 import { useState } from 'preact/hooks'
 import Icon from './Icon.jsx'
+import { writeClipboard } from '../lib/copy.js'
 import {
   ARTERY_POINTS,
   BODY_REGIONS,
@@ -58,10 +59,12 @@ export default function GuideAnatomy({ lang }) {
     bleeding: bleedingActive,
   })
 
-  const handleCopy = (text, type) => {
-    navigator.clipboard?.writeText(text)
-    setCopiedType(type)
-    setTimeout(() => setCopiedType(null), 1500)
+  const handleCopy = async (text, type) => {
+    const ok = await writeClipboard(text)
+    if (ok) {
+      setCopiedType(type)
+      setTimeout(() => setCopiedType(null), 1500)
+    }
   }
 
   const filteredRegions =

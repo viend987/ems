@@ -4,6 +4,7 @@ dist/
 .DS_Store
 *.local
 images-incoming/
+lsfd.png
 
 # AI / Agentic tooling & configs
 CLAUDE.md

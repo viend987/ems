@@ -82,4 +82,18 @@ describe('mode switcher & guide mode', () => {
     expect(el.textContent).toContain('Lower Extremity')
     expect(el.textContent).toContain('Combat Ready Clamp (CRoC)')
   })
+
+  it('mengklik daftar isi guide tidak melempar route ke builder operasional', async () => {
+    const el = await mount('#/guide-anatomy')
+    const secBtn = [...el.querySelectorAll('button')].find((b) =>
+      b.textContent.includes('Generator Doctor Report & Radio'),
+    )
+    expect(secBtn).toBeTruthy()
+    secBtn.click()
+    await pause(150)
+
+    // Tetap di mode guide dan hash tidak berubah jadi #builder
+    expect(location.hash).toBe('#/guide-anatomy')
+    expect(el.textContent).toContain('Terminologi Anatomi')
+  })
 })

@@ -7,6 +7,11 @@ export default function GuideBoard({ variant, active, onGo, lang, onSwitchToOps 
   const isEn = lang === 'en'
   const currentGuide = GUIDES.find((g) => g.id === active) || GUIDES[0]
 
+  const scrollToSection = (secId) => {
+    const el = document.getElementById(secId) || document.getElementById(`${active}-${secId}`)
+    el?.scrollIntoView?.({ block: 'start' })
+  }
+
   if (variant === 'grid') {
     return (
       <div className="border-b border-line px-4 py-4 sm:px-6 lg:hidden bg-panel">
@@ -52,13 +57,14 @@ export default function GuideBoard({ variant, active, onGo, lang, onSwitchToOps 
             </span>
             <div className="grid grid-cols-2 gap-1 text-[11px]">
               {currentGuide.sections.map((sec) => (
-                <a
+                <button
                   key={sec.id}
-                  href={`#${sec.id}`}
-                  className="rounded-sm border border-line bg-ink px-2 py-1 text-dim hover:text-bone hover:border-alarm"
+                  type="button"
+                  onClick={() => scrollToSection(sec.id)}
+                  className="rounded-sm border border-line bg-ink px-2 py-1 text-left text-dim hover:text-bone hover:border-alarm"
                 >
                   {pick(sec, 'name', lang)}
-                </a>
+                </button>
               ))}
             </div>
           </div>
@@ -130,14 +136,15 @@ export default function GuideBoard({ variant, active, onGo, lang, onSwitchToOps 
             </span>
             <div className="space-y-1">
               {currentGuide.sections.map((sec) => (
-                <a
+                <button
                   key={sec.id}
-                  href={`#${sec.id}`}
-                  className="flex items-center gap-1.5 py-1 text-[11px] text-dim hover:text-alarm transition-colors"
+                  type="button"
+                  onClick={() => scrollToSection(sec.id)}
+                  className="flex w-full items-center gap-1.5 py-1 text-left text-[11px] text-dim hover:text-alarm transition-colors"
                 >
                   <span className="text-muted">•</span>
                   <span>{pick(sec, 'name', lang)}</span>
-                </a>
+                </button>
               ))}
             </div>
           </div>

@@ -2,10 +2,16 @@
 // favicon PNG. Jalankan ulang kalau berkas sumbernya diganti.
 //
 //   npm run logo
+import { existsSync } from 'node:fs'
 import { mkdir, stat } from 'node:fs/promises'
 import sharp from 'sharp'
 
 const SOURCE = 'lsfd.png'
+
+if (!existsSync(SOURCE)) {
+  console.error(`Berkas ${SOURCE} tidak ditemukan di root. Pastikan berkas sumber ${SOURCE} ada untuk membuat ulang logo.`)
+  process.exit(1)
+}
 // Logo tampil 64px di layar lebar; 128px cukup untuk layar retina 2x.
 const LOGO = 128
 // Tab browser memakai 16–32px; 48px memberi ruang untuk layar berkerapatan tinggi.

@@ -14,7 +14,7 @@ const OUT_DIR = 'src/assets/fonts'
 // ASCII yang bisa dicetak, U+0020 sampai U+007E.
 const ASCII = Array.from({ length: 0x7e - 0x20 + 1 }, (_, i) => String.fromCharCode(0x20 + i)).join('')
 // Tanda baca tipografis yang dipakai di konten dan antarmuka.
-const TYPO = '—–·“”‘’›…→≥'
+const TYPO = '—–·“”‘’›…→≥≤'
 
 const FONTS = [
   {

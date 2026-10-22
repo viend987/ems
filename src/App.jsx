@@ -130,7 +130,9 @@ export default function App() {
   // peramban setelah reload tetap bekerja.
   useEffect(() => {
     if (route.section) {
-      const el = document.getElementById(`${route.category}-${route.section}`)
+      const el =
+        document.getElementById(`${route.category}-${route.section}`) ??
+        document.getElementById(route.section)
       el?.scrollIntoView?.({ block: 'start' })
     } else if (route.nonce > 0) {
       document.getElementById('isi')?.scrollIntoView?.({ block: 'start' })
