@@ -1,13 +1,10 @@
-// Vertical Rescue — chat RP dari "VERTICAL RESCUE" dan panduan helikopter di draft.md.
+// Vertical Rescue — chat RP dari [GUIDE] VERTICAL RESCUE dan panduan helikopter di draft.md.
 //
-// Frasa radionya dirapikan mengikuti kebiasaan penerbangan Amerika:
-// - Helipad LSFD hanya DFS dan PBH. ASGH/CGH/FS di naskah asal terbawa dari
-//   panduan server lain dan dihapus.
-// - Selalu VFR. IFR menuntut rencana penerbangan yang diajukan lebih dulu dan
-//   tidak dipakai unit penyelamat yang terbang dengan pandangan mata.
-// - Squawk 1200 adalah kode transponder VFR baku di Amerika saat tidak sedang
-//   dilayani ATC. Kalau ATC memberi kode khusus, pakai kode itu. 7700 hanya
-//   untuk pesawat yang sendirinya sedang darurat.
+// Prosedur ini mencakup:
+// - Persiapan APD khusus (Safety Helmet, Gloves, Full-body Harness, SAR Kit, LSB).
+// - Radio penerbangan helikopter LifeFlight dari DFS dan PBH (VFR, Squawk 1200 baku / Squawk 2222 per dispatch).
+// - Koordinasi IC udara (Pilot/Co-Pilot) dengan Rescuer menggunakan Hoist Steel Rod.
+// - Ground Vertical Rescue: evakuasi tebing dengan dual-line rigging, aturan 2 vs 3 anchor points, dan penurunan katrol.
 
 export default {
   id: 'vertical',
@@ -18,6 +15,43 @@ export default {
   blurbEn:
     'Aviation radio, IC coordinating with the Rescuer, and lowering the victim off a cliff.',
   sections: [
+    {
+      id: 'apd',
+      name: 'Persiapan APD Rescuer',
+      nameEn: 'Rescuer PPE Preparation',
+      steps: [
+        {
+          kind: 'note',
+          text: 'Sebelum operasi udara atau penanganan tebing, Rescuer wajib mengenakan APD keselamatan lengkap dan menyiapkan perlengkapan SAR. Anim: .handsup · .adjust',
+          en: 'Before aerial or cliff operations, Rescuers must don full safety PPE and prepare their SAR kit. Anims: .handsup · .adjust',
+        },
+        {
+          kind: 'me',
+          text: 'mengenakan Safety Helmet (Petzl Vertex) lalu mengencangkan chinstrap di bawah dagu.',
+          en: 'puts on the Petzl Vertex Safety Helmet and secures the chinstrap beneath their chin.',
+        },
+        {
+          kind: 'me',
+          text: 'memakai Safety Gloves berbahan kulit tebal pada kedua tangan.',
+          en: 'pulls on heavy-duty leather Safety Gloves on both hands.',
+        },
+        {
+          kind: 'me',
+          text: 'mengenakan full-body Safety Harness lalu mengunci buckle di pinggang dan kedua paha hingga presisi.',
+          en: 'steps into the full-body Safety Harness and fastens the waist and leg buckles securely.',
+        },
+        {
+          kind: 'me',
+          text: 'mengecek tas perlengkapan SAR (static rope, carabiner, descender, figure of eight) dan Life Support Bag (LSB).',
+          en: 'checks the SAR equipment pack (static rope, carabiners, descender, figure of eight) and the Life Support Bag (LSB).',
+        },
+        {
+          kind: 'do',
+          text: 'Seluruh APD keselamatan dan perlengkapan SAR siap digunakan.',
+          en: 'All safety PPE and SAR equipment are inspected and ready for deployment.',
+        },
+      ],
+    },
     {
       id: 'radio-latihan',
       name: 'Radio — latihan dari DFS',
@@ -47,7 +81,12 @@ export default {
           labelEn: 'Report to ATC',
           text: 'ATC, ~ airborne from DFS helipad, alt 400, for Vertical Rescue Training, VFR, heading North on departure, squawk 1200.',
         },
-        { kind: 'radio', label: 'Lapor mendarat', labelEn: 'Report landing', text: '~ has fully landed on DFS helipad, full-stop.' },
+        {
+          kind: 'radio',
+          label: 'Lapor mendarat',
+          labelEn: 'Report landing',
+          text: '~ has fully landed on DFS helipad, full-stop.',
+        },
       ],
     },
     {
@@ -57,8 +96,8 @@ export default {
       steps: [
         {
           kind: 'note',
-          text: 'OCD menanyakan 10-21 Pilot Certified lebih dulu, dan jawaban itu wajib dibalas. Pastikan unitmu sudah dibuat lewat /createunit supaya ~ terisi nama unit.',
-          en: 'OCD asks for a 10-21 Pilot Certified first, and that call has to be answered. Make sure your unit exists via /createunit so the ~ fills in with the unit name.',
+          text: 'OCD menanyakan 10-21 Pilot Certified lebih dulu, dan panggilan ini wajib dibalas. Standar transponder: squawk 1200 (VFR), atau squawk 2222 bila diarahkan oleh dispatch departemen.',
+          en: 'OCD calls for a 10-21 Pilot Certified first, and this call must be answered. Transponder standard: squawk 1200 (VFR), or squawk 2222 when assigned by department dispatch.',
         },
         {
           kind: 'radio',
@@ -84,7 +123,12 @@ export default {
           labelEn: 'Emergency landing on scene',
           text: '~ emergency landing on Angel Pine area.',
         },
-        { kind: 'radio', label: 'Sampai lokasi', labelEn: 'On scene', text: '~ Status-6 10-20 Angel Pine.' },
+        {
+          kind: 'radio',
+          label: 'Sampai lokasi',
+          labelEn: 'On scene',
+          text: '~ Status-6 10-20 Angel Pine.',
+        },
         {
           kind: 'radio',
           label: 'Selesai menangani',
@@ -107,10 +151,14 @@ export default {
     },
     {
       id: 'ic-rescuer',
-      name: 'Koordinasi IC dengan Rescuer',
-      nameEn: 'IC coordinating with the Rescuer',
+      name: 'Koordinasi IC dengan Rescuer (Aerial Hoist)',
+      nameEn: 'IC coordinating with the Rescuer (Aerial Hoist)',
       steps: [
-        { kind: 'note', text: 'Yang memegang IC adalah Pilot atau Co-Pilot. Biasanya Co-Pilot.', en: 'IC is held by the Pilot or the Co-Pilot. Usually the Co-Pilot.' },
+        {
+          kind: 'note',
+          text: 'Yang memegang IC adalah Pilot atau Co-Pilot (biasanya Co-Pilot). Gunakan Hoist Steel Rod untuk menurunkan Rescuer ke medan yang tidak bisa didarati helikopter.',
+          en: 'IC is held by the Pilot or Co-Pilot (usually Co-Pilot). Deploy the Hoist Steel Rod to lower the Rescuer into terrain where the helicopter cannot land.',
+        },
         {
           kind: 'radio',
           label: 'IC',
@@ -132,7 +180,13 @@ export default {
           text: 'IC to Rescuer, lokasi sudah ditentukan, silahkan memasangkan device ke Steel Rod.',
           en: 'IC to Rescuer, the location is set, go ahead and attach the device to the Steel Rod.',
         },
-        { kind: 'radio', label: 'Rescuer', labelEn: 'Rescuer', text: 'Rescuer to IC, harness telah terpasang.' },
+        {
+          kind: 'radio',
+          label: 'Rescuer',
+          labelEn: 'Rescuer',
+          text: 'Rescuer to IC, harness telah terpasang.',
+          en: 'Rescuer to IC, harness is secured.',
+        },
         {
           kind: 'me',
           text: 'memasangkan Ferno basket stretcher ke carabiner lalu mengaitkannya ke steel rod.',
@@ -148,7 +202,13 @@ export default {
           text: 'menekan tombol rod activation, membuka kunci pengaman, lalu menekan tombol turun untuk menurunkan steel rod.',
           en: 'presses the rod activation button, releases the safety lock, then presses the descend button to lower the steel rod.',
         },
-        { kind: 'radio', label: 'Rescuer', labelEn: 'Rescuer', text: 'Rescuer to IC, saya sudah berada di ground.', en: 'Rescuer to IC, I am on the ground.' },
+        {
+          kind: 'radio',
+          label: 'Rescuer',
+          labelEn: 'Rescuer',
+          text: 'Rescuer to IC, saya sudah berada di ground.',
+          en: 'Rescuer to IC, I am on the ground.',
+        },
         {
           kind: 'radio',
           label: 'IC',
@@ -165,34 +225,38 @@ export default {
     },
     {
       id: 'ground',
-      name: 'Ground Vertical Rescue',
-      nameEn: 'Ground Vertical Rescue',
+      name: 'Ground Vertical Rescue (Evakuasi Tebing)',
+      nameEn: 'Ground Vertical Rescue (Cliff Evacuation)',
       steps: [
         {
           kind: 'note',
-          text: 'Dipakai saat korban terjebak di tebing atau tempat yang tidak bisa digapai dari darat.',
-          en: 'Used when the victim is stuck on a cliff or somewhere that cannot be reached from the ground.',
+          text: 'Standar Anchor: Buat 2 Anchor Point untuk 1 Rescuer, atau 3 Anchor Point jika terdapat 2 Rescuer. Gunakan sistem dual-line: Working Line (Rescuer) dan Stretcher Line (Ferno Stretcher).',
+          en: 'Anchor Standard: Rig 2 Anchor Points for 1 Rescuer, or 3 Anchor Points for 2 Rescuers. Utilize a dual-line system: Working Line (Rescuer) and Stretcher Line (Ferno Stretcher).',
         },
         {
           kind: 'me',
-          text: 'membuat simpul di pohon menggunakan descender lalu membuat dua anchor point.',
-          en: 'ties off to a tree with the descender and builds two anchor points.',
+          text: 'mencari pohon kokoh atau batuan tebing lalu membuat simpul anchor point pengaman.',
+          en: 'identifies a sturdy tree or rock outcrop and rigs the primary safety anchor points.',
         },
         {
           kind: 'me',
-          text: 'memasang static rope ke anchor lalu mengaitkan descender ke harness dengan carabiner.',
-          en: 'rigs the static rope to the anchor and clips the descender to the harness with a carabiner.',
+          text: 'memasang static rope utama ke anchor lalu mengaitkan descender ke harness dengan carabiner.',
+          en: 'rigs the primary static rope to the anchor and clips the descender to the harness with a carabiner.',
         },
         {
           kind: 'me',
-          text: 'memasang static rope kedua ke anchor lalu mengaitkan figure of eight ke basket stretcher.',
-          en: 'rigs a second static rope to the anchor and clips a figure of eight to the basket stretcher.',
+          text: 'memasang static rope kedua ke anchor kedua lalu mengaitkan figure of eight ke Ferno basket stretcher dengan carabiner.',
+          en: 'rigs a second static rope to the secondary anchor and clips a figure of eight to the Ferno basket stretcher with a carabiner.',
         },
-        { kind: 'me', text: 'menurunkan basket stretcher terlebih dahulu dengan teknik katrol.', en: 'lowers the basket stretcher first, using a pulley system.' },
         {
           kind: 'me',
-          text: 'turun dengan berhati-hati sembari membuka perlahan katup descender agar pengait tidak terlalu menggigit tali.',
-          en: 'descends carefully, easing the descender open so the brake does not bite too hard on the rope.',
+          text: 'menurunkan Ferno basket stretcher terlebih dahulu menuju titik korban dengan teknik katrol.',
+          en: 'lowers the Ferno basket stretcher down towards the victim first using a pulley technique.',
+        },
+        {
+          kind: 'me',
+          text: 'turun menuruni tebing dengan berhati-hati sembari membuka perlahan katup descender agar pengait tidak terlalu menggigit tali.',
+          en: 'descends the cliff face carefully, easing the descender valve open so the brake feeds rope smoothly.',
         },
         {
           kind: 'radio',

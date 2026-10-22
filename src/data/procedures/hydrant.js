@@ -56,6 +56,11 @@ export default {
       nameEn: 'Checking the pillar cap',
       steps: [
         {
+          kind: 'note',
+          text: 'Operating nut di puncak hydrant dan cap berulir memiliki bentuk baut segi lima (pentagonal), sehingga wajib dibuka menggunakan hydrant wrench khusus.',
+          en: 'The operating nut on top and the threaded caps are pentagonal, requiring the dedicated hydrant wrench.',
+        },
+        {
           kind: 'me',
           text: 'memposisikan hydrant wrench pada cap pillar lalu memutarnya perlahan berlawanan arah jarum jam.',
           en: 'sets the hydrant wrench on the pillar cap and turns it slowly anticlockwise.',
@@ -100,6 +105,11 @@ export default {
       name: 'Cek aliran & katup',
       nameEn: 'Checking flow and valve',
       steps: [
+        {
+          kind: 'note',
+          text: 'Standar NFPA 291 — Kode Warna Bonnet/Cap (Indikator Debit): Biru (≥1500 GPM - Sangat Tinggi), Hijau (1000–1499 GPM - Tinggi), Oranye (500–999 GPM - Sedang), Merah (<500 GPM - Rendah).',
+          en: 'NFPA 291 Standard — Bonnet/Cap Color Code (Flow Indicator): Blue (≥1500 GPM - Very High), Green (1000–1499 GPM - High), Orange (500–999 GPM - Moderate), Red (<500 GPM - Low).',
+        },
         {
           kind: 'me',
           text: 'memasang hydrant valve pada outlet nozzle, lalu menyambungkan hose beserta nozzle-nya hingga terkunci rapat.',
@@ -190,8 +200,13 @@ export default {
         { kind: 'me', text: 'menutup hydrant valve lalu membuka nozzle untuk membuang sisa tekanan di selang.', en: 'closes the hydrant valve and opens the nozzle to bleed the remaining pressure from the hose.' },
         {
           kind: 'me',
-          text: 'melepas bagian selang yang bocor lalu menggantinya dengan selang cadangan.',
-          en: 'removes the leaking length of hose and replaces it with a spare.',
+          text: 'menempelkan isolasi penanda pada area selang yang bocor (pinhole) agar ditarik dari operasional.',
+          en: 'applies marking tape over the punctured hose area so it is pulled from operational service.',
+        },
+        {
+          kind: 'me',
+          text: 'melepas bagian selang yang bocor lalu menggantinya dengan selang cadangan dari unit.',
+          en: 'disconnects the leaking hose section and replaces it with a spare hose from the unit.',
         },
         {
           kind: 'me',
@@ -264,8 +279,8 @@ export default {
         },
         {
           kind: 'note',
-          text: 'Yang dicat ulang hanya body-nya dengan chrome yellow. Bonnet dan cap jangan ikut dicat kuning — warnanya menandai debit air: biru ≥1500 GPM, hijau 1000–1499, oranye 500–999, merah di bawah 500.',
-          en: 'Only the body is repainted, in chrome yellow. Do not paint the bonnet or the cap yellow — their colour marks the flow rate: blue ≥1500 GPM, green 1000–1499, orange 500–999, red below 500.',
+          text: 'PENTING: Yang dicat ulang HANYA body/barrel dengan chrome yellow. Bonnet dan nozzle caps JANGAN ikut dicat kuning karena warnanya adalah kode kapasitas debit NFPA 291: Biru (≥1500 GPM), Hijau (1000–1499), Oranye (500–999), Merah (<500 GPM).',
+          en: 'IMPORTANT: ONLY the barrel body is repainted in chrome yellow. The bonnet and nozzle caps MUST NOT be painted yellow as their colors denote NFPA 291 flow capacity: Blue (≥1500 GPM), Green (1000–1499), Orange (500–999), Red (<500 GPM).',
         },
         {
           kind: 'me',
