@@ -7,14 +7,13 @@ images-incoming/
 lsfd.png
 
 # AI / Agentic tooling & configs
-CLAUDE.md
-draft.md
+*.md
+!README.md
+!readme.md
 .claude/
 .cursor/
 .cursorrules
 .agents/
-AGENTS.md
-GEMINI.md
 .gemini/
 .superpowers/
 .playwright-mcp/
