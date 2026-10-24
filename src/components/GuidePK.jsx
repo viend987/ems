@@ -2,21 +2,103 @@ import { useState } from 'preact/hooks'
 import Icon from './Icon.jsx'
 import { writeClipboard } from '../lib/copy.js'
 import {
+  BODY_REGIONS,
   evaluatePk,
-  GSW_LOCATIONS,
   PK_STATUS,
   simulateChanceRoll,
   WOUND_TYPES,
 } from '../lib/pk-calculator.js'
 
+const PRESETS = [
+  {
+    labelId: 'Baku Tembak Ringan (1x Torso GSW, 1x Flesh, 2x Graze, 65%)',
+    labelEn: 'Light Shootout (1x Torso GSW, 1x Flesh, 2x Graze, 65%)',
+    chance: 65,
+    wounds: [
+      { id: 'p-1', type: 'gsw', location: 'torso', count: 1 },
+      { id: 'p-2', type: 'flesh', location: 'torso', count: 1 },
+      { id: 'p-3', type: 'graze', location: 'limbs', count: 2 },
+    ],
+  },
+  {
+    labelId: 'Torso Vital Kritis (3x Torso GSW, 40% - AUTO PK)',
+    labelEn: 'Critical Vital Torso (3x Torso GSW, 40% - AUTO PK)',
+    chance: 40,
+    wounds: [
+      { id: 'p-1', type: 'gsw', location: 'torso', count: 3 },
+      { id: 'p-2', type: 'graze', location: 'torso', count: 1 },
+    ],
+  },
+  {
+    labelId: 'Torso Vital Stabil (3x Torso GSW, 60% - /chance 50)',
+    labelEn: 'Stable Vital Torso (3x Torso GSW, 60% - /chance 50)',
+    chance: 60,
+    wounds: [
+      { id: 'p-1', type: 'gsw', location: 'torso', count: 3 },
+    ],
+  },
+  {
+    labelId: 'Headshot Fatal (1x Head GSW, 35% - AUTO PK)',
+    labelEn: 'Fatal Headshot (1x Head GSW, 35% - AUTO PK)',
+    chance: 35,
+    wounds: [
+      { id: 'p-1', type: 'gsw', location: 'head', count: 1 },
+    ],
+  },
+  {
+    labelId: 'Headshot Kritis (1x Head GSW, 55% - /chance 50)',
+    labelEn: 'Critical Headshot (1x Head GSW, 55% - /chance 50)',
+    chance: 55,
+    wounds: [
+      { id: 'p-1', type: 'gsw', location: 'head', count: 1 },
+    ],
+  },
+  {
+    labelId: 'Flesh Wound Kritis (2x Torso Flesh, 45% - /chance 45)',
+    labelEn: 'Critical Flesh Wound (2x Torso Flesh, 45% - /chance 45)',
+    chance: 45,
+    wounds: [
+      { id: 'p-1', type: 'flesh', location: 'torso', count: 2 },
+      { id: 'p-2', type: 'graze', location: 'limbs', count: 1 },
+    ],
+  },
+  {
+    labelId: 'Luka Tangan & Kaki (3x Limbs GSW + 1x Fracture, 30% - No PK)',
+    labelEn: 'Limb Trauma (3x Limbs GSW + 1x Fracture, 30% - No PK)',
+    chance: 30,
+    wounds: [
+      { id: 'p-1', type: 'gsw', location: 'limbs', count: 3 },
+      { id: 'p-2', type: 'fracture', location: 'limbs', count: 1 },
+    ],
+  },
+  {
+    labelId: 'Begal Sajam / Hantaman (2x Cut + 1x Bruise, 45% - No PK)',
+    labelEn: 'Melee / Blunt (2x Cut + 1x Bruise, 45% - No PK)',
+    chance: 45,
+    wounds: [
+      { id: 'p-1', type: 'cut', location: 'torso', count: 2 },
+      { id: 'p-2', type: 'bruise', location: 'head', count: 1 },
+    ],
+  },
+]
+
 export default function GuidePK({ lang }) {
   const isEn = lang === 'en'
 
-  // Calculator state
-  const [woundType, setWoundType] = useState('gsw')
-  const [location, setLocation] = useState('torso')
-  const [bullets, setBullets] = useState(3)
-  const [survivalChance, setSurvivalChance] = useState(75)
+  // Calculator state: daftar gabungan luka korban
+  const [wounds, setWounds] = useState([
+    { id: 'init-1', type: 'gsw', location: 'torso', count: 1 },
+    { id: 'init-2', type: 'flesh', location: 'torso', count: 1 },
+    { id: 'init-3', type: 'graze', location: 'limbs', count: 2 },
+  ])
+
+  // Form tambah luka baru
+  const [newType, setNewType] = useState('gsw')
+  const [newLocation, setNewLocation] = useState('torso')
+  const [newCount, setNewCount] = useState(1)
+
+  // Kondisi menyeluruh
+  const [survivalChance, setSurvivalChance] = useState(65)
   const [bleedExpired, setBleedExpired] = useState(false)
   const [medicArrived, setMedicArrived] = useState(false)
   const [explosionDrowningOnly, setExplosionDrowningOnly] = useState(false)
@@ -26,14 +108,72 @@ export default function GuidePK({ lang }) {
   const [copiedCmd, setCopiedCmd] = useState(false)
 
   const evaluation = evaluatePk({
-    woundType,
-    location,
-    bullets,
+    wounds,
     survivalChance,
     bleedExpired,
     medicArrived,
     explosionDrowningOnly,
   })
+
+  const totalBullets = wounds
+    .filter((w) => w.type === 'gsw')
+    .reduce((sum, w) => sum + w.count, 0)
+  const totalFlesh = wounds
+    .filter((w) => w.type === 'flesh')
+    .reduce((sum, w) => sum + w.count, 0)
+  const totalOther = wounds
+    .filter((w) => w.type !== 'gsw' && w.type !== 'flesh')
+    .reduce((sum, w) => sum + w.count, 0)
+  const totalWoundCount = wounds.reduce((sum, w) => sum + w.count, 0)
+
+  const handleAddWound = () => {
+    const existing = wounds.find((w) => w.type === newType && w.location === newLocation)
+    if (existing) {
+      setWounds(
+        wounds.map((w) =>
+          w.id === existing.id ? { ...w, count: w.count + newCount } : w
+        )
+      )
+    } else {
+      setWounds([
+        ...wounds,
+        {
+          id: `w-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+          type: newType,
+          location: newLocation,
+          count: newCount,
+        },
+      ])
+    }
+  }
+
+  const handleUpdateCount = (id, delta) => {
+    setWounds(
+      wounds
+        .map((w) => {
+          if (w.id === id) {
+            const nextCount = w.count + delta
+            return nextCount > 0 ? { ...w, count: nextCount } : null
+          }
+          return w
+        })
+        .filter(Boolean)
+    )
+  }
+
+  const handleRemoveWound = (id) => {
+    setWounds(wounds.filter((w) => w.id !== id))
+  }
+
+  const handleResetWounds = () => {
+    setWounds([])
+  }
+
+  const handleApplyPreset = (preset) => {
+    setWounds(preset.wounds)
+    setSurvivalChance(preset.chance)
+    setRollResult(null)
+  }
 
   const handleRoll = () => {
     const target = evaluation.chanceCommand === '/chance 50' ? 50 : survivalChance
@@ -61,6 +201,9 @@ export default function GuidePK({ lang }) {
     [PK_STATUS.CHANCE_PK]: isEn ? 'ELIGIBLE FOR PK VIA /CHANCE' : 'DAPAT PK MENGGUNAKAN /CHANCE',
     [PK_STATUS.NO_PK]: isEn ? 'CANNOT PK — /CHANCE FORBIDDEN' : 'TIDAK DAPAT PK — /CHANCE DILARANG',
   }
+
+  const woundTypeMap = Object.fromEntries(WOUND_TYPES.map((t) => [t.id, isEn ? t.nameEn : t.name]))
+  const regionMap = Object.fromEntries(BODY_REGIONS.map((r) => [r.id, isEn ? r.nameEn : r.name]))
 
   return (
     <div className="flex flex-col gap-8 pb-12">
@@ -115,116 +258,247 @@ export default function GuidePK({ lang }) {
             {isEn ? 'PK Status Calculator & Chance Simulator' : 'Kalkulator Status PK & Simulator /chance'}
           </h3>
         </div>
-        <p className="mb-4 text-xs leading-relaxed text-dim">
+        <p className="mb-3 text-xs leading-relaxed text-dim">
           {isEn
-            ? 'Input in-game /health and /inspect values to instantly calculate PK eligibility and test /chance rolls.'
-            : 'Masukkan kondisi dari /health dan /inspect untuk mengetahui status PK yang sah dan uji simulasi roll /chance in-game.'}
+            ? 'Input all in-game /health and /inspect wounds. Supports combined multiple wounds (GSW, Flesh Wound, Graze, Cut, Fractures) to accurately evaluate official LSFD PK rules.'
+            : 'Masukkan seluruh daftar luka dari /health dan /inspect in-game. Mendukung akumulasi luka gabungan (GSW, Flesh Wound, Graze, Sayat, Patah Tulang) untuk menentukan status PK dan /chance yang sah sesuai regulasi LSFD.'}
         </p>
 
+        {/* Preset Cepat Lapangan */}
+        <div className="mb-3 flex flex-wrap items-center gap-1.5 text-[11px]">
+          <span className="font-bold text-muted mr-1 font-mono text-[10px] uppercase">
+            {isEn ? 'Presets:' : 'Contoh Kasus:'}
+          </span>
+          {PRESETS.map((p, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => handleApplyPreset(p)}
+              className="rounded-xs border border-line bg-ink px-2 py-1 text-[10px] text-dim hover:border-alarm hover:text-bone transition-colors"
+            >
+              {isEn ? p.labelEn : p.labelId}
+            </button>
+          ))}
+        </div>
+
         <div className="rounded-sm border border-line bg-panel p-3.5 sm:p-4">
-          {/* Input Form Simulator */}
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {/* Kolom Kiri: Jenis Luka & Lokasi */}
-            <div className="space-y-3">
-              <div>
-                <label className="block text-[11px] font-bold text-bone">
-                  {isEn ? 'Primary Wound Type (/health)' : 'Jenis Luka Utama (/health)'}
-                </label>
-                <select
-                  value={woundType}
-                  onChange={(e) => setWoundType(e.target.value)}
-                  className="mt-1 w-full rounded-sm border border-line bg-ink px-2.5 py-1.5 text-xs text-bone focus:border-alarm focus:outline-none"
-                >
-                  {WOUND_TYPES.map((t) => (
-                    <option key={t.id} value={t.id}>
-                      {isEn ? t.nameEn : t.name}
-                    </option>
-                  ))}
-                </select>
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+            {/* Kolom Kiri (7 Cols): Manajemen Luka /health */}
+            <div className="space-y-3.5 lg:col-span-7">
+              {/* DAFTAR LUKA SAAT INI */}
+              <div className="rounded-sm border border-line bg-ink p-3 space-y-2.5">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-line/60 pb-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-[11px] font-bold text-bone">
+                      {isEn ? 'Victim /health Wound List' : 'Daftar Luka /health Korban'}
+                    </span>
+                    <span className="rounded-xs bg-raise px-1.5 py-0.5 text-[10px] font-mono text-muted">
+                      {totalWoundCount} {isEn ? 'wounds' : 'luka'}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-1 text-[10px] font-mono">
+                    <span className="text-red-400 font-bold">{totalBullets}x GSW</span>
+                    <span className="text-muted">•</span>
+                    <span className="text-amber-400 font-bold">{totalFlesh}x Flesh</span>
+                    <span className="text-muted">•</span>
+                    <span className="text-muted">{totalOther}x Lain</span>
+                    {wounds.length > 0 && (
+                      <>
+                        <span className="text-muted">|</span>
+                        <button
+                          type="button"
+                          onClick={handleResetWounds}
+                          className="text-muted hover:text-alarm underline text-[10px] ml-1"
+                        >
+                          {isEn ? 'Clear' : 'Kosongkan'}
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {/* Banner Peringatan Vital Wound */}
+                {evaluation.isVital && (
+                  <div className="flex items-center gap-2 rounded-xs border border-alarm/40 bg-alarm/10 px-2.5 py-1.5 text-[11px] text-alarm">
+                    <span className="font-bold">⚠️ VITAL WOUND:</span>
+                    <span>
+                      {isEn
+                        ? 'Vital organ/bone trauma detected (≥1x Head GSW or ≥3x Torso GSW).'
+                        : 'Terdeteksi luka tembak vital (≥1x GSW Kepala atau ≥3x GSW Torso).'}
+                    </span>
+                  </div>
+                )}
+
+                {/* List Item Luka */}
+                {wounds.length === 0 ? (
+                  <div className="py-4 text-center text-xs text-muted">
+                    {isEn
+                      ? 'No wounds added. Add a wound below or click a preset.'
+                      : 'Belum ada luka ditambahkan. Tambahkan luka di bawah atau pilih contoh kasus.'}
+                  </div>
+                ) : (
+                  <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
+                    {wounds.map((w) => {
+                      const isGsw = w.type === 'gsw'
+                      const isFlesh = w.type === 'flesh'
+                      const isHead = w.location === 'head'
+                      const isTorso = w.location === 'torso'
+
+                      return (
+                        <div
+                          key={w.id}
+                          className="flex items-center justify-between gap-2 rounded-xs border border-line/60 bg-raise/50 px-2.5 py-1.5 text-[11px]"
+                        >
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            {/* Badge Regio */}
+                            <span
+                              className={`rounded-xs px-1.5 py-0.5 text-[9px] font-bold font-mono uppercase ${
+                                isHead
+                                  ? 'bg-red-500/20 text-red-400 border border-red-500/40'
+                                  : isTorso
+                                    ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40'
+                                    : 'bg-blue-500/20 text-blue-400 border border-blue-500/40'
+                              }`}
+                            >
+                              {regionMap[w.location] || w.location}
+                            </span>
+
+                            {/* Nama Jenis Luka */}
+                            <span
+                              className={`font-medium ${
+                                isGsw
+                                  ? 'text-bone font-bold'
+                                  : isFlesh
+                                    ? 'text-amber-300 font-bold'
+                                    : 'text-dim'
+                              }`}
+                            >
+                              {woundTypeMap[w.type] || w.type}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            {/* Tombol Kurang */}
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateCount(w.id, -1)}
+                              className="size-5 flex items-center justify-center rounded-xs border border-line bg-ink text-muted hover:text-bone hover:border-muted font-mono font-bold"
+                              title={isEn ? 'Decrease' : 'Kurangi'}
+                            >
+                              -
+                            </button>
+
+                            <span className="w-6 text-center font-mono font-bold text-bone">
+                              {w.count}x
+                            </span>
+
+                            {/* Tombol Tambah */}
+                            <button
+                              type="button"
+                              onClick={() => handleUpdateCount(w.id, 1)}
+                              className="size-5 flex items-center justify-center rounded-xs border border-line bg-ink text-muted hover:text-bone hover:border-muted font-mono font-bold"
+                              title={isEn ? 'Increase' : 'Tambah'}
+                            >
+                              +
+                            </button>
+
+                            {/* Tombol Hapus */}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveWound(w.id)}
+                              className="ml-1 text-muted hover:text-alarm px-1 text-xs"
+                              title={isEn ? 'Delete' : 'Hapus'}
+                            >
+                              ✕
+                            </button>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
 
-              {woundType === 'gsw' ? (
-                <>
+              {/* FORM TAMBAH LUKA BARU */}
+              <div className="rounded-sm border border-line bg-ink p-3 space-y-3">
+                <span className="block text-[10px] font-bold text-muted uppercase tracking-wider">
+                  {isEn ? '+ Add New Wound to /health' : '+ Tambah Luka Baru ke /health'}
+                </span>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {/* Pilihan Regio Tubuh */}
                   <div>
-                    <label className="block text-[11px] font-bold text-bone">
-                      {isEn ? 'Bullet Location' : 'Lokasi Tembakan'}
+                    <label className="block text-[10px] font-bold text-muted mb-1">
+                      {isEn ? 'Body Region' : 'Bagian Tubuh'}
                     </label>
-                    <div className="mt-1 grid grid-cols-3 gap-1.5">
-                      {GSW_LOCATIONS.map((loc) => {
-                        const active = location === loc.id
-                        return (
-                          <button
-                            key={loc.id}
-                            type="button"
-                            onClick={() => setLocation(loc.id)}
-                            className={`rounded-sm border px-2 py-1.5 text-center text-[11px] font-medium transition-colors ${
-                              active
-                                ? 'border-alarm bg-alarm text-white font-bold'
-                                : 'border-line bg-ink text-dim hover:border-muted hover:text-bone'
-                            }`}
-                          >
-                            {loc.id === 'head' ? 'Kepala (Head)' : loc.id === 'torso' ? 'Dada (Torso)' : 'Tangan / Kaki'}
-                          </button>
-                        )
-                      })}
+                    <div className="flex flex-col gap-1">
+                      {BODY_REGIONS.map((reg) => (
+                        <button
+                          key={reg.id}
+                          type="button"
+                          onClick={() => setNewLocation(reg.id)}
+                          className={`rounded-xs border px-2 py-1 text-left text-[10px] font-medium transition-colors ${
+                            newLocation === reg.id
+                              ? 'border-alarm bg-alarm text-white font-bold'
+                              : 'border-line bg-raise text-dim hover:text-bone'
+                          }`}
+                        >
+                          {reg.id === 'head' ? 'Kepala (Head)' : reg.id === 'torso' ? 'Dada (Torso)' : 'Tangan / Kaki'}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
-                  <div>
-                    <div className="flex items-center justify-between">
-                      <label className="text-[11px] font-bold text-bone">
-                        {isEn ? 'Number of Bullets (GSW Count)' : 'Jumlah Peluru (Jumlah GSW)'}
-                      </label>
-                      <span className="text-xs font-bold text-alarm font-mono">{bullets} Peluru</span>
-                    </div>
-                    <div className="mt-1 flex items-center gap-2">
-                      <input
-                        type="range"
-                        min="1"
-                        max="10"
-                        value={bullets}
-                        onInput={(e) => setBullets(Number(e.target.value))}
-                        className="w-full accent-alarm cursor-pointer"
-                      />
-                      <div className="flex gap-1">
-                        {[1, 2, 3, 5].map((n) => (
+                  {/* Pilihan Jenis Luka */}
+                  <div className="sm:col-span-2">
+                    <label className="block text-[10px] font-bold text-muted mb-1">
+                      {isEn ? 'Wound Type (Includes Flesh Wound)' : 'Jenis Luka (Termasuk Flesh Wound)'}
+                    </label>
+                    <select
+                      value={newType}
+                      onChange={(e) => setNewType(e.target.value)}
+                      className="w-full rounded-xs border border-line bg-raise px-2.5 py-1.5 text-xs text-bone focus:border-alarm focus:outline-none"
+                    >
+                      {WOUND_TYPES.map((t) => (
+                        <option key={t.id} value={t.id}>
+                          {isEn ? t.nameEn : t.name}
+                        </option>
+                      ))}
+                    </select>
+
+                    {/* Selector Jumlah */}
+                    <div className="mt-2 flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 5].map((cnt) => (
                           <button
-                            key={n}
+                            key={cnt}
                             type="button"
-                            onClick={() => setBullets(n)}
-                            className={`rounded-sm border px-2 py-0.5 text-[10px] font-mono ${
-                              bullets === n ? 'border-alarm bg-alarm text-white font-bold' : 'border-line bg-ink text-muted'
+                            onClick={() => setNewCount(cnt)}
+                            className={`rounded-xs border px-2 py-0.5 text-[10px] font-mono ${
+                              newCount === cnt
+                                ? 'border-alarm bg-alarm text-white font-bold'
+                                : 'border-line bg-raise text-muted hover:text-bone'
                             }`}
                           >
-                            {n}x
+                            {cnt}x
                           </button>
                         ))}
                       </div>
-                    </div>
-                    <p className="mt-1 text-[11px] text-muted">
-                      {location === 'head'
-                        ? (isEn ? 'Head: min. 1 bullet is vital' : 'Kepala: minimal 1 peluru tergolong Vital')
-                        : location === 'torso'
-                          ? (isEn ? 'Torso: min. 3 bullets is vital' : 'Torso: minimal 3 peluru tergolong Vital')
-                          : (isEn ? 'Limbs: cannot PK' : 'Ekstremitas: tidak bisa PK')}
-                    </p>
-                  </div>
-                </>
-              ) : woundType === 'burns' ? (
-                <div className="rounded-sm border border-line bg-ink p-2.5 text-[11px] text-dim">
-                  <label className="flex items-center gap-2 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={explosionDrowningOnly}
-                      onChange={(e) => setExplosionDrowningOnly(e.target.checked)}
-                      className="accent-alarm size-4 rounded"
-                    />
-                    <span>{isEn ? 'Victim down due to pure explosion without bullets' : 'Korban roboh akibat ledakan murni tanpa luka tembak'}</span>
-                  </label>
-                </div>
-              ) : null}
 
-              {/* Kondisi Khusus / Bleeding Checkbox */}
+                      <button
+                        type="button"
+                        onClick={handleAddWound}
+                        className="rounded-xs bg-alarm px-3 py-1 text-xs font-bold text-white hover:opacity-90 transition-opacity"
+                      >
+                        {isEn ? '+ Add Wound' : '+ Tambah Luka'}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* KONDISI KHUSUS */}
               <div className="space-y-2 rounded-sm border border-line bg-ink p-2.5">
                 <span className="block text-[10px] font-bold text-muted uppercase tracking-wider">
                   {isEn ? 'Special Case Conditions' : 'Kondisi Khusus'}
@@ -236,7 +510,11 @@ export default function GuidePK({ lang }) {
                     onChange={(e) => setBleedExpired(e.target.checked)}
                     className="accent-alarm size-4 rounded"
                   />
-                  <span>{isEn ? 'Bleeding > 15 minutes with NO medical RP' : 'Bleeding > 15 menit tanpa ada penanganan RP sama sekali'}</span>
+                  <span>
+                    {isEn
+                      ? 'Bleeding > 15 minutes with NO medical RP from anyone'
+                      : 'Bleeding > 15 menit tanpa ada respon penanganan RP sama sekali'}
+                  </span>
                 </label>
 
                 {bleedExpired && (
@@ -248,21 +526,42 @@ export default function GuidePK({ lang }) {
                       className="accent-alarm size-4 rounded"
                     />
                     <span className="text-muted">
-                      {isEn ? 'LSFD / Medical responder has arrived at scene' : 'Petugas LSFD / Penolong medis sudah tiba di TKP'}
+                      {isEn
+                        ? 'LSFD / Medical responder has arrived at scene (voids 15-min bleeding rule)'
+                        : 'Petugas LSFD / Penolong medis sudah tiba di TKP (membatalkan aturan 15 menit bleeding)'}
                     </span>
                   </label>
                 )}
+
+                <label className="flex items-center gap-2 text-[11px] text-dim cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={explosionDrowningOnly}
+                    onChange={(e) => setExplosionDrowningOnly(e.target.checked)}
+                    className="accent-alarm size-4 rounded"
+                  />
+                  <span>
+                    {isEn
+                      ? 'Victim down due to pure explosion or drowning (no bullets)'
+                      : 'Korban roboh murni karena ledakan atau tenggelam (tanpa luka tembak)'}
+                  </span>
+                </label>
               </div>
             </div>
 
-            {/* Kolom Kanan: Survival Chance & Verdict Box */}
-            <div className="space-y-3">
-              <div>
+            {/* Kolom Kanan (5 Cols): Survival Chance & Hasil Keputusan PK */}
+            <div className="space-y-3.5 lg:col-span-5">
+              {/* SURVIVAL CHANCE SLIDER */}
+              <div className="rounded-sm border border-line bg-ink p-3 space-y-2">
                 <div className="flex items-center justify-between">
                   <label className="text-[11px] font-bold text-bone">
                     {isEn ? 'Survival Chance (/health)' : 'Survival Chance di /health'}
                   </label>
-                  <span className={`text-xs font-bold font-mono ${survivalChance <= 50 ? 'text-alarm' : 'text-emerald-500'}`}>
+                  <span
+                    className={`text-sm font-bold font-mono ${
+                      survivalChance <= 50 ? 'text-alarm' : 'text-emerald-500'
+                    }`}
+                  >
                     {survivalChance}%
                   </span>
                 </div>
@@ -272,16 +571,18 @@ export default function GuidePK({ lang }) {
                   max="100"
                   value={survivalChance}
                   onInput={(e) => setSurvivalChance(Number(e.target.value))}
-                  className="mt-1 w-full accent-alarm cursor-pointer"
+                  className="w-full accent-alarm cursor-pointer"
                 />
-                <div className="mt-1 flex gap-1">
+                <div className="flex gap-1">
                   {[75, 60, 50, 45, 20].map((val) => (
                     <button
                       key={val}
                       type="button"
                       onClick={() => setSurvivalChance(val)}
-                      className={`flex-1 rounded-sm border py-0.5 text-center text-[10px] font-mono transition-colors ${
-                        survivalChance === val ? 'border-alarm bg-alarm text-white font-bold' : 'border-line bg-ink text-muted hover:text-bone'
+                      className={`flex-1 rounded-xs border py-0.5 text-center text-[10px] font-mono transition-colors ${
+                        survivalChance === val
+                          ? 'border-alarm bg-alarm text-white font-bold'
+                          : 'border-line bg-raise text-muted hover:text-bone'
                       }`}
                     >
                       {val}%
@@ -290,8 +591,8 @@ export default function GuidePK({ lang }) {
                 </div>
               </div>
 
-              {/* HASIL DIAGNOSIS / VERDICT */}
-              <div className={`rounded-sm border p-3 space-y-2.5 ${statusColors[evaluation.status]}`}>
+              {/* HASIL DIAGNOSIS / KEPUTUSAN PK RESMI */}
+              <div className={`rounded-sm border p-3.5 space-y-2.5 ${statusColors[evaluation.status]}`}>
                 <div className="flex items-center justify-between gap-2">
                   <span className="text-[10px] font-bold uppercase tracking-wider font-mono">
                     {statusBadge[evaluation.status]}
@@ -305,6 +606,12 @@ export default function GuidePK({ lang }) {
 
                 <div className="text-xs font-bold text-bone">
                   {isEn ? evaluation.titleEn : evaluation.titleId}
+                </div>
+
+                {/* Ringkasan Luka yang Dievaluasi */}
+                <div className="text-[10px] font-mono text-muted">
+                  <span className="font-bold text-dim">{isEn ? 'Wounds: ' : 'Luka: '}</span>
+                  <span>{isEn ? evaluation.summaryEn : evaluation.summaryId}</span>
                 </div>
 
                 <p className="text-[11px] leading-relaxed text-dim">
@@ -324,7 +631,7 @@ export default function GuidePK({ lang }) {
                     <button
                       type="button"
                       onClick={handleCopyCmd}
-                      className="rounded-sm border border-line bg-panel px-2 py-0.5 text-[10px] font-bold text-dim hover:border-alarm hover:text-bone"
+                      className="rounded-xs border border-line bg-panel px-2 py-0.5 text-[10px] font-bold text-dim hover:border-alarm hover:text-bone"
                     >
                       {copiedCmd ? (isEn ? 'Copied!' : 'Tersalin!') : (isEn ? 'Salin Command' : 'Salin Command')}
                     </button>
@@ -342,7 +649,7 @@ export default function GuidePK({ lang }) {
                     <button
                       type="button"
                       onClick={handleRoll}
-                      className="flex items-center gap-1 rounded-sm bg-alarm px-2.5 py-1 text-[11px] font-bold text-white hover:opacity-90"
+                      className="flex items-center gap-1 rounded-xs bg-alarm px-2.5 py-1 text-[11px] font-bold text-white hover:opacity-90"
                     >
                       <Icon name="dice" className="size-3 shrink-0" />
                       <span>{isEn ? 'Roll /chance (1x)' : 'Roll /chance (1x)'}</span>
@@ -350,9 +657,13 @@ export default function GuidePK({ lang }) {
                   </div>
 
                   {rollResult && (
-                    <div className={`mt-2 rounded-sm p-2 text-[11px] border ${
-                      rollResult.pass ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400' : 'border-alarm bg-alarm/10 text-alarm'
-                    }`}>
+                    <div
+                      className={`mt-2 rounded-sm p-2 text-[11px] border ${
+                        rollResult.pass
+                          ? 'border-emerald-500 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400'
+                          : 'border-alarm bg-alarm/10 text-alarm'
+                      }`}
+                    >
                       <div className="font-bold flex items-center justify-between">
                         <span>HASIL: {rollResult.verdict} (D100: {rollResult.roll})</span>
                         <span>{rollResult.pass ? 'SELAMAT' : 'PLAYER KILL'}</span>

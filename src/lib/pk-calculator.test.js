@@ -63,8 +63,107 @@ describe('pk-calculator', () => {
       expect(res.chanceCommand).toBe('/chance 45')
     })
 
+    it('pilihan eksplisit woundType flesh pada torso (<=50%) dapat /chance sesuai survival chance', () => {
+      const res = evaluatePk({ woundType: 'flesh', location: 'torso', bullets: 1, survivalChance: 40 })
+      expect(res.isVital).toBe(false)
+      expect(res.status).toBe(PK_STATUS.CHANCE_PK)
+      expect(res.canChance).toBe(true)
+      expect(res.chanceCommand).toBe('/chance 40')
+    })
+
+    it('pilihan eksplisit woundType flesh pada torso (>50%) tidak dapat PK', () => {
+      const res = evaluatePk({ woundType: 'flesh', location: 'torso', bullets: 2, survivalChance: 70 })
+      expect(res.isVital).toBe(false)
+      expect(res.status).toBe(PK_STATUS.NO_PK)
+      expect(res.canChance).toBe(false)
+      expect(res.chanceCommand).toBeNull()
+    })
+
     it('luka tembak di tangan/kaki (limbs) tidak dapat PK', () => {
       const res = evaluatePk({ woundType: 'gsw', location: 'limbs', bullets: 4, survivalChance: 30 })
+      expect(res.status).toBe(PK_STATUS.NO_PK)
+      expect(res.canChance).toBe(false)
+    })
+
+    it('flesh wound di ekstremitas (limbs) tidak dapat PK walau survival chance rendah', () => {
+      const res = evaluatePk({ woundType: 'flesh', location: 'limbs', bullets: 3, survivalChance: 20 })
+      expect(res.status).toBe(PK_STATUS.NO_PK)
+      expect(res.canChance).toBe(false)
+    })
+  })
+
+  describe('combined multiple wounds logic', () => {
+    it('gabungan luka dengan vital wound (3x GSW Torso + 1x Flesh + 2x Graze) dan <50% chance -> AUTO PK', () => {
+      const wounds = [
+        { type: 'gsw', location: 'torso', count: 3 },
+        { type: 'flesh', location: 'torso', count: 1 },
+        { type: 'graze', location: 'limbs', count: 2 },
+      ]
+      const res = evaluatePk({ wounds, survivalChance: 35 })
+      expect(res.isVital).toBe(true)
+      expect(res.status).toBe(PK_STATUS.AUTO_PK)
+      expect(res.autoPk).toBe(true)
+      expect(res.canChance).toBe(false)
+      expect(res.summaryId).toContain('3x Gunshot Wound (GSW / Luka Tembak)')
+    })
+
+    it('gabungan luka dengan vital wound (1x GSW Head + 1x Cut) dan >=50% chance -> /chance 50', () => {
+      const wounds = [
+        { type: 'gsw', location: 'head', count: 1 },
+        { type: 'cut', location: 'torso', count: 1 },
+      ]
+      const res = evaluatePk({ wounds, survivalChance: 65 })
+      expect(res.isVital).toBe(true)
+      expect(res.status).toBe(PK_STATUS.CHANCE_PK)
+      expect(res.canChance).toBe(true)
+      expect(res.chanceCommand).toBe('/chance 50')
+    })
+
+    it('gabungan luka non-vital (1x GSW Torso + 2x Flesh Torso + 3x Graze) dengan chance 42% -> /chance 42', () => {
+      const wounds = [
+        { type: 'gsw', location: 'torso', count: 1 },
+        { type: 'flesh', location: 'torso', count: 2 },
+        { type: 'graze', location: 'limbs', count: 3 },
+      ]
+      const res = evaluatePk({ wounds, survivalChance: 42 })
+      expect(res.isVital).toBe(false)
+      expect(res.status).toBe(PK_STATUS.CHANCE_PK)
+      expect(res.canChance).toBe(true)
+      expect(res.chanceCommand).toBe('/chance 42')
+    })
+
+    it('gabungan luka non-vital dengan chance 75% -> NO PK (/chance dilarang)', () => {
+      const wounds = [
+        { type: 'gsw', location: 'torso', count: 1 },
+        { type: 'flesh', location: 'torso', count: 1 },
+        { type: 'graze', location: 'limbs', count: 3 },
+      ]
+      const res = evaluatePk({ wounds, survivalChance: 75 })
+      expect(res.isVital).toBe(false)
+      expect(res.status).toBe(PK_STATUS.NO_PK)
+      expect(res.canChance).toBe(false)
+      expect(res.chanceCommand).toBeNull()
+    })
+
+    it('gabungan luka hanya pada ekstremitas (tangan/kaki) -> NO PK', () => {
+      const wounds = [
+        { type: 'gsw', location: 'limbs', count: 2 },
+        { type: 'flesh', location: 'limbs', count: 2 },
+        { type: 'fracture', location: 'limbs', count: 1 },
+      ]
+      const res = evaluatePk({ wounds, survivalChance: 25 })
+      expect(res.isVital).toBe(false)
+      expect(res.status).toBe(PK_STATUS.NO_PK)
+      expect(res.canChance).toBe(false)
+    })
+
+    it('gabungan luka non-peluru (Cut + Fracture + Bruise) -> NO PK', () => {
+      const wounds = [
+        { type: 'cut', location: 'torso', count: 2 },
+        { type: 'fracture', location: 'limbs', count: 1 },
+        { type: 'bruise', location: 'head', count: 1 },
+      ]
+      const res = evaluatePk({ wounds, survivalChance: 30 })
       expect(res.status).toBe(PK_STATUS.NO_PK)
       expect(res.canChance).toBe(false)
     })
