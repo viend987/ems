@@ -321,7 +321,8 @@ export default function GuidePK({ lang }) {
                 {/* Banner Peringatan Vital Wound */}
                 {evaluation.isVital && (
                   <div className="flex items-center gap-2 rounded-xs border border-alarm/40 bg-alarm/10 px-2.5 py-1.5 text-[11px] text-alarm">
-                    <span className="font-bold">⚠️ VITAL WOUND:</span>
+                    <Icon name="warn" className="size-3.5 shrink-0" />
+                    <span className="font-bold">VITAL WOUND:</span>
                     <span>
                       {isEn
                         ? 'Vital organ/bone trauma detected (≥1x Head GSW or ≥3x Torso GSW).'
@@ -410,7 +411,7 @@ export default function GuidePK({ lang }) {
                               className="ml-1 text-muted hover:text-alarm px-1 text-xs"
                               title={isEn ? 'Delete' : 'Hapus'}
                             >
-                              ✕
+                              <Icon name="cross" className="size-3" />
                             </button>
                           </div>
                         </div>
