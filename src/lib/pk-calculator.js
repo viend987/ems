@@ -93,8 +93,8 @@ export function summarizeWounds(wounds, isEn = false) {
  * @param {string} [params.location='torso'] - Lokasi luka tunggal (opsional / fallback)
  * @param {number} [params.bullets=1] - Jumlah peluru luka tunggal (opsional / fallback)
  * @param {number} [params.survivalChance=75] - Angka persentase survival chance di /health (0 - 100)
- * @param {boolean} [params.bleedExpired=false] - Apakah sudah lewat 15 menit tanpa penanganan RP sama sekali
- * @param {boolean} [params.medicArrived=false] - Apakah petugas LSFD atau penolong medis sudah tiba di TKP
+ * @param {boolean} [params.bleedExpired=false] - Apakah LSFD belum datang selama lebih dari 15 menit
+ * @param {boolean} [params.medicArrived=false] - Apakah LSPD/LSSD melakukan RP BLS/penanganan darurat (menggugurkan aturan PK 15 menit)
  * @param {boolean} [params.explosionDrowningOnly=false] - Mati murni ledakan/tenggelam tanpa luka tembak
  * @returns {Object} Evaluasi status, komando /chance, rincian luka, dan pasal rujukan
  */
@@ -155,9 +155,11 @@ export function evaluatePk({
   const summaryId = summarizeWounds(normalized, false)
   const summaryEn = summarizeWounds(normalized, true)
 
-  // 1. KASUS BLEEDING >15 MENIT:
-  // Bleeding >15 menit diizinkan PK via /chance JIKA tidak ada respon RP sama sekali.
-  // Namun jika LSFD / responder sudah tiba di TKP, timer 15 menit LANGSUNG BATAL.
+  // 1. KASUS ATURAN 15 MENIT:
+  // Korban/suspect diperbolehkan PK apabila LSFD belum datang selama 15 menit.
+  // Pengecualian LSPD/LSSD: Apabila dalam 15 menit pihak LSPD/LSSD melakukan RP BLS / penanganan darurat,
+  // maka aturan PK 15 menit dianggap gugur (korban tidak boleh PK).
+  // Namun jika LSPD/LSSD tidak melakukan RP BLS dan LSFD juga belum datang selama 15 menit, barulah korban berhak PK via /chance.
   if (bleedExpired && !medicArrived) {
     return {
       status: PK_STATUS.CHANCE_PK,
@@ -165,15 +167,15 @@ export function evaluatePk({
       canChance: true,
       autoPk: false,
       chanceCommand: `/chance ${chance}`,
-      titleId: 'Dapat PK Karena Bleeding >15 Menit',
-      titleEn: 'Eligible for PK Due to >15 Min Bleeding',
+      titleId: 'Dapat PK — LSFD Belum Datang >15 Menit Tanpa RP BLS',
+      titleEn: 'Eligible for PK — No LSFD for >15 Mins Without BLS',
       reasonId:
-        'Korban tidak mendapatkan penanganan RP sama sekali selama lebih dari 15 menit sebelum ada responder medis yang tiba. Berdasarkan panduan LSFD, diperbolehkan mengajukan PK menggunakan /chance sesuai survival chance.',
+        'LSFD belum tiba di TKP selama lebih dari 15 menit dan pihak LSPD/LSSD di lokasi tidak melakukan RP BLS atau penanganan darurat. Korban diperbolehkan mengajukan PK menggunakan /chance sesuai nilai survival chance.',
       reasonEn:
-        'The victim received no medical RP response for over 15 minutes before responders arrived. Permitted to roll /chance based on survival chance.',
+        'LSFD has not arrived for over 15 minutes and on-scene LSPD/LSSD officers performed no BLS or emergency care RP. The victim is permitted to request a PK via /chance according to survival chance.',
       actionId: `Lakukan /chance ${chance} sebanyak 1 kali setelah izin OOC. Jika PASS = selamat, FAIL = PK.`,
       actionEn: `Execute /chance ${chance} once with OOC permission. PASS = survives, FAIL = PK.`,
-      ruleRef: 'LSFD Guide Calculation Point C: Bleeding Rules',
+      ruleRef: 'Ketentuan 15 Menit LSFD & Tindakan BLS LSPD/LSSD',
       summaryId,
       summaryEn,
       wounds: normalized,

@@ -34,9 +34,6 @@ export default function Header({
             <h1 className="slab text-[clamp(1.5rem,5vw,2.75rem)] text-bone">
               Los Santos <span className="text-alarm">Fire Dept</span>
             </h1>
-            <p className="mt-0.5 text-[11px] leading-relaxed text-dim sm:text-xs">
-              {s.tagline}
-            </p>
           </div>
         </div>
 

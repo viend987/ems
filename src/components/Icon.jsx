@@ -54,7 +54,7 @@ const PATHS = {
   tableCentered: 'M4.2 4.6h7.6v6.8H4.2zM4.2 8h7.6M8 4.6v6.8M1.6 2.6h12.8M1.6 13.4h12.8',
   td1: 'M2 3h12v10H2zM2 7h12M6 3v10M2 3h4v4H2z',
 
-  // Mode & Doktrin Panduan
+  // Mode & Panduan Rules
   bolt: 'M8.5 1.5 3 8.5h4.5L6 14.5l7-7.5H8.5l1.5-5.5z',
   book: 'M2 3.5h4.5a2 2 0 0 1 2 2v7.5a1.5 1.5 0 0 0-2-1.5H2v-8zM14 3.5H9.5a2 2 0 0 0-2 2v7.5a1.5 1.5 0 0 1 2-1.5H14v-8z',
   calculator: 'M3 2h10a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1zm2 3h6M5 8h2M9 8h2M5 11h2M9 11h2',

@@ -1,5 +1,5 @@
 /**
- * Daftar Panduan dan Doktrin Medis / Server Rules.
+ * Daftar Panduan Medis & Server Rules.
  * Setiap modul guide mengupas tuntas satu topik teori, rules, dan prosedur
  * dengan simulator interaktif dan referensi pasal resmi.
  */
@@ -9,8 +9,8 @@ export const GUIDES = [
     id: 'guide-pk',
     title: 'Ketentuan Player Kill (PK)',
     titleEn: 'Player Kill (PK) Regulations',
-    badge: 'Doktrin & Rules',
-    badgeEn: 'Doctrine & Rules',
+    badge: 'Rules & Panduan',
+    badgeEn: 'Rules & Guide',
     readTime: '6 min baca',
     readTimeEn: '6 min read',
     blurb:

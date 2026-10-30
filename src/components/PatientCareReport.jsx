@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import STAFF from '../data/staff.js'
 import BBCodePreview from './BBCodePreview.jsx'
+import Icon from './Icon.jsx'
 import { writeClipboard } from '../lib/copy.js'
 import { isImageUrl, normalizeImageUrl, todayIso } from '../lib/patrol.js'
 import {
@@ -437,9 +438,24 @@ export default function PatientCareReport({ lang }) {
             onClick={copy}
             className="flex items-center gap-1.5 rounded-sm border border-line bg-ink px-3 py-1 text-xs font-semibold text-bone hover:border-alarm hover:bg-raise active:translate-y-px"
           >
-            {copied === true && <span className="text-mech">✓ {s.reportCopied}</span>}
-            {copied === false && <span className="text-alarm">× {s.reportCopyFailed}</span>}
-            {copied === null && <span>⧉ {s.reportCopyBbcode}</span>}
+            {copied === true && (
+              <span className="flex items-center gap-1 text-mech">
+                <Icon name="check" className="size-3" />
+                {s.reportCopied}
+              </span>
+            )}
+            {copied === false && (
+              <span className="flex items-center gap-1 text-alarm">
+                <Icon name="cross" className="size-3" />
+                {s.reportCopyFailed}
+              </span>
+            )}
+            {copied === null && (
+              <span className="flex items-center gap-1">
+                <Icon name="clipboard" className="size-3" />
+                {s.reportCopyBbcode}
+              </span>
+            )}
           </button>
         </div>
 

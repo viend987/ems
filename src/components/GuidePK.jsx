@@ -9,79 +9,6 @@ import {
   WOUND_TYPES,
 } from '../lib/pk-calculator.js'
 
-const PRESETS = [
-  {
-    labelId: 'Baku Tembak Ringan (1x Torso GSW, 1x Flesh, 2x Graze, 65%)',
-    labelEn: 'Light Shootout (1x Torso GSW, 1x Flesh, 2x Graze, 65%)',
-    chance: 65,
-    wounds: [
-      { id: 'p-1', type: 'gsw', location: 'torso', count: 1 },
-      { id: 'p-2', type: 'flesh', location: 'torso', count: 1 },
-      { id: 'p-3', type: 'graze', location: 'limbs', count: 2 },
-    ],
-  },
-  {
-    labelId: 'Torso Vital Kritis (3x Torso GSW, 40% - AUTO PK)',
-    labelEn: 'Critical Vital Torso (3x Torso GSW, 40% - AUTO PK)',
-    chance: 40,
-    wounds: [
-      { id: 'p-1', type: 'gsw', location: 'torso', count: 3 },
-      { id: 'p-2', type: 'graze', location: 'torso', count: 1 },
-    ],
-  },
-  {
-    labelId: 'Torso Vital Stabil (3x Torso GSW, 60% - /chance 50)',
-    labelEn: 'Stable Vital Torso (3x Torso GSW, 60% - /chance 50)',
-    chance: 60,
-    wounds: [
-      { id: 'p-1', type: 'gsw', location: 'torso', count: 3 },
-    ],
-  },
-  {
-    labelId: 'Headshot Fatal (1x Head GSW, 35% - AUTO PK)',
-    labelEn: 'Fatal Headshot (1x Head GSW, 35% - AUTO PK)',
-    chance: 35,
-    wounds: [
-      { id: 'p-1', type: 'gsw', location: 'head', count: 1 },
-    ],
-  },
-  {
-    labelId: 'Headshot Kritis (1x Head GSW, 55% - /chance 50)',
-    labelEn: 'Critical Headshot (1x Head GSW, 55% - /chance 50)',
-    chance: 55,
-    wounds: [
-      { id: 'p-1', type: 'gsw', location: 'head', count: 1 },
-    ],
-  },
-  {
-    labelId: 'Flesh Wound Kritis (2x Torso Flesh, 45% - /chance 45)',
-    labelEn: 'Critical Flesh Wound (2x Torso Flesh, 45% - /chance 45)',
-    chance: 45,
-    wounds: [
-      { id: 'p-1', type: 'flesh', location: 'torso', count: 2 },
-      { id: 'p-2', type: 'graze', location: 'limbs', count: 1 },
-    ],
-  },
-  {
-    labelId: 'Luka Tangan & Kaki (3x Limbs GSW + 1x Fracture, 30% - No PK)',
-    labelEn: 'Limb Trauma (3x Limbs GSW + 1x Fracture, 30% - No PK)',
-    chance: 30,
-    wounds: [
-      { id: 'p-1', type: 'gsw', location: 'limbs', count: 3 },
-      { id: 'p-2', type: 'fracture', location: 'limbs', count: 1 },
-    ],
-  },
-  {
-    labelId: 'Begal Sajam / Hantaman (2x Cut + 1x Bruise, 45% - No PK)',
-    labelEn: 'Melee / Blunt (2x Cut + 1x Bruise, 45% - No PK)',
-    chance: 45,
-    wounds: [
-      { id: 'p-1', type: 'cut', location: 'torso', count: 2 },
-      { id: 'p-2', type: 'bruise', location: 'head', count: 1 },
-    ],
-  },
-]
-
 export default function GuidePK({ lang }) {
   const isEn = lang === 'en'
 
@@ -169,12 +96,6 @@ export default function GuidePK({ lang }) {
     setWounds([])
   }
 
-  const handleApplyPreset = (preset) => {
-    setWounds(preset.wounds)
-    setSurvivalChance(preset.chance)
-    setRollResult(null)
-  }
-
   const handleRoll = () => {
     const target = evaluation.chanceCommand === '/chance 50' ? 50 : survivalChance
     const sim = simulateChanceRoll(target)
@@ -207,26 +128,11 @@ export default function GuidePK({ lang }) {
 
   return (
     <div className="flex flex-col gap-8 pb-12">
-      {/* Header Doktrin */}
+      {/* Header */}
       <header className="mb-2">
-        <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-wider text-muted mb-1">
-          <span className="font-mono text-alarm font-bold">
-            {isEn ? 'LSFD OPERATIONAL DOCTRINE' : 'DOKTRIN OPERASIONAL LSFD'}
-          </span>
-          <span>•</span>
-          <span>Topic #1239</span>
-          <span>•</span>
-          <span>JGVRP Server Rules Bab I & Pasal 11</span>
-        </div>
-
         <h2 className="slab text-2xl text-bone sm:text-3xl">
           {isEn ? 'Player Kill (PK) Regulations & Calculation' : 'Ketentuan & Kalkulasi Player Kill (PK)'}
         </h2>
-        <p className="mt-1 max-w-prose text-xs leading-relaxed text-dim">
-          {isEn
-            ? 'Official guide on character death determination, vital wound standardization, /chance percentage rules, and faction authority based on JGVRP Server Rules & LSFD Medical Protocol.'
-            : 'Pedoman resmi penentuan status kematian karakter, standarisasi luka vital, persentase /chance, wewenang faksi, dan batas waktu 15 menit berdasarkan Server Rules JGVRP & Protokol Medis LSFD.'}
-        </p>
       </header>
 
       {/* Quick jump navigation (seragam dengan SectionNav) */}
@@ -263,23 +169,6 @@ export default function GuidePK({ lang }) {
             ? 'Input all in-game /health and /inspect wounds. Supports combined multiple wounds (GSW, Flesh Wound, Graze, Cut, Fractures) to accurately evaluate official LSFD PK rules.'
             : 'Masukkan seluruh daftar luka dari /health dan /inspect in-game. Mendukung akumulasi luka gabungan (GSW, Flesh Wound, Graze, Sayat, Patah Tulang) untuk menentukan status PK dan /chance yang sah sesuai regulasi LSFD.'}
         </p>
-
-        {/* Preset Cepat Lapangan */}
-        <div className="mb-3 flex flex-wrap items-center gap-1.5 text-[11px]">
-          <span className="font-bold text-muted mr-1 font-mono text-[10px] uppercase">
-            {isEn ? 'Presets:' : 'Contoh Kasus:'}
-          </span>
-          {PRESETS.map((p, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => handleApplyPreset(p)}
-              className="rounded-xs border border-line bg-ink px-2 py-1 text-[10px] text-dim hover:border-alarm hover:text-bone transition-colors"
-            >
-              {isEn ? p.labelEn : p.labelId}
-            </button>
-          ))}
-        </div>
 
         <div className="rounded-sm border border-line bg-panel p-3.5 sm:p-4">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
@@ -335,8 +224,8 @@ export default function GuidePK({ lang }) {
                 {wounds.length === 0 ? (
                   <div className="py-4 text-center text-xs text-muted">
                     {isEn
-                      ? 'No wounds added. Add a wound below or click a preset.'
-                      : 'Belum ada luka ditambahkan. Tambahkan luka di bawah atau pilih contoh kasus.'}
+                      ? 'No wounds added. Add a wound using the form below.'
+                      : 'Belum ada luka ditambahkan. Tambahkan luka menggunakan formulir di bawah.'}
                   </div>
                 ) : (
                   <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1">
@@ -513,8 +402,8 @@ export default function GuidePK({ lang }) {
                   />
                   <span>
                     {isEn
-                      ? 'Bleeding > 15 minutes with NO medical RP from anyone'
-                      : 'Bleeding > 15 menit tanpa ada respon penanganan RP sama sekali'}
+                      ? 'LSFD has not arrived at the scene for >15 minutes'
+                      : 'LSFD belum datang ke TKP selama lebih dari 15 menit'}
                   </span>
                 </label>
 
@@ -528,8 +417,8 @@ export default function GuidePK({ lang }) {
                     />
                     <span className="text-muted">
                       {isEn
-                        ? 'LSFD / Medical responder has arrived at scene (voids 15-min bleeding rule)'
-                        : 'Petugas LSFD / Penolong medis sudah tiba di TKP (membatalkan aturan 15 menit bleeding)'}
+                        ? 'LSPD/LSSD performed BLS/emergency care RP within 15 mins (voids 15-min PK rule)'
+                        : 'LSPD/LSSD melakukan RP BLS/penanganan darurat dalam kurun 15 menit (aturan PK 15 menit gugur)'}
                     </span>
                   </label>
                 )}
@@ -1060,12 +949,14 @@ export default function GuidePK({ lang }) {
 
           <div className="rounded-sm border-l-3 border-alarm bg-panel p-3 space-y-1">
             <h4 className="text-xs font-bold text-bone">
-              {isEn ? 'The 15-Minute Bleeding Rule Voidance' : 'Batalnya Aturan 15 Menit Bleeding Saat Petugas Hadir'}
+              {isEn
+                ? '15-Minute Rule: LSFD Response & LSPD/LSSD BLS Role'
+                : 'Ketentuan 15 Menit: Kedatangan LSFD & Peran RP BLS LSPD/LSSD'}
             </h4>
             <p className="text-dim text-[11px]">
               {isEn
-                ? 'While 15 minutes of unresponded bleeding allows PK, the arrival of LSFD, LSPD, LSSD, or a Life Support Certify Holder IMMEDIATELY VOIDS the timer. Players cannot claim PK if responders arrived before or at the 15-minute mark.'
-                : 'Meskipun bleeding 15 menit tanpa respon mengizinkan PK, kehadiran LSFD, LSPD, LSSD, atau Life Support Holder SEKETIKA MENGGUGURKAN perhitungan menit tersebut. Korban tidak bisa menuntut PK atas dalih "sudah lewat 15 menit" jika penolong sudah berada di TKP.'}
+                ? 'Victims or suspects are permitted to PK if LSFD has not arrived for over 15 minutes. However, if on-scene LSPD or LSSD officers initiate BLS (Basic Life Support) or emergency first aid RP within those 15 minutes, the 15-minute PK rule is rendered VOID (the victim cannot claim PK). If LSPD/LSSD fails to perform BLS RP and LSFD does not arrive within 15 minutes, the victim is fully entitled to request a PK roll.'
+                : 'Suspect atau korban diperbolehkan mengajukan PK apabila pihak LSFD belum datang ke TKP selama 15 menit. Namun jika dalam kurun 15 menit tersebut pihak LSPD atau LSSD di lokasi melakukan RP BLS (Basic Life Support) atau tindakan penanganan darurat, maka aturan PK 15 menit dianggap GUGUR (korban dilarang PK). Sebaliknya, jika selama 15 menit LSPD/LSSD tidak melakukan RP BLS/penanganan darurat dan LSFD belum tiba, barulah korban sah melakukan roll /chance untuk PK.'}
             </p>
           </div>
 
@@ -1109,28 +1000,60 @@ export default function GuidePK({ lang }) {
         <div className="space-y-2">
           {[
             {
-              q: 'Pada struktur health atau /inspect tidak pernah ada tulisan luka "vital", bagaimana mengetahuinya?',
-              a: 'Benar, status luka vital ditandai dengan kode GSW dan standarisasi jumlah peluru: minimal 1x GSW pada Kepala, atau minimal 3x GSW pada Torso.',
+              q: isEn
+                ? 'Can a victim claim PK if LSFD has not arrived for >15 minutes, but police are doing BLS?'
+                : 'Apakah korban boleh PK jika LSFD belum datang >15 menit, tetapi polisi/sheriff sudah melakukan RP BLS?',
+              a: isEn
+                ? 'No. If LSPD or LSSD performs BLS or emergency medical RP within those 15 minutes, the 15-minute PK rule is voided and the victim cannot claim PK. PK is only allowed if neither LSFD arrives nor LSPD/LSSD performs BLS/emergency care during the entire 15 minutes.'
+                : 'Tidak boleh. Apabila LSPD atau LSSD melakukan RP BLS (Basic Life Support) atau penanganan darurat dalam kurun waktu 15 menit, maka aturan PK 15 menit gugur dan korban tidak boleh PK. Hak PK baru berlaku jika LSFD belum tiba dan LSPD/LSSD sama sekali tidak melakukan RP BLS atau penanganan darurat selama 15 menit penuh.',
             },
             {
-              q: 'Bagaimana jika luka vital memiliki Survival Chance lebih dari 50%, apakah bisa PK?',
-              a: 'Bisa, diberikan kesempatan roll dengan menurunkan survival chance menjadi 50%, sehingga wajib menggunakan perintah /chance 50.',
+              q: isEn
+                ? 'There is never a "vital" wound label on /health or /inspect, how to identify it?'
+                : 'Pada struktur health atau /inspect tidak pernah ada tulisan luka "vital", bagaimana mengetahuinya?',
+              a: isEn
+                ? 'Vital wound status is identified by GSW code and standardized bullet count: minimum 1x GSW to the Head, or minimum 3x GSW to the Torso.'
+                : 'Benar, status luka vital ditandai dengan kode GSW dan standarisasi jumlah peluru: minimal 1x GSW pada Kepala, atau minimal 3x GSW pada Torso.',
             },
             {
-              q: 'Apakah korban boleh meminta /chance dilakukan di akhir roleplay?',
-              a: 'Boleh. Lawan RP berhak meminta /chance dilakukan di akhir setelah selesai rangkaian tindakan RP, asalkan memenuhi kriteria PK Criteria Table.',
+              q: isEn
+                ? 'What if a vital wound has a Survival Chance over 50%, is PK possible?'
+                : 'Bagaimana jika luka vital memiliki Survival Chance lebih dari 50%, apakah bisa PK?',
+              a: isEn
+                ? 'Yes, by rolling /chance capped at 50% (/chance 50), regardless of higher health percentages.'
+                : 'Bisa, diberikan kesempatan roll dengan menurunkan survival chance menjadi 50%, sehingga wajib menggunakan perintah /chance 50.',
             },
             {
-              q: 'Apakah bisa meroleplaykan PK karena ledakan atau tenggelam?',
-              a: 'Mati karena ledakan atau tenggelam tidak bisa serta merta dijadikan alasan otomatis untuk PK. LSFD tetap mengkondisikan sesuai status /health. Jika korban juga memiliki luka tembak, kembali ke aturan Bullet Wound.',
+              q: isEn
+                ? 'Can the victim request the /chance roll at the end of the roleplay?'
+                : 'Apakah korban boleh meminta /chance dilakukan di akhir roleplay?',
+              a: isEn
+                ? 'Yes. The victim retains the right to request /chance roll at the conclusion of all medical procedures at the scene, provided they meet the PK Criteria Table.'
+                : 'Boleh. Lawan RP berhak meminta /chance dilakukan di akhir setelah selesai rangkaian tindakan RP, asalkan memenuhi kriteria PK Criteria Table.',
             },
             {
-              q: 'Apakah saya bisa PK jika hanya mengalami luka Flesh Wound di kaki atau tangan?',
-              a: 'Tidak bisa. Tidak ada organ vital pada kaki atau tangan yang menghilangkan fungsi denyut nadi. Risiko terburuknya adalah amputasi atau cacat fisik permanen.',
+              q: isEn
+                ? 'Can someone roleplay PK purely due to explosion or drowning?'
+                : 'Apakah bisa meroleplaykan PK karena ledakan atau tenggelam?',
+              a: isEn
+                ? 'Death by explosion or drowning alone does not grant automatic PK. Treatment is conditioned based on /health. If the victim also has gunshot wounds, standard bullet wound rules apply.'
+                : 'Mati karena ledakan atau tenggelam tidak bisa serta merta dijadikan alasan otomatis untuk PK. LSFD tetap mengkondisikan sesuai status /health. Jika korban juga memiliki luka tembak, kembali ke aturan Bullet Wound.',
             },
             {
-              q: 'Berapa perbandingan probabilitas dalam roll /chance?',
-              a: 'Rasio 1:2 (50% kemungkinan sukses/PASS dan 50% kemungkinan gagal/FAIL). Kedua belah pihak mendapatkan peluang yang adil dan sama besar.',
+              q: isEn
+                ? 'Can I PK if I only have Flesh Wounds on my limbs (hands or legs)?'
+                : 'Apakah saya bisa PK jika hanya mengalami luka Flesh Wound di kaki atau tangan?',
+              a: isEn
+                ? 'No. There are no vital organs in limbs that cause loss of pulse. The worst potential outcome is amputation or permanent physical disability.'
+                : 'Tidak bisa. Tidak ada organ vital pada kaki atau tangan yang menghilangkan fungsi denyut nadi. Risiko terburuknya adalah amputasi atau cacat fisik permanen.',
+            },
+            {
+              q: isEn
+                ? 'What is the probability ratio in a /chance roll?'
+                : 'Berapa perbandingan probabilitas dalam roll /chance?',
+              a: isEn
+                ? 'A 1:2 ratio (50% chance of PASS / survive and 50% chance of FAIL / PK when rolling /chance 50). Both parties get an equal and fair opportunity.'
+                : 'Rasio 1:2 (50% kemungkinan sukses/PASS dan 50% kemungkinan gagal/FAIL). Kedua belah pihak mendapatkan peluang yang adil dan sama besar.',
             },
           ].map((item, idx) => (
             <details key={idx} className="group rounded-sm border border-line bg-panel p-3 [&_summary::-webkit-details-marker]:hidden">

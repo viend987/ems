@@ -119,8 +119,8 @@ export const COMMANDS = {
 export const CODES = {
   id: 'codes',
   group: 'referensi',
-  name: 'Kamus Kode',
-  nameEn: 'Code Dictionary',
+  name: 'Callsign',
+  nameEn: 'Callsign',
   blurb: 'Arti 10-code, code, status, kategori, dan triage. Dari Field Academy Handbook.',
   blurbEn:
     'What the 10-codes, codes, statuses, categories and triage levels mean. From the Field Academy Handbook.',

@@ -74,11 +74,11 @@ export default function GuideAnatomy({ lang }) {
 
   return (
     <div className="flex flex-col gap-8 pb-12">
-      {/* Header Doktrin */}
+      {/* Header */}
       <header className="mb-2">
         <div className="flex flex-wrap items-center gap-2 text-[10px] uppercase tracking-wider text-muted mb-1">
           <span className="font-mono text-alarm font-bold">
-            {isEn ? 'ANATOMY & MEDICAL DOCTRINE' : 'ANATOMI & DOKTRIN MEDIS'}
+            {isEn ? 'ANATOMY & MEDICAL REFERENCE' : 'ANATOMI & REFERENSI MEDIS'}
           </span>
           <span>•</span>
           <span>{isEn ? 'LSFD Trauma Care' : 'Trauma Care LSFD'}</span>
